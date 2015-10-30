@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/12/05/2014-12-05-android-e4b88ae7bd91e6b581e9878fe7bb9fe8aea1e79a84e8aebee8aea1e4b88ee5ae9ee78eb0-e8aebee8aea1e7af87/index.html">
 <meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="1. 前言需要做一个 流量统计 的功能，主要实现WIFI和移动数据的日流量统计、月流量统计，可能的话还有流量超限报警等功能。然后着手搜集资料，发现android的SDK提供了类TrafficStats可以获取流量统计值。但是这个类只能获取开机以来的各种流量数据。TrafficStats获取流量数值的实现，是通过JNI，读取并解析linux的proc下相应的文件得到的，关机之后，这些数据都清零了。因">
-<meta property="og:updated_time" content="2015-10-30T03:40:49.000Z">
+<meta property="og:updated_time" content="2015-10-30T06:45:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 上网流量统计的设计与实现-设计篇">
 <meta name="twitter:description" content="1. 前言需要做一个 流量统计 的功能，主要实现WIFI和移动数据的日流量统计、月流量统计，可能的话还有流量超限报警等功能。然后着手搜集资料，发现android的SDK提供了类TrafficStats可以获取流量统计值。但是这个类只能获取开机以来的各种流量数据。TrafficStats获取流量数值的实现，是通过JNI，读取并解析linux的proc下相应的文件得到的，关机之后，这些数据都清零了。因">
@@ -255,7 +255,11 @@ static long <span class="function"><span class="title">getUidTxBytes</span><span
 </code></pre><p>当然，所有这些函数都只能得到开机以来的流量数值。虽然不能直接获取Wifi的流量值，但用Total的减去Mobile的就好了。</p>
 <p>下面要考虑如何使用这些功能有限的API去实现日流量统计、月流量统计。我们首先要有一个数据库。</p>
 <h2 id="3-_流量统计_数据库设计">3. 流量统计 数据库设计</h2><p>流量统计数据库中，建立3张Table，其组织形式如下：</p>
-<h3 id="流量统计设置">流量统计设置</h3><p>[table id=1 /]</p>
+<h3 id="流量统计设置">流量统计设置</h3><table cellspacing="0" border="1px"><br><tbody><br><tr bgcolor="#4f81bc"><br><td>id<br></td><br><br><td>name<br></td><br><br><td>value<br></td><br><br></tr><br><tr><br><br><td>last_record_time<br></td><br><br><td><br></td><br><br><td><br></td><br></tr><br><tr><br><br><td>limit_bytes_for_day<br></td><br><br><td><br></td><br><br><td><br></td><br></tr><br><tr><br><br><td>monthly_plan_bytes<br></td><br><br><td><br></td><br><br><td><br></td><br></tr><br><tr><br><br><td>monthly_plan_limit_percent<br></td><br><br><td><br></td><br><br><td><br></td><br></tr><br></tbody><br></table>
+
+
+
+
 <ul>
 <li>流量统计设置表以key-value的形式存储设置信息。其中：</li>
 </ul>
@@ -272,9 +276,12 @@ static long <span class="function"><span class="title">getUidTxBytes</span><span
 <li>monthly_plan_limit_percent：包月套餐流量预警值</li>
 </ul>
 <p>具体参数的使用会在实现部分解释。</p>
-<h3 id="日流量统计">日流量统计</h3><p>[table id=2 /]</p>
+<p>日流量统计</p>
+<table cellspacing="0" border="1px"><br><tbody><br><tr bgcolor="#4f81bc"><br><td>id<br></td><br><br><td>type<br></td><br><br><td>mobile<br></td><br><br><td>total<br></td><br><br><td>mobile_before<br></td><br><br><td>total_before<br></td><br><br><td>mobile_init<br></td><br><br><td>total_init<br></td><br><br></tr><br><tr><br><br><td>upload<br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td>download<br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br></tr><br><tr><br><br></tr><br></tbody><br></table>
+
 <p>月流量统计</p>
-<p>[table id=2/]</p>
+<table cellspacing="0" border="1px"><br><tbody><br><tr bgcolor="#4f81bc"><br><td>id<br></td><br><br><td>type<br></td><br><br><td>mobile<br></td><br><br><td>total<br></td><br><br><td>mobile_before<br></td><br><br><td>total_before<br></td><br><br><td>mobile_init<br></td><br><br><td>total_init<br></td><br><br></tr><br><tr><br><br><td>upload<br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td>download<br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br><td><br></td><br><br></tr><br><tr><br><br></tr><br></tbody><br></table>
+
 <p>日流量统计和月流量统计表格的组织形式一样。其中：</p>
 <ul>
 <li>Type用来标示出事上传流量还是下载流量。</li>
@@ -323,7 +330,7 @@ static long <span class="function"><span class="title">getUidTxBytes</span><span
   <p><span>本文标题:</span><a href="/2014/12/05/2014-12-05-android-e4b88ae7bd91e6b581e9878fe7bb9fe8aea1e79a84e8aebee8aea1e4b88ee5ae9ee78eb0-e8aebee8aea1e7af87/">Android 上网流量统计的设计与实现-设计篇</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2014年12月5日 - 12时12分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 11时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 14时10分</p>
   <p>
     <span>原始链接:</span><a href="/2014/12/05/2014-12-05-android-e4b88ae7bd91e6b581e9878fe7bb9fe8aea1e79a84e8aebee8aea1e4b88ee5ae9ee78eb0-e8aebee8aea1e7af87/" title="Android 上网流量统计的设计与实现-设计篇">http://yoursite.com/2014/12/05/2014-12-05-android-e4b88ae7bd91e6b581e9878fe7bb9fe8aea1e79a84e8aebee8aea1e4b88ee5ae9ee78eb0-e8aebee8aea1e7af87/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2014/12/05/2014-12-05-android-e4b88ae7bd91e6b581e9878fe7bb9fe8aea1e79a84e8aebee8aea1e4b88ee5ae9ee78eb0-e8aebee8aea1e7af87/　　作者: Dylan Gao" title="点击复制文章链接">
@@ -373,7 +380,7 @@ static long <span class="function"><span class="title">getUidTxBytes</span><span
 <!-- Show TOC and tocButton in default, Hide TOC via putting "toc: false" before "---" at [post].md -->
 <div id="toc" class="toc-article">
 <strong class="toc-title">文章目录</strong>
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_前言"><span class="toc-number">1.</span> <span class="toc-text">1. 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_TrafficStats类简介"><span class="toc-number">2.</span> <span class="toc-text">2. TrafficStats类简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-_流量统计_数据库设计"><span class="toc-number">3.</span> <span class="toc-text">3. 流量统计 数据库设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#流量统计设置"><span class="toc-number">3.1.</span> <span class="toc-text">流量统计设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日流量统计"><span class="toc-number">3.2.</span> <span class="toc-text">日流量统计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-_流量统计流程设计"><span class="toc-number">4.</span> <span class="toc-text">4. 流量统计流程设计</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_前言"><span class="toc-number">1.</span> <span class="toc-text">1. 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_TrafficStats类简介"><span class="toc-number">2.</span> <span class="toc-text">2. TrafficStats类简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-_流量统计_数据库设计"><span class="toc-number">3.</span> <span class="toc-text">3. 流量统计 数据库设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#流量统计设置"><span class="toc-number">3.1.</span> <span class="toc-text">流量统计设置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-_流量统计流程设计"><span class="toc-number">4.</span> <span class="toc-text">4. 流量统计流程设计</span></a></li></ol>
 </div>
 <style type="text/css">
   .left-col .switch-btn {
