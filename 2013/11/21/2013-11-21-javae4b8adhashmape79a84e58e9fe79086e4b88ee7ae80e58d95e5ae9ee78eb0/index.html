@@ -6,33 +6,30 @@
   <title>Java中 HashMap 的原理与简单实现 | Dylan Gao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
-##1.HashMap原理的简单分析 
-HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
+1.HashMap原理的简单分析HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-![](https://otwrpg.dm2301.">
+![](https://otwrpg.dm2301.live">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中 HashMap 的原理与简单实现">
 <meta property="og:url" content="http://yoursite.com/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/index.html">
 <meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
-##1.HashMap原理的简单分析 
-HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
+1.HashMap原理的简单分析HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-![](https://otwrpg.dm2301.">
-<meta property="og:updated_time" content="2015-10-30T07:44:41.000Z">
+![](https://otwrpg.dm2301.live">
+<meta property="og:updated_time" content="2015-10-30T07:55:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中 HashMap 的原理与简单实现">
 <meta name="twitter:description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
-##1.HashMap原理的简单分析 
-HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
+1.HashMap原理的简单分析HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-![](https://otwrpg.dm2301.">
+![](https://otwrpg.dm2301.live">
   
     <link rel="alternative" href="/atom.xml" title="Dylan Gao" type="application/atom+xml">
   
@@ -244,8 +241,7 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
     <div class="article-entry" itemprop="articleBody">
       
         <pre><code>基本来源于《Thinking <span class="keyword">in</span> Java》，记下来也算是简单复习一遍。
-</code></pre><p>##1.HashMap原理的简单分析 </p>
-<pre><code>HashMap之所以有较快的查询速度，是因为HashMap利用了<span class="built_in">key</span>的hashcode存储<span class="built_in">key</span>-<span class="built_in">value</span>。
+</code></pre><h2 id="1-HashMap原理的简单分析">1.HashMap原理的简单分析</h2><pre><code>HashMap之所以有较快的查询速度，是因为HashMap利用了<span class="built_in">key</span>的hashcode存储<span class="built_in">key</span>-<span class="built_in">value</span>。
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
@@ -257,8 +253,7 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
 
 查询的时候，需要对list进行线性查询，但如果散列函数较好，每个list就会有很少的<span class="built_in">key</span>-<span class="built_in">value</span>，所以即使是线性查询也不会花太多时间。
 </code></pre><a id="more"></a>
-<p>##2.HashMap的简单实现  </p>
-<pre><code>下面基本是书上的东西，自己合上书敲了一遍，加深记忆。
+<h2 id="2-HashMap的简单实现">2.HashMap的简单实现</h2><pre><code>下面基本是书上的东西，自己合上书敲了一遍，加深记忆。
 
 <span class="keyword">import</span> java.util.AbstractMap;
 <span class="keyword">import</span> java.util.HashSet;
@@ -428,7 +423,7 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
 <!-- Show TOC and tocButton in default, Hide TOC via putting "toc: false" before "---" at [post].md -->
 <div id="toc" class="toc-article">
 <strong class="toc-title">文章目录</strong>
-
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HashMap原理的简单分析"><span class="toc-number">1.</span> <span class="toc-text">1.HashMap原理的简单分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-HashMap的简单实现"><span class="toc-number">2.</span> <span class="toc-text">2.HashMap的简单实现</span></a></li></ol>
 </div>
 <style type="text/css">
   .left-col .switch-btn {

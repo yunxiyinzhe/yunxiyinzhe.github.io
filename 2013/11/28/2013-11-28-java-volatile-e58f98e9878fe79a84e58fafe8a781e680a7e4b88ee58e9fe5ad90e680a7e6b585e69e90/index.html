@@ -5,25 +5,25 @@
   
   <title>Java volatile 变量的可见性与原子性浅析 | Dylan Gao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在看&amp;lt;Java Concurrency In Practice&amp;gt;, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
+  <meta name="description" content="最近在看Java Concurrency In Practice, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
 1.Java内存模型Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
 
-在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆">
+在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java volatile 变量的可见性与原子性浅析">
 <meta property="og:url" content="http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/index.html">
 <meta property="og:site_name" content="Dylan Gao">
-<meta property="og:description" content="最近在看&amp;lt;Java Concurrency In Practice&amp;gt;, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
+<meta property="og:description" content="最近在看Java Concurrency In Practice, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
 1.Java内存模型Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
 
-在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆">
-<meta property="og:updated_time" content="2015-10-30T07:48:26.000Z">
+在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共">
+<meta property="og:updated_time" content="2015-10-30T08:02:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java volatile 变量的可见性与原子性浅析">
-<meta name="twitter:description" content="最近在看&amp;lt;Java Concurrency In Practice&amp;gt;, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
+<meta name="twitter:description" content="最近在看Java Concurrency In Practice, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
 1.Java内存模型Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
 
-在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆">
+在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共">
   
     <link rel="alternative" href="/atom.xml" title="Dylan Gao" type="application/atom+xml">
   
@@ -234,8 +234,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code>最近在看&lt;Java Concurrency <span class="keyword">In</span> Practice&gt;, 对Java <span class="keyword">volatile</span>变量有了新的认知下面综合各种资料浅显地总结一下我对<span class="keyword">volatile</span>的理解。
-</code></pre><h2 id="1-Java内存模型"><strong>1.Java内存模型</strong></h2><pre><code>Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
+        <pre><code>最近在看Java Concurrency <span class="keyword">In</span> Practice, 对Java <span class="keyword">volatile</span>变量有了新的认知下面综合各种资料浅显地总结一下我对<span class="keyword">volatile</span>的理解。
+</code></pre><h2 id="1-Java内存模型">1.Java内存模型</h2><pre><code>Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
 
 在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共享。局部变量、方法定义参数和异常处理器参数不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。Java线程之间的通信由Java内存模型（JMM）控制Java内存模型的抽象示意图如下：
 
@@ -246,7 +246,7 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
 <pre><code>基于上面的内存模型，如果不采取任何措施，在多线程环境下就会产生共享变量不可见的问题：假设线程<span class="literal">A</span>正在对共享变量进行赋值操作，读取主内存的变量，修改变量的值，写回主内存，如果在线程<span class="literal">A</span>对共享变量的修改写回主内存前，有线程B要对此共享变量进行读取，此时不能保证线程<span class="literal">A</span>的修改对线程B是可见的，所以此时线程B将读取到过期的数据。
 
 为了解决这个问题，我们可以利用synchronized对两个线程的读写操作进行同步，也可以利用关键字volatile修饰共享变量。
-</code></pre><h2 id="2-volatile变量的可见性"><strong>2.volatile变量的可见性</strong></h2><pre><code>如果把一个域声明为<span class="keyword">volatile</span>，那么只要对着个域产生了写操作，那么所有的读操作都可以看到这个修改，<span class="keyword">volatile</span>域会被立即写到主存中，而且读取操作也发生在主存中。为了方便理解<span class="keyword">volatile</span>，可以把对<span class="keyword">volatile</span>变量的单个读/写操作，看成是使用同一个锁对这些单个读/写操作做了同步。<span class="keyword">volatile</span>变量的可见性的可见性在于：对一个<span class="keyword">volatile</span>变量的读，总是能看到（任意线程）对这个<span class="keyword">volatile</span>变量最后的写入。对于下面的代码：
+</code></pre><h2 id="2-volatile变量的可见性">2.volatile变量的可见性</h2><pre><code>如果把一个域声明为<span class="keyword">volatile</span>，那么只要对着个域产生了写操作，那么所有的读操作都可以看到这个修改，<span class="keyword">volatile</span>域会被立即写到主存中，而且读取操作也发生在主存中。为了方便理解<span class="keyword">volatile</span>，可以把对<span class="keyword">volatile</span>变量的单个读/写操作，看成是使用同一个锁对这些单个读/写操作做了同步。<span class="keyword">volatile</span>变量的可见性的可见性在于：对一个<span class="keyword">volatile</span>变量的读，总是能看到（任意线程）对这个<span class="keyword">volatile</span>变量最后的写入。对于下面的代码：
 
 <span class="keyword">class</span> VolatileFeaturesExample {
     <span class="keyword">volatile</span> <span class="keyword">long</span> vl = <span class="number">0L</span>;  <span class="comment">//使用volatile声明64位的long型变量</span>
@@ -284,7 +284,7 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
         <span class="keyword">return</span> vl;
     }
 }
-</code></pre><h2 id="3-volatile变量的原子性"><strong>3.volatile变量的原子性</strong></h2><pre><code>通过上面代码我们可以看出：对任意单个<span class="keyword">volatile</span>变量的读/写具有原子性，但类似于<span class="keyword">volatile</span>++这种复合操作不具有原子性。因为++操作被分解为多个操作，即使复合操作中每一步都是原子的，但是如果复合操作整体不具有原子性，依然会产生同步问题。
+</code></pre><h2 id="3-volatile变量的原子性">3.volatile变量的原子性</h2><pre><code>通过上面代码我们可以看出：对任意单个<span class="keyword">volatile</span>变量的读/写具有原子性，但类似于<span class="keyword">volatile</span>++这种复合操作不具有原子性。因为++操作被分解为多个操作，即使复合操作中每一步都是原子的，但是如果复合操作整体不具有原子性，依然会产生同步问题。
 总结下来，<span class="keyword">volatile</span>变量自身具有下列特性：
 </code></pre><ul>
 <li>可见性。对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写入。</li>
@@ -292,11 +292,11 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
 <ul>
 <li>原子性：对任意单个volatile变量的读/写具有原子性，但类似于volatile++这种复合操作不具有原子性。</li>
 </ul>
-<h2 id="参考文献："><strong>参考文献：</strong></h2><pre><code>1.<span class="xml"><span class="tag">&lt;<span class="title">Java</span> <span class="attribute">Concurrency</span> <span class="attribute">In</span> <span class="attribute">Practice</span>&gt;</span></span>
+<h2 id="参考文献：">参考文献：</h2><pre><code><span class="bullet">1. </span>Java Concurrency In Practice
 
 <span class="bullet">2. </span>深入理解Java内存模型 [<span class="link_label">http://www.infoq.com/cn/minibooks/java_memory_model</span>](<span class="link_url">http://www.infoq.com/cn/minibooks/java_memory_model</span>)
 
-3.JVM并发机制的探讨----内存模型、内存可见性和指令重排序 [<span class="link_label">http://my.oschina.net/chihz/blog/58035</span>](<span class="link_url">http://my.oschina.net/chihz/blog/58035</span>)
+<span class="bullet">3. </span>JVM并发机制的探讨----内存模型、内存可见性和指令重排序 [<span class="link_label">http://my.oschina.net/chihz/blog/58035</span>](<span class="link_url">http://my.oschina.net/chihz/blog/58035</span>)
 </code></pre>
       
       
@@ -309,7 +309,7 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
   <p><span>本文标题:</span><a href="/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/">Java volatile 变量的可见性与原子性浅析</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2013年11月28日 - 12时11分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 15时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 16时10分</p>
   <p>
     <span>原始链接:</span><a href="/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/" title="Java volatile 变量的可见性与原子性浅析">http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/　　作者: Dylan Gao" title="点击复制文章链接">

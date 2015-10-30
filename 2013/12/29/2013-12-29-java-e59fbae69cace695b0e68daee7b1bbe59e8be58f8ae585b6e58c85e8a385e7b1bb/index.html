@@ -18,7 +18,7 @@ byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取
 
 byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取值范围是从-128 至 127(-2的7次方至 2的">
 <meta property="og:image" content="https://otwrpg.dm1.livefilestore.com/y2pIJgKRC1qAKqT0N_zoEWJ3pX2qj_Ox9T3RSwKDaXwGiJR76KspP2ZPEB9rgdmVAAKf4emtniR6DkmTithetjju-gBUVN7nQlUAAXYIS2obXo/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png?psid=1">
-<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta property="og:updated_time" content="2015-10-30T08:04:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基本数据类型及其包装类">
 <meta name="twitter:description" content="1.基本数据类型Java基本数据类型(Primitive Types)可以分为数值类型(Numeric Types)、 布尔类型 (Boolean Type)和 returnAddress 类型三类。其中数值类型又分为整型类型和浮点类型.
@@ -364,9 +364,7 @@ s = s - <span class="number">2</span>;<span class="comment">//compile error</spa
 <span class="keyword">int</span> b = <span class="number">8</span>;
 System.out.println(a/b);<span class="comment">// 15/8 = 1.875,截断为1</span>
 </code></pre><h1 id="3-基本数据类型的包装类">3.基本数据类型的包装类</h1><p>Java里面8种基本数据类型都有其对应的包装类：</p>
-<table cellpadding="4" width="317" cellspacing="0"><br><tbody><br><tr valign="TOP"><br><br><td width="86">基本数据类型<br></td><br><br><td width="48">包装类<br></td><br><br><td width="88">基本数据类型<br></td><br><br><td width="61">包装类<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">byte<br></td><br><br><td width="48">Byte<br></td><br><br><td width="88">char<br></td><br><br><td width="61">Character<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">short<br></td><br><br><td width="48">Short<br></td><br><br><td width="88">float<br></td><br><br><td width="61">Float<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">int<br></td><br><br><td width="48">Integer<br></td><br><br><td width="88">double<br></td><br><br><td width="61">Double<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">long<br></td><br><br><td width="48">Long<br></td><br><br><td width="88">boolean<br></td><br><br><td width="61">Boolean<br></td><br></tr><br></tbody><br></table>
-
-
+<p>基本数据类型 包装类<br>byte       Byte<br>char       Character<br>short      Short<br>float      Float<br>int        Integer<br>double     Double<br>long       Long<br>boolean    Boolean</p>
 <h2 id="3-1包装类对象的构造">3.1包装类对象的构造</h2><p>可以通过调用包装类的构造器将基本数据类型包装成包装类实例。而且除了Character外，其他包装类都可以传入一个字符串来构造包装类对象。当用字符串创建Boolean对象时，字符串大小写不敏感。当传入包装类的字符串无法转换为相应基本类型变量时，则抛出java.lang.NumberFormatException异常。</p>
 <pre><code><span class="keyword">boolean</span> b = <span class="keyword">false</span>;
 <span class="keyword">Boolean</span> B1 = <span class="keyword">new</span> <span class="keyword">Boolean</span>(b);    
@@ -430,7 +428,7 @@ System.<span class="keyword">out</span>.println(<span class="keyword">m</span>==
   <p><span>本文标题:</span><a href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/">Java 基本数据类型及其包装类</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2013年12月29日 - 14时12分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 11时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 16时10分</p>
   <p>
     <span>原始链接:</span><a href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/" title="Java 基本数据类型及其包装类">http://yoursite.com/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/　　作者: Dylan Gao" title="点击复制文章链接">
