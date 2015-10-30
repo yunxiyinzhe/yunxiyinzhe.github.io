@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java 内部类 基础知识总结 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="将一个类定义在另一个类的内部，即是 内部类 。内部类的用途主要有：
+
+内部类能够提供更好的封装，将内部类隐藏在外部类之内。
+
+
+内部类可以访问外部类的所有成员数据，包括私有数据。
+
+
+匿名内部类适合于创建那些只需要使用一次的类。
+
+根据内部类定义位置的不同，可以将内部类分为一下几类：
+
+普通内部类：定义在外部类中的非静态内部类
+
+
+静态内部类：定义在外部类中的静态内部类，又叫做嵌套类
+
+
+局部内部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 内部类 基础知识总结">
+<meta property="og:url" content="http://yoursite.com/2014/01/28/2014-01-28-java-e58685e983a8e7b1bb/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="将一个类定义在另一个类的内部，即是 内部类 。内部类的用途主要有：
+
+内部类能够提供更好的封装，将内部类隐藏在外部类之内。
+
+
+内部类可以访问外部类的所有成员数据，包括私有数据。
+
+
+匿名内部类适合于创建那些只需要使用一次的类。
+
+根据内部类定义位置的不同，可以将内部类分为一下几类：
+
+普通内部类：定义在外部类中的非静态内部类
+
+
+静态内部类：定义在外部类中的静态内部类，又叫做嵌套类
+
+
+局部内部">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 内部类 基础知识总结">
+<meta name="twitter:description" content="将一个类定义在另一个类的内部，即是 内部类 。内部类的用途主要有：
+
+内部类能够提供更好的封装，将内部类隐藏在外部类之内。
+
+
+内部类可以访问外部类的所有成员数据，包括私有数据。
+
+
+匿名内部类适合于创建那些只需要使用一次的类。
+
+根据内部类定义位置的不同，可以将内部类分为一下几类：
+
+普通内部类：定义在外部类中的非静态内部类
+
+
+静态内部类：定义在外部类中的静态内部类，又叫做嵌套类
+
+
+局部内部">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-01-28-java-e58685e983a8e7b1bb" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/01/28/2014-01-28-java-e58685e983a8e7b1bb/" class="article-date">
+  <time datetime="2014-01-28T00:41:16.000Z" itemprop="datePublished">2014-01-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java 内部类 基础知识总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>将一个类定义在另一个类的内部，即是 内部类 。内部类的用途主要有：</p>
+<ul>
+<li>内部类能够提供更好的封装，将内部类隐藏在外部类之内。</li>
+</ul>
+<ul>
+<li>内部类可以访问外部类的所有成员数据，包括私有数据。</li>
+</ul>
+<ul>
+<li>匿名内部类适合于创建那些只需要使用一次的类。</li>
+</ul>
+<p>根据内部类定义位置的不同，可以将内部类分为一下几类：</p>
+<ul>
+<li>普通内部类：定义在外部类中的非静态内部类</li>
+</ul>
+<ul>
+<li>静态内部类：定义在外部类中的静态内部类，又叫做嵌套类</li>
+</ul>
+<ul>
+<li>局部内部类：在方法中定义的内部类</li>
+</ul>
+<ul>
+<li>匿名内部类：不给出类名，直接定义一个类，通常这个类实现了某种接口或者抽象</li>
+</ul>
+<p>下面将对以上几种内部类分别做简要的总结。<a id="more"></a></p>
+<blockquote>PS：发现自己Java基础很不牢固啊，在写博文的时候，发现自己对Java类的修饰符和方法修饰符的概念有些混淆了，这里再补一下基础吧。<br>Java的权限修饰赋：<br><br>&gt;<br>&gt;<br><br>&gt;   <em> public：可以修饰类、接口、变量、方法。public类必须定义在和类名相同的同名文件中,即一个Java文件中只能有一个类可以被修饰为public。<br>&gt;<br><br><br><br>&gt;   </em> protected：可以修饰变量、方法，不能修饰外部类只能修饰内部类<br>&gt;<br><br><br><br>&gt;   <em> default：可以修饰类、接口、变量、方法<br>&gt;<br><br><br><br>&gt;   </em> private：可以修饰变量、方法，不能修饰外部类只能修饰内部类<br>&gt;<br><br>因此除了内部类，普通类的访问权限修饰符只有public和默认权限。另外，在涉及继承关系的时候，子类重写父类的方法的访问修饰符，不能低于父类的方法访问权限。</blockquote>
+
+
+
+
+<h2 id="普通内部类"><strong>普通内部类</strong></h2><p>下面的示例程序定义了一个简单的普通内部类，普通内部类可以看作为与外部类的(非静态)变量、(非静态)方法和(非静态)初始化块相似的类成员。因此与外部类只能使用public和默认权限两种访问权限修饰符不同，内部类可以使用任意访问权限修饰符。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Outer</span></span>{
+    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Inner1</span> </span>{}
+    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Inner2</span> </span>{}
+    <span class="keyword">protected</span> <span class="class"><span class="keyword">class</span> <span class="title">Inner3</span> </span>{}
+    <span class="class"><span class="keyword">class</span> <span class="title">Inner4</span> </span>{}
+}
+</code></pre><p>如何创建内部类的对象呢，看下面的代码</p>
+<pre><code><span class="keyword">class</span> <span class="title">Outer</span> {
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Inner</span> {}
+    <span class="function">Inner <span class="title">createInner</span>(<span class="params"></span>) </span>{
+    Inner i = <span class="keyword">new</span> Inner();
+    <span class="keyword">return</span> i;
+    }
+    <span class="function"><span class="keyword">static</span> Inner <span class="title">createInnerStatic</span>(<span class="params"></span>) </span>{
+    Outer.Inner i = (<span class="keyword">new</span> Outer()).new Inner();
+    <span class="keyword">return</span> i;
+    }
+}
+<span class="keyword">class</span> <span class="title">Outer2</span> {
+    Outer.<span class="function">Inner <span class="title">createInner</span>(<span class="params"></span>) </span>{
+    Outer.Inner i = (<span class="keyword">new</span> Outer()).new Inner();
+    <span class="keyword">return</span> i;
+    }
+}
+</code></pre><p>如果是在内部类所在的外部类中的非静态域中创建内部类对象，和普通类的创建方法没有什么不同。如果在静态域或者其他类中创建内部类对象，首先要指明这个对象的具体类型：Outer.Inner，此外还要使用外部类对象来创建内部类对象，就像上面程序所展示的那样。</p>
+<p>为什么内部类对象如此依赖于外部类呢？我们知道，内部类对象自动拥有对其外部类所有成员的访问权限。为了实现这个目的，内部类必须持有创建他的那个外部类的对象的引用，内部类就是通过这个引用来访问外部类的成员变量的。因此内部类对象只能在与外部类的对象相关联的情况下才会被创建。在外部类的非静态域创建内部类对象时，外部类会隐式地使用Outer.this创建内部类，在静态域中则必须显式地使用”.new“语法。看下面的代码</p>
+<pre><code><span class="keyword">class</span> <span class="title">Outer</span> {
+    String s = <span class="string">"Outer s"</span>;
+    String t = <span class="string">"Outer t"</span>;
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Inner</span> {
+    String s = <span class="string">"Inner s"</span>;
+    <span class="function"><span class="keyword">public</span> Outer <span class="title">getOuter</span>(<span class="params"></span>) </span>{
+        <span class="keyword">return</span> Outer.<span class="keyword">this</span>;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span>(<span class="params"></span>) </span>{
+        System.<span class="keyword">out</span>.println(s);<span class="comment">//Inner s</span>
+        System.<span class="keyword">out</span>.println(Outer.<span class="keyword">this</span>.s);<span class="comment">//Outer s</span>
+        System.<span class="keyword">out</span>.println(t);<span class="comment">//Outer t</span>
+    }
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+    Outer o = <span class="keyword">new</span> Outer();
+    Outer.Inner i = o.new Inner();
+    System.<span class="keyword">out</span>.println(o == i.getOuter());
+    i.print();
+    }
+}
+</code></pre><p>输出是true，进一步证实了外部类会将自身的引用传入内部类中。此外在内部类中this指的是内部类对象的this，如果想得到外部类对象的引用，则需要使用Outer.this。在内部类中使用外部类的变量，如果有同名变量，则要显式地使用Outer.this指出，其他情况可以省略。</p>
+<p>也可以将接口定义在类的内部，并且可以使用private权限修饰符，以获得更好的封装特性。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> {</span>
+    <span class="keyword">private</span> <span class="class"><span class="keyword">interface</span> <span class="title">Inner</span> {</span>
+    <span class="typename">void</span> <span class="keyword">in</span>();
+    }
+    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerImp</span> <span class="keyword">implements</span> <span class="title">Inner</span> {</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="typename">void</span> <span class="keyword">in</span>() {
+        System.out.println(<span class="string">"InnerImp"</span>);
+    }
+    }
+}
+</code></pre><h2 id="静态内部类"><strong>静态内部类</strong></h2><p>如果使用static来修饰一个内部类，则这个内部类对象就与外部类对象没有联系了，通常称作静态内部类或者嵌套类。普通的内部类隐式地保存了指向创建他的外部类对象的引用，而静态内部类则没有。静态内部类可以包含静态或非静态的成员，但是不能访问外部类的实例成员，只能访问其类成员。即使是静态内部类的实例方法也只能访问外部类的静态成员。此外，普通内部类不能有static数据和static方法，也不能有静态内部类，而静态内部类可以包含所有这些东西。</p>
+<pre><code><span class="keyword">class</span> <span class="title">Outer</span> {
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">InnerStatic</span> {
+    <span class="keyword">int</span> i;
+    <span class="keyword">static</span> <span class="keyword">int</span> j;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span>(<span class="params"></span>) </span>{}
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testStatic</span>(<span class="params"></span>) </span>{}
+    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">InnerInnerStatic</span> {}
+    <span class="keyword">class</span> <span class="title">InnerInner</span> {}
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+    <span class="keyword">new</span> InnerStatic().i = <span class="number">1</span>;
+    <span class="keyword">new</span> InnerStatic().test();
+    InnerStatic.j = <span class="number">1</span>;
+    InnerStatic.testStatic();
+    }
+}
+</code></pre><p>Java允许在接口中定义内部类，接口中定义的内部类默认是public和static的。如果想要创建某些公共代码，使得他们可以被某个接口的所有不同实现所共用，那么使用接口内部的嵌套类就会显得方便。</p>
+<pre><code><span class="class"><span class="keyword">interface</span> <span class="title">Outer</span> </span>{
+    <span class="function"><span class="keyword">void</span> <span class="title">out</span><span class="params">()</span></span>;
+    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> <span class="keyword">implements</span> <span class="title">Outer</span> </span>{
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">out</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"outer implement"</span>);
+    }    
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">in</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"in method"</span>);
+    }    
+    }
+}
+</code></pre><h2 id="局部内部类"><strong>局部内部类</strong></h2><p>如果把一个内部类放在方法里面定义，则这个内部类就是一个局部内部类。局部内部类只在该方法内有效。由于局部内部类不能在外部类的方法以外的地方使用，因此局部内部类不能使用权限修饰符和static修饰符。不管是局部变量还是局部内部类，他们的上一级程序单元都是方法而不是类，所以用static修饰他们没有意义。局部变量或局部内部类的作用域是其所在方法，不能使用任何权限控制符。</p>
+<pre><code><span class="keyword">class</span> <span class="title">Outer</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+    <span class="keyword">class</span> <span class="title">Inner</span> {
+        <span class="keyword">int</span> a = <span class="number">0</span>;
+    }
+    Inner i = <span class="keyword">new</span> Inner();
+    System.<span class="keyword">out</span>.println(i.a + <span class="number">1</span>);
+    }
+}
+</code></pre><h2 id="匿名内部类"><strong>匿名内部类</strong></h2><p>匿名内部类适合创建那种只需要一次使用的类，创建匿名内部类时会立即创建一个该类的实例，这个类的定义立即消失，因此匿名内部类不能重复使用。匿名内部类可以继承一个父类或者实现一个接口，但最多只能继承一个父类或实现一个接口。</p>
+<pre><code><span class="keyword">class</span> <span class="title">Outer</span> {
+    <span class="function"><span class="keyword">void</span> <span class="title">test1</span> (<span class="params">TestInterface inn</span>) </span>{
+    inn.f();
+    }
+    <span class="function"><span class="keyword">void</span> <span class="title">test2</span> (<span class="params">TestClass inn</span>) </span>{
+    inn.f();
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+    Outer o = <span class="keyword">new</span> Outer();
+    o.test1(<span class="keyword">new</span> TestInterface() {
+        @<span class="function">Override
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{
+               System.<span class="keyword">out</span>.println(<span class="string">"Implement interface"</span>);
+        }
+    });
+
+    o.test2(<span class="keyword">new</span> TestClass() {
+        @<span class="function">Override
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{
+           System.<span class="keyword">out</span>.println(<span class="string">"Implement interface"</span>);
+        }
+    });
+    }
+}
+<span class="keyword">interface</span> <span class="title">TestInterface</span> {
+    <span class="function"><span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>)</span>;
+}
+<span class="keyword">class</span> <span class="title">TestClass</span> {
+    <span class="function"><span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{};
+}
+</code></pre><p>当通过实现接口来创建匿名内部类时，匿名内部类不能显示创建构造器，因此匿名内部类只有一个隐式的无参数构造器，故new接口名后面的括号内不能传入参数值。当通过继承父类来创建匿名内部类时，匿名内部类拥有和父类相似的构造器，相似是指拥有相同的形参列表。</p>
+<pre><code><span class="keyword">class</span> <span class="title">Outer</span> {
+    <span class="function"><span class="keyword">void</span> <span class="title">test2</span> (<span class="params">TestClass inn</span>) </span>{
+    inn.f();
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+    Outer o = <span class="keyword">new</span> Outer();
+    o.test2(<span class="keyword">new</span> TestClass() {
+        @<span class="function">Override
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{
+            System.<span class="keyword">out</span>.println(s);
+        }
+    });<span class="comment">//123</span>
+    o.test2(<span class="keyword">new</span> TestClass(<span class="string">"456"</span>) {
+        @<span class="function">Override
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{
+            System.<span class="keyword">out</span>.println(s);
+        }
+    });<span class="comment">//456</span>
+    }
+}
+<span class="keyword">class</span> <span class="title">TestClass</span> {
+    String s = <span class="string">"123"</span>;
+    <span class="function"><span class="keyword">public</span> <span class="title">TestClass</span>(<span class="params"></span>) </span>{}
+    <span class="function"><span class="keyword">public</span> <span class="title">TestClass</span>(<span class="params">String s</span>) </span>{
+    <span class="keyword">this</span>.s = s;
+    }
+    <span class="function"><span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{};
+}
+</code></pre><p>如果匿名内部类要访问外部类的局部变量，则必须使用final修饰符来修饰外部局部变量，否则编译器会报错。</p>
+<h2 id="内部类的继承"><strong>内部类的继承</strong></h2><p>因为内部类的构造器必须连接到指向外部类对象的引用，所以在继承内部类的时候，必须使用特殊的语法来说明清出内部类外部类和导出类之间的关系</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> {</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> {</span>}
+}
+<span class="class"><span class="keyword">class</span> <span class="title">SubInner</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Outer</span>.<span class="title">Inner</span> {</span>
+    <span class="comment">//默认构造器和无参数构造器都会编译错误</span>
+    public <span class="type">SubInner</span>(<span class="type">Outer</span> o) {
+    o.<span class="keyword">super</span>();
+    }
+    public static void main(<span class="type">String</span>[] args) {
+    <span class="type">Outer</span> o = <span class="keyword">new</span> <span class="type">Outer</span>();
+    <span class="type">SubInner</span> si = <span class="keyword">new</span> <span class="type">SubInner</span>(o);
+    }
+}
+</code></pre><h2 id="内部类的覆盖"><strong>内部类的覆盖</strong></h2><p>通过下面的例子可以看到内部类被覆盖后会发生什么事情。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> {</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">Inner</span> {</span>
+    void test() {
+        <span class="type">System</span>.out.println(<span class="string">"Inner"</span>);
+    }
+    }
+}
+public <span class="class"><span class="keyword">class</span> <span class="title">SubOuter</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Outer</span> {</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">SubInner</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Outer</span>.<span class="title">Inner</span> {</span>
+    <span class="annotation">@Override</span>
+    void test() {
+        <span class="type">System</span>.out.println(<span class="string">"SubInner"</span>);
+        }
+    }
+    public static void main(<span class="type">String</span>[] args) {
+    <span class="type">SubOuter</span>.<span class="type">Inner</span> i = (<span class="keyword">new</span> <span class="type">SubOuter</span>()).<span class="keyword">new</span> <span class="type">SubInner</span>();
+    i.test();
+    }
+}
+</code></pre><p>运行输出结果为“SubInner”，SubInner的test方法覆盖了父类的方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/01/28/2014-01-28-java-e58685e983a8e7b1bb/" data-id="cigd6gc54001a5jorqfset70d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/02/14/2014-02-14-javae5a49ae7babfe7a88be4b88be79a84e58d95e4be8be6a8a1e5bc8f/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java多线程下的 单例模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/01/11/2014-01-11-java-e99d99e68081e7bb91e5ae9ae4b88ee58aa8e68081e7bb91e5ae9a/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java 静态绑定 与 动态绑定</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

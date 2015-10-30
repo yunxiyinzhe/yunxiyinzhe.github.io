@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java运行时数据区域 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据的规定,Java虚拟机所管理的内存将包含以下几个运行时数据区域,如图所示注:蓝色表示所有线程共享数据区    白色表示线程隔离数据区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java运行时数据区域">
+<meta property="og:url" content="http://yoursite.com/2013/12/23/2013-12-23-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9f/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据的规定,Java虚拟机所管理的内存将包含以下几个运行时数据区域,如图所示注:蓝色表示所有线程共享数据区    白色表示线程隔离数据区">
+<meta property="og:image" content="https://otwrpg.dm2304.livefilestore.com/y2pieSJK7gIGp14PziT63EyRWe1BnyzlWyZsjcxSdE6APvtMEDwIXlkBydqJ0ERK5MMb4GRTRGCeLbOQKbzoG19kgfaWemLK5bVGhvFUCqrVxE/940ec804-bdf4-471e-a36e-6198fb1edb6f.jpg">
+<meta property="og:image" content="https://otwrpg.dm2302.livefilestore.com/y2pU6H4e31JhF8y8Pt_o3lSd2Q9viniMy4NR7uizQrUps3cM8rRmMAUW-pVNLYKzc2I8462Ys412ECdMTBEJGI4NOkflke0VHv2FdOtT5MDWwQ/1348659242_7055.jpg?psid=1">
+<meta property="og:image" content="https://otwrpg.dm2304.livefilestore.com/y2p1kfSdqe4UxKWqKlbY6wRThSDcnlaoE9spbRW7E6r53q5OJwtomKv5gR7j_S5P4K-x6ivhnoENgD_8S_wPNJJY7_dQXtZ9da2T6t-IbjrbBo/1348658605_5211.jpg?psid=1">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java运行时数据区域">
+<meta name="twitter:description" content="Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据的规定,Java虚拟机所管理的内存将包含以下几个运行时数据区域,如图所示注:蓝色表示所有线程共享数据区    白色表示线程隔离数据区">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-12-23-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9f" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/23/2013-12-23-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9f/" class="article-date">
+  <time datetime="2013-12-23T07:23:50.000Z" itemprop="datePublished">2013-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java运行时数据区域
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据<java虚拟机规范>的规定,Java虚拟机所管理的内存将包含以下几个运行时数据区域,如图所示<img src="https://otwrpg.dm2304.livefilestore.com/y2pieSJK7gIGp14PziT63EyRWe1BnyzlWyZsjcxSdE6APvtMEDwIXlkBydqJ0ERK5MMb4GRTRGCeLbOQKbzoG19kgfaWemLK5bVGhvFUCqrVxE/940ec804-bdf4-471e-a36e-6198fb1edb6f.jpg" alt=""><br>注:蓝色表示所有线程共享数据区    白色表示线程隔离数据区<a id="more"></a></java虚拟机规范></p>
+<h1 id="1-程序计数器"><strong>1.程序计数器</strong></h1><p>程序计数器可以看做是当前线程所执行字节码的行号指示器,字节码解释器工作时就通过改变这个计数器来选取下一条指令.Java虚拟机的多线程是通过轮流切换并分配处理器执行时间的方式来实现的,在任一确定的时刻,一个处理器内核只能执行一条线程中的指令.因此为了使线程切换后能够恢复到正确的执行位置,<strong>每一个线程都要有一个独立的程序计数器.如果线程正在执行的是一个Java方法,则这个程序计数器就保存Java虚拟机正在执行的字节码指令的地址，如果该方法是native的，那程序计数器的值是undefined</strong>。</p>
+<h1 id="2-Java虚拟机栈"><strong>2.Java虚拟机栈</strong></h1><p><strong>每一条Java虚拟机线程都有自己私有的Java虚拟机栈,其生命周期与线程相同</strong>.虚拟机栈描述的是Java方法执行的内存模型：每个方法被执行的时候都会同时创建一个栈帧(Stack Frame)用于存储局部变量表、操作栈、动态链接、方法出口等信息.每一个方法被调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程. Java 虚拟机栈与传统语言(例如C语言)中的栈不完全相同,从概念上,后者可以理解为虚拟机栈中局部变量表部分.<strong>局部变量表存放了编译期可知的各种基本数据类型(boolean、byte、char、short、int、float、long、double)、对象引用(Object reference)和字节码指令地址(returnAddress类型)</strong>.局部变量表所需的内存空间在编译期间完成分配,当进入一个方法时.此方法需要在栈帧中分配的局部变量空间是完全确定的,且运行期间不会改变. 在Java虚拟机规范中,对于此区域规定了两种异常状况： 如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常; 如果虚拟机栈可以动态扩展,当扩展时无法申请到足够的内存时会抛出OutOfMemoryError异常.</p>
+<h2 id="2-1_栈帧"><strong>2.1 栈帧</strong></h2><p><strong>栈帧(Frame)是用来存储数据和部分过程结果的数据结构,同时也被用来处理动态链接(Dynamic Linking)、方法返回值和异常分派(Dispatch Exception).栈帧随着方法调用而创建，随着方法结束而销毁</strong>——无论方法是正常完成还是异常完成(抛出了在方法内未被捕获的异常)都算作方法结束.栈帧的存储空间分配在Java虚拟机栈之中，每一个栈帧都有自己的局部变量表(Local Variables)、操作数栈(Operand Stack)和指向当前方法所属的类的运行时常量池的引用. 在一条线程之中,只有目前正在执行的那个方法的栈帧是活动的.这个栈帧就被称为是当前栈帧(Current Frame),这个栈帧对应的方法就被称为是当前方法(Current Method),定义这个方法的类就称作当前类(Current Class).对局部变量表和操作数栈的各种操作,通常都指的是对当前栈帧的对局部变量表和操作数栈进行的操作.如果当前方法调用了其他方法,或者当前方法执行结束,那这个方法的栈帧就不再是当前栈帧了.当一个新的方法被调用,一个新的栈帧也会随之而创建,并且随着程序控制权移交到新的方法而成为新的当前栈帧.当方法返回的之际,当前栈帧会传回此方法的执行结果给前一个栈帧,在方法返回之后,当前栈帧就随之被丢弃,前一个栈帧就重新成为当前栈帧了.</p>
+<h2 id="2-2-局部变量表"><strong>2.2.局部变量表</strong></h2><p>每个栈帧=内部都包含一组称为局部变量表(Local Variables)的变量列表.栈帧中局部变量表的长度由编译期决定.一个局部变量可以保存一个类型为boolean、byte、char、short、float、reference和returnAddress的数据,两个局部变量可以保存一个类型为long 和 double的数据.局部变量使用索引来进行定位访问,第一个局部变量的索引值为零,局部变量的索引值是从零至小于局部变量表最大容量的所有整数.long 和 double 类型的数据占用两个连续的局部变量,这两种类型的数据值采用两个局部变量之中较小的索引值来定位.例如我们讲一个 double 类型的值存储在索引值为n的局部变量中,实际上的意思是索引值为n和n+1的两个局部变量都用来存储这个值.索引值为n+1的局部变量是无法直接读取的,但是可能会被写入,不过如果进行了这种操作,就将会导致局部变量n的内容失效掉。上文中提及的局部变量n的n值并不要求一定是偶数, Java 虚拟机也不要求double和long类型数据采用 64 位对其的方式存放在连续的局部变量中。虚拟机实现者可以自由地选择适当的方式,通过两个局部变量来存储一个double或long类型的值.Java虚拟机使用局部变量表来完成方法调用时的参数传递,当一个方法被调用的时候,它的参数将会传递至从 0 开始的连续的局部变量表位置上.特别地,当一个实例方法被调用的时候,第0个局部变量一定是用来存储被调用的实例方法所在的对象的引用(即Java语言中的“this”关键字).后续的其他参数将会传递至从1开始的连续的局部变量表位置上.</p>
+<h2 id="2-3-操作数栈"><strong>2.3.操作数栈</strong></h2><p>每一个栈帧内部都包含一个称为操作数栈(Operand Stack)的后进先出(Last-In-First-Out,LIFO)栈.操作数栈所属的栈帧在刚刚被创建的时候,操作数栈是空的.Java虚拟机提供一些字节码指令来从局部变量表或者对象实例的字段中复制常量或变量值到操作数栈中,也提供了一些指令用于从操作数栈取走数据、操作数据和把操作结果重新入栈.在方法调用的时候,操作数栈也用来准备调用方法的参数以及接收方法返回结果.举个例子, iadd 字节码指令的作用是将两个 int 类型的数值相加,它要求在执行的之前操作数栈的栈顶已经存在两个由前面其他指令放入的 int 型数值.在 iadd 指令执行时,2个int值从操作栈中出栈,相加求和,然后将求和结果重新入栈.在操作数栈中,一项运算常由多个子运算嵌套进行,一个子运算过程的结果可以被其他外围运算所使用.每一个操作数栈的成员 (Entry)可以保存一个Java虚拟机中定义的任意数据类型的值，包括 long 和 double 类型.在操作数栈中的数据必须被正确地操作,这里正确操作是指对操作数栈的操作必须与操作数栈栈顶的数据类型相匹配,例如不可以入栈两个int类型的数据,然后当作 long 类型去操作他们,或者入栈两个float 类型的数据,然后使用 iadd 指令去对它们进行求和.有一小部分Java虚拟机指令(例如 dup 和 swap 指令)可以不关注操作数的具体数据类型,把所有在运行时数据区中的数据当作裸类型(Raw Type)数据来操作,这些指令不可以用来修改数据,也不可以拆散那些原本不可拆分的数据,这些操作的正确性将会通过 Class 文件的校验过程 来强制保障.在任意时刻,操作数栈都会有一个确定的栈深度,一个 long 或者 double 类型的数据会占用两个单位的栈深度,其他数据类型则会占用一个单位深度.</p>
+<h2 id="2-4-动态链接"><strong>2.4.动态链接</strong></h2><p>每一个栈帧内部都包含一个指向运行时常量池的引用来支持当前方法的代码实现动态链接(Dynamic Linking).在 Class 文件里面,描述一个方法调用了其他方法,或者访问其成员变量是通过符号引用(Symbolic Reference)来表示的，动态链接的作用就是将这些符号引用所表示的方法转换为实际方法的直接引用.类加载的过程中将要解析掉尚未被解析的符号引用,并且将变量访问转化为访问这些变量的存储结构所在的运行时内存位置的正确偏移量.由于动态链接的存在,通过晚期绑定(Late Binding)使用的其他类的方法和变量在发生变化时,将不会对调用它们的方法构成影响.</p>
+<h1 id="3-本地方法栈"><strong>3.本地方法栈</strong></h1><p>Java虚拟机实现可能会使用到传统的栈(通常称之为“C Stacks”)来支持native方法(指使用Java 以外的其他语言编写的方法)的执行,这个栈就是本地方法栈(Native Method Stack).当Java虚拟机使用其他语言(例如 C 语言)来实现指令集解释器时,也会使用到本地方法栈.如果Java虚拟机不支持 natvie 方法,并且自己也不依赖传统栈的话,可以无需支持本地方法栈,如果支持本地方法栈,那这个栈一般会在线程创建的时候按线程分配.</p>
+<h1 id="4-Java堆"><strong>4.Java堆</strong></h1><p><strong>Java堆是可供各条线程共享的运行时内存区域,也是供所有类实例和数组对象分配内存的区域.Java 堆在虚拟机启动的时候就被创建,它存储了被自动内存管理系统(Automatic Storage Management System,也即是常说的“Garbage Collector(垃圾收集器)”)所管理的各种对象,这些受管理的对象无需,也无法显式地被销毁</strong>.Java堆可以处于物理上不连续的内存空间中,只要逻辑上是连续的即可,就像我们的磁盘空间一样.在实现时,既可以实现成固定大小的,也可以是可扩展的,不过当前主流的虚拟机都是按照可扩展来实现的(通过-Xmx和-Xms控制).如果在堆中没有内存完成实例分配,并且堆也无法再扩展时,将会抛出OutOfMemoryError异常.</p>
+<h1 id="5-方法区"><strong>5.方法区</strong></h1><p><strong>方法区(Method Area)与Java堆一样,是各个线程共享的内存区域,它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据,在虚拟机启动的时候被创建</strong>.Java虚拟机规范对这个区域的限制非常宽松,除了和Java堆一样不需要连续的内存和可以选择固定大小或者可扩展外,还可以选择不实现垃圾收集.根据Java虚拟机规范的规定,当方法区无法满足内存分配需求时,将抛出OutOfMemoryError异常.</p>
+<h2 id="5-1-运行时常量池"><strong>5.1.运行时常量池</strong></h2><p>运行时常量池(Runtime Constant Pool)是方法区的一部分.Class文件中除了有类的版本、字段、方法、接口等描述等信息外,还有一项信息是<strong>常量池(Constant Pool Table),用于存放编译期生成的各种字面量和符号引用</strong>,这部分内容将在类加载后存放到方法区的运行时常量池中。 <strong>运行时常量池相对于Class文件常量池的另外一个重要特征是具备动态性,Java语言并不要求常量一定只能在编译期产生,也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池,运行期间也可能将新的常量放入池中</strong>,这种特性被开发人员利用得比较多的便是String类的intern()方法.既然运行时常量池是方法区的一部分,自然会受到方法区内存的限制,当常量池无法再申请到内存时会抛出OutOfMemoryError异常.</p>
+<h1 id="6-对象访问"><strong>6.对象访问</strong></h1><p>对象访问涉及到java堆、java栈、方法区这三个最重要的内存区域。对于如下代码：</p>
+<pre><code><span class="label">Object</span> <span class="keyword">bj </span>= newObject()<span class="comment">;</span>
+</code></pre><p><strong>Object obj这个引用变量会存放在java栈的本地变量表中，作为一个reference类型数据，它指向了一个对象的引用，即指向堆中对象起始地址的引用指针或一个代表对象的句柄，不同的虚拟机有不同的实现。而new Object()会在java堆中分配一块内存，用于存放Object类型的实例数据值，这块内存的大小是不固定的。此外，在java堆中还包含了能查找到此对象类型数据(对象类型、父类、实现的接口、方法等，这些类型数据存储在方法区中)的地址信息，即指向方法区的一个指针。</strong><br>reference类型指向了一个对象的引用，而不同的虚拟机在确定这个的具体位置时，有不同的实现，主流的有两种方式：</p>
+<p>1、句柄访问方式：java堆中将会划分出一块内存来作为句柄池，reference中存放的就是对象的句柄地址，而句柄中包含了对象实例数据和类型数据的地址信息，如下图所示:<br><img src="https://otwrpg.dm2302.livefilestore.com/y2pU6H4e31JhF8y8Pt_o3lSd2Q9viniMy4NR7uizQrUps3cM8rRmMAUW-pVNLYKzc2I8462Ys412ECdMTBEJGI4NOkflke0VHv2FdOtT5MDWwQ/1348659242_7055.jpg?psid=1" alt=""><br>2、直接指针访问方式：reference中直接存放的就是对象的地址，如下图所示：<br><img src="https://otwrpg.dm2304.livefilestore.com/y2p1kfSdqe4UxKWqKlbY6wRThSDcnlaoE9spbRW7E6r53q5OJwtomKv5gR7j_S5P4K-x6ivhnoENgD_8S_wPNJJY7_dQXtZ9da2T6t-IbjrbBo/1348658605_5211.jpg?psid=1" alt=""><br>句柄访问方式的优点是reference中存放的是稳定的句柄地址，在对象被移动（垃圾收集时移动对象是很普遍的）时只会改变句柄中的实例数据指针，而reference本身不需要被修改。</p>
+<p>直接指针访问方式的优点是速度快，它节省了一次指针定位的时间开销，由于对象的访问在java中非常频繁，因此这类开销的执行成本也很高。Sun的HotSpot使用的就是这种对象访问方式。</p>
+<p>摘自:<br>《深入理解Java虚拟机–JVM高级特性与最佳实践2 》<br>《Java虚拟机规范(Java SE 7)》<br><a href="http://blog.csdn.net/java2000_wl/article/details/8015105" target="_blank" rel="external">http://blog.csdn.net/java2000_wl/article/details/8015105</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/12/23/2013-12-23-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9f/" data-id="cigd6gc5l00225jorh88b62l2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/12/24/2013-12-24-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9fe7bbad/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java 运行时数据区域(续)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/12/23/2013-12-23-e59fbae4ba8edecodee4b8bbe9a298e5ae9ae588b6e887aae5b7b1e79a84wordpresse4b8bbe9a298/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">基于Decode主题定制自己的Wordpress主题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

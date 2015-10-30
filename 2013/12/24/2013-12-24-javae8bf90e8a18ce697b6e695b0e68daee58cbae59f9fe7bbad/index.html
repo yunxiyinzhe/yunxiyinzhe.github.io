@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java 运行时数据区域(续) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前一篇文章（Java 运行时数据区域）中介绍了 Java 运行时的各个数据区域,本文先将前文做简要总结,在以实际例子分析Java运行时的数据区域.
+1.总结
+寄存器每一个线程都有一个独立的程序计数器,保存Java虚拟机正在执行的字节码指令的地址，若方法是native的，那程序计数器的值是undefined.
+
+
+栈每一个线程都有自己私有的Java虚拟机栈.栈帧(Stack Frame)用于存储局部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 运行时数据区域(续)">
+<meta property="og:url" content="http://yoursite.com/2013/12/24/2013-12-24-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9fe7bbad/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前一篇文章（Java 运行时数据区域）中介绍了 Java 运行时的各个数据区域,本文先将前文做简要总结,在以实际例子分析Java运行时的数据区域.
+1.总结
+寄存器每一个线程都有一个独立的程序计数器,保存Java虚拟机正在执行的字节码指令的地址，若方法是native的，那程序计数器的值是undefined.
+
+
+栈每一个线程都有自己私有的Java虚拟机栈.栈帧(Stack Frame)用于存储局部">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 运行时数据区域(续)">
+<meta name="twitter:description" content="前一篇文章（Java 运行时数据区域）中介绍了 Java 运行时的各个数据区域,本文先将前文做简要总结,在以实际例子分析Java运行时的数据区域.
+1.总结
+寄存器每一个线程都有一个独立的程序计数器,保存Java虚拟机正在执行的字节码指令的地址，若方法是native的，那程序计数器的值是undefined.
+
+
+栈每一个线程都有自己私有的Java虚拟机栈.栈帧(Stack Frame)用于存储局部">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-12-24-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9fe7bbad" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/24/2013-12-24-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9fe7bbad/" class="article-date">
+  <time datetime="2013-12-24T06:30:25.000Z" itemprop="datePublished">2013-12-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java 运行时数据区域(续)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前一篇文章（<a href="http://dylangao.com/2013/12/23/java%e8%bf%90%e8%a1%8c%e6%97%b6%e6%95%b0%e6%8d%ae%e5%8c%ba%e5%9f%9f/" target="_blank" rel="external">Java 运行时数据区域</a>）中介绍了 Java 运行时的各个数据区域,本文先将前文做简要总结,在以实际例子分析Java运行时的数据区域.</p>
+<h1 id="1-总结"><strong>1.总结</strong></h1><ul>
+<li>寄存器<br>每一个线程都有一个独立的程序计数器,保存Java虚拟机正在执行的字节码指令的地址，若方法是native的，那程序计数器的值是undefined.</li>
+</ul>
+<ul>
+<li>栈<br>每一个线程都有自己私有的Java虚拟机栈.栈帧(Stack Frame)用于存储局部变量表、操作栈、动态链接、方法出口等信息.局部变量表存放了编译期可知的各种基本数据类型、对象引用和字节码指令地址</li>
+</ul>
+<ul>
+<li>堆<br>Java堆可由各条线程共享,存储类实例和数组对象.由Garbage Collector(垃圾收集器)管理这些对象</li>
+</ul>
+<ul>
+<li>静态域<br>存放静态成员(static定义的).在方法区中</li>
+</ul>
+<ul>
+<li>常量池<br>存放字符串常量和基本类型常量(public static final).在方法区中<a id="more"></a>
+</li>
+</ul>
+<h1 id="2-例子"><strong>2.例子</strong></h1><h2 id="2-1_栈中内存的分配"><strong>2.1 栈中内存的分配</strong></h2><p>每个方法栈帧中的局部变量表可以存储基本数据类型、对象引用,例如</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> test(<span class="built_in">int</span> i) {<span class="comment">//参数传递是利用局部变量表</span>
+    <span class="comment">//基本类型存于局部变量表</span>
+    <span class="built_in">int</span> j;
+    <span class="built_in">boolean</span> k;
+    <span class="built_in">float</span> l;
+    <span class="comment">//对象引用存于局部变量表</span>
+    <span class="keyword">String</span> s;
+    <span class="keyword">Object</span> t;
+    <span class="comment">//对象本身不存于局部变量表</span>
+    <span class="keyword">Object</span> o = <span class="keyword">new</span> <span class="keyword">Object</span>();
+}
+</code></pre><h2 id="2-2_堆中内存分配"><strong>2.2 堆中内存分配</strong></h2><p>堆内存用来存放由new创建的对象和数组。 在堆中分配的内存，由Java虚拟机的自动垃圾回收器来管理。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> test() {
+        <span class="comment">//数组和new的对象存于堆中</span>
+    <span class="built_in">int</span>[] i = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">3</span>]; 
+    <span class="keyword">String</span> s = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"123"</span>);
+    <span class="keyword">Object</span> o = <span class="keyword">new</span> <span class="keyword">Object</span>();
+}
+</code></pre><p>引用变量在栈中分配，引用变量在程序运行到其作用域之外后被释放。而数组和对象本身在堆中分配，即使程序运行到使用 new 产生数组或者对象的语句所在的代码块之外，数组和对象本身占据的内存不会被释放，数组和对象在没有引用变量指向它的时候，才变为垃圾，不能在被使用，但仍然占据内存空间不放，在随后的一个不确定的时间被垃圾回收器收走（释放掉）.</p>
+<h2 id="2-3_常量池"><strong>2.3 常量池</strong></h2><p>对于字符串String：对象的引用都是存储在栈中的，如果是编译期已经创建好(直接用双引号定义的)的就存储在常量池中，如果是运行期(new出来的)才能确定的就存储在堆中。对于equals相等的字符串，在常量池中永远只有一份，在堆中有多份。</p>
+<pre><code><span class="comment">//存于常量池中</span>
+<span class="built_in">String</span> s1 = <span class="string">"12345"</span>;<span class="comment">//寻找常量池中有无此常量，有则直接指向,无则加入常量池  </span>
+<span class="built_in">String</span> s2 = <span class="string">"12345"</span>;  
+<span class="built_in">String</span> s3 = <span class="string">"12"</span> + <span class="string">"345"</span>; <span class="comment">//编译期间确定，在常量池中</span>
+System.out.<span class="built_in">print</span>(s1 == s2);<span class="comment">//true</span>
+System.out.<span class="built_in">print</span>(s1 == s3);<span class="comment">//true</span>
+<span class="comment">//存于堆中 </span>
+<span class="built_in">String</span> t1 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"12345"</span>); 
+<span class="built_in">String</span> t2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"12345"</span>);
+<span class="built_in">String</span> t3 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"12"</span>) + <span class="string">"345"</span>; 
+System.out.<span class="built_in">print</span>(t1 == t2 );<span class="comment">//false</span>
+System.out.<span class="built_in">print</span>(t3 == t2 );<span class="comment">//false</span>
+</code></pre><p>对于基础类型的变量和常量：变量和引用存储在栈中，常量存储在常量池中。</p>
+<pre><code><span class="keyword">int</span> i = <span class="number">9</span>;<span class="comment">//存于栈中</span>
+<span class="keyword">public</span> <span class="keyword">static</span> final <span class="keyword">int</span> INT = <span class="number">9</span>;<span class="comment">//存于常量池中</span>
+</code></pre><h2 id="2-4_更多分析">2.4 更多分析</h2><p><strong>成员变量和局部变量</strong></p>
+<p>成员变量就是方法外部，类的内部定义的变量；局部变量就是方法或语句块内部定义的变量。局部变量必须初始化。形式参数是局部变量，局部变量的数据存在于栈内存中。栈内存中的局部变量随着方法的消失而消失。</p>
+<pre><code><span class="keyword">class</span> BirthDate {
+    <span class="comment">// 成员变量，存于堆中(new BirthDate())</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> day;
+    <span class="keyword">private</span> <span class="keyword">int</span> month;
+    <span class="keyword">private</span> <span class="keyword">int</span> year;
+    <span class="function"><span class="keyword">public</span> <span class="title">BirthDate</span><span class="params">(<span class="keyword">int</span> d, <span class="keyword">int</span> m, <span class="keyword">int</span> y)</span> </span>{
+        day = d;
+        month = m;
+        year = y;
+    }
+}
+<span class="keyword">public</span> <span class="keyword">class</span> Test {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>{
+        <span class="comment">// 局部变量，存于栈中</span>
+        <span class="keyword">int</span> d = <span class="number">16</span>;
+        <span class="keyword">int</span> m = <span class="number">9</span>;
+        <span class="keyword">int</span> y = <span class="number">1987</span>;
+        BirthDate bdate = <span class="keyword">new</span> BirthDate(d, m, y);
+    }
+}
+</code></pre><p><strong>关于String.intern()</strong></p>
+<p>String的 intern()方法是扩充常量池的 一个方法；当一个String实例str调用intern()方法时，Java 查找常量池中是否有相同Unicode的字符串常量，如果有，则返回其的引用，如果没有，则在常量池中增加一个Unicode等于str的字符串并返回它的引用；</p>
+<pre><code><span class="keyword">String</span> s0= <span class="string">"12345"</span>;<span class="comment">//存于常量池</span>
+<span class="keyword">String</span> s1=<span class="keyword">new</span> <span class="keyword">String</span>(<span class="string">"12345"</span>);<span class="comment">//存于堆</span>
+System.out.<span class="built_in">println</span>( s0==s1 );<span class="comment">//false</span>
+System.out.<span class="built_in">println</span>( s0==s1.intern() );<span class="comment">//true，常量池中存在此常量，返回其引用</span>
+</code></pre><p><strong>String常量池</strong></p>
+<pre><code><span class="type">String</span> a = <span class="string">"a1"</span>;
+<span class="type">String</span> b = <span class="string">"a"</span> + <span class="number">1</span>;
+<span class="type">System</span>.<span class="keyword">out</span>.println((a == b)); //<span class="literal">result</span> = <span class="literal">true</span>
+<span class="type">String</span> a = <span class="string">"atrue"</span>;
+<span class="type">String</span> b = <span class="string">"a"</span> + <span class="string">"true"</span>;
+<span class="type">System</span>.<span class="keyword">out</span>.println((a == b)); //<span class="literal">result</span> = <span class="literal">true</span>
+<span class="type">String</span> a = <span class="string">"a3.4"</span>;
+<span class="type">String</span> b = <span class="string">"a"</span> + <span class="number">3</span>.<span class="number">4</span>;
+<span class="type">System</span>.<span class="keyword">out</span>.println((a == b)); //<span class="literal">result</span> = <span class="literal">true</span>
+</code></pre><p>JVM对于字符串常量的”+”号连接，将程序编译期，JVM就将常量字符串的”+”连接优化为连接后的值，拿”a” + 1来说，经编译器优化后在class中就已经是a1。在编译期其字符串常量的值就确定下来，故上面程序最终的结果都为true。</p>
+<pre><code><span class="keyword">String </span>a = <span class="string">"ab"</span><span class="comment">;</span>
+<span class="keyword">String </span><span class="keyword">bb </span>= <span class="string">"b"</span><span class="comment">;</span>
+<span class="keyword">String </span><span class="keyword">b </span>= <span class="string">"a"</span> + <span class="keyword">bb;
+</span><span class="label">System.out.println</span>((a == <span class="keyword">b)); </span>//false
+</code></pre><p>JVM对于字符串引用，由于在字符串的”+”连接中，有字符串引用存在，而引用的值在程序编译期是无法确定的，即”a” + bb无法被编译器优化，只有在程序运行期来动态分配并将连接后的新地址赋给b。所以上面程序的结果也就为false。</p>
+<pre><code><span class="keyword">String </span>a = <span class="string">"ab"</span><span class="comment">;</span>
+<span class="label">final</span> <span class="keyword">String </span><span class="keyword">bb </span>= <span class="string">"b"</span><span class="comment">;</span>
+<span class="keyword">String </span><span class="keyword">b </span>= <span class="string">"a"</span> + <span class="keyword">bb;
+</span><span class="label">System.out.println</span>((a == <span class="keyword">b)); </span>//true
+</code></pre><p>bb字符串加了final修饰，对于final修饰的变量，它在编译时被解析为常量值的一个本地拷贝存储到自己的常量 池中或嵌入到它的字节码流中。所以此时的”a” + bb和”a” + “b”效果是一样的。故上面程序的结果为true。</p>
+<pre><code><span class="type">String</span> a = <span class="string">"ab"</span>;
+final <span class="type">String</span> bb = getBB();
+<span class="type">String</span> b = <span class="string">"a"</span> + bb;
+<span class="type">System</span>.<span class="keyword">out</span>.println((a == b)); //<span class="literal">result</span> = <span class="literal">false</span>
+private <span class="keyword">static</span> <span class="type">String</span> getBB() {
+<span class="keyword">return</span> <span class="string">"b"</span>;
+}
+</code></pre><p>JVM对于字符串引用bb，它的值在编译期无法确定，只有在程序运行期调用方法后，将方法的返回值和”a”来动态连接并分配地址为b，故上面 程序的结果为false。</p>
+<p>参考文章：<br><a href="http://developer.51cto.com/art/201009/225071.htm" target="_blank" rel="external">http://developer.51cto.com/art/201009/225071.htm</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/12/24/2013-12-24-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9fe7bbad/" data-id="cigd6gc5j001z5jor8ndupi6x" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/12/26/2013-12-26-outofmemoryerror-e5ae9ee8b7b5e4b88ee58886e69e90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          OutOfMemoryError 实践与分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/12/23/2013-12-23-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9f/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java运行时数据区域</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>OutOfMemoryError 实践与分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="继续抄书. 前文介绍了JVM运行时内存区的分配. 本文将介绍 OutOfMemoryError (OOM).
+由前文可知, JVM运行时内存可分为:程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区(包含常量池). 除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生OutOfMemoryError异常的可能. 本文通过实例验证各个区域OutOfMemoryError异常发生的场景.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OutOfMemoryError 实践与分析">
+<meta property="og:url" content="http://yoursite.com/2013/12/26/2013-12-26-outofmemoryerror-e5ae9ee8b7b5e4b88ee58886e69e90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="继续抄书. 前文介绍了JVM运行时内存区的分配. 本文将介绍 OutOfMemoryError (OOM).
+由前文可知, JVM运行时内存可分为:程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区(包含常量池). 除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生OutOfMemoryError异常的可能. 本文通过实例验证各个区域OutOfMemoryError异常发生的场景.">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OutOfMemoryError 实践与分析">
+<meta name="twitter:description" content="继续抄书. 前文介绍了JVM运行时内存区的分配. 本文将介绍 OutOfMemoryError (OOM).
+由前文可知, JVM运行时内存可分为:程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区(包含常量池). 除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生OutOfMemoryError异常的可能. 本文通过实例验证各个区域OutOfMemoryError异常发生的场景.">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-12-26-outofmemoryerror-e5ae9ee8b7b5e4b88ee58886e69e90" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/26/2013-12-26-outofmemoryerror-e5ae9ee8b7b5e4b88ee58886e69e90/" class="article-date">
+  <time datetime="2013-12-26T07:31:24.000Z" itemprop="datePublished">2013-12-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OutOfMemoryError 实践与分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>继续抄书. 前文介绍了JVM运行时内存区的分配. 本文将介绍 OutOfMemoryError (OOM).</p>
+<p>由前文可知, JVM运行时内存可分为:程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区(包含常量池). 除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生OutOfMemoryError异常的可能. 本文通过实例验证各个区域OutOfMemoryError异常发生的场景. 文中的代码都是基于Sun Hotspot虚拟机1.6版的实现，对于不同公司的不同版本的虚拟机，参数与程序运行结果可能结果会有所差别。</p>
+<h1 id="1-JVM内存设置参数">1.JVM内存设置参数</h1><p>-Xms :设置JVM初始化堆内存大小</p>
+<p>-Xmx :设置JVM最大允许分配的堆内存大小</p>
+<p>-Xss :设置JVM栈内存大小</p>
+<p>-XX:PermSize : 设置JVM初始分配的非堆内存</p>
+<p>-XX:MaxPermSize 设置:JVM最大允许分配的非堆内存<br><a id="more"></a></p>
+<h1 id="2-Java堆">2.Java堆</h1><p>Java堆存放的是对象实例，因此只要不断建立对象，并且保证GC Roots到对象之间有可达路径即可产生OOM异常。</p>
+<p>测试中限制Java堆大小为20M，不可扩展，通过参数-XX:+HeapDumpOnOutOfMemoryError让虚拟机在出现OOM异常的时候Dump出内存映像以便分析。</p>
+<p>Java堆OOM测试代码</p>
+<pre><code><span class="comment">/**
+ * VM Args：-Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeapOOM</span>
+</span>{
+    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMObject</span>
+    </span>{
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> void main( String[] args )
+    {
+        java.util.<span class="keyword">List</span>&lt;OOMObject&gt; <span class="keyword">list</span> = <span class="keyword">new</span> ArrayList&lt;OOMObject&gt;();
+        <span class="keyword">while</span>( <span class="keyword">true</span> )
+        {
+            <span class="keyword">list</span>.add( <span class="keyword">new</span> OOMObject() );
+        }
+    }
+}
+</code></pre><p>运行结果：</p>
+<pre><code>java.lang.OutOfMemoryError: Java heap <span class="constant">space</span>
+Dumping heap <span class="built_in">to</span> java_pid7372.hprof ...
+Heap dump <span class="built_in">file</span> created [<span class="number">24724537</span> <span class="keyword">bytes</span> <span class="operator">in</span> <span class="number">0.699</span> <span class="built_in">secs</span>]
+</code></pre><h1 id="3-JVM栈和本地方法栈">3.JVM栈和本地方法栈</h1><p>Hotspot虚拟机并不区分VM栈和本地方法栈，因此-Xoss参数实际上是无效的，栈容量只由-Xss参数设定。关于VM栈和本地方法栈在VM Spec描述了两种异常：如果线程请求的栈的深度大于虚拟机所允许的最大深度,则将抛出StackOverflowError; 如果虚拟机在扩展栈时无法申请到足够的内存空间,则将抛出OutOfMemoryError.</p>
+<p>这里把异常分成两种情况看似更加严谨，但却存在着一些互相重叠的地方：当栈空间无法继续分配时，到底是内存太小，还是已使用的栈空间太大，其本质上只是对同一件事情的两种描述而已。在实验中，如果将实验范围限制于单线程中的操作，尝试了下面两种方法均无法让虚拟机产生OutOfMemoryError异常，尝试的结果都是获得StackOverflowError异常:</p>
+<p>使用-Xss参数减少栈内存容量。结果：抛出StackOverflowError异常，异常出现时输出的栈深度相应缩小。</p>
+<p>定义了大量的本地变量，增加此方法帧中本地变量表的长度。结果：抛出StackOverflowError异常时输出的栈深度相应缩小。</p>
+<p>VM栈和本地方法栈OOM测试代码（仅作为第1点测试程序）</p>
+<pre><code><span class="comment">/**
+ * VM Args：-Xss128k
+ * 
+ */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JavaVMStackSOF</span>
+{
+    <span class="keyword">private</span> <span class="keyword">int</span> stackLength = <span class="number">1</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stackLeak</span>(<span class="params"></span>)
+    </span>{
+        stackLength++;
+        stackLeak();
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"> String[] args </span>) throws Throwable
+    </span>{
+        JavaVMStackSOF oom = <span class="keyword">new</span> JavaVMStackSOF();
+        <span class="keyword">try</span>
+        {
+            oom.stackLeak();
+        }
+        <span class="keyword">catch</span>( Throwable e )
+        {
+            System.<span class="keyword">out</span>.println( <span class="string">"stack length:"</span> + oom.stackLength );
+            <span class="keyword">throw</span> e;
+        }
+    }
+}
+</code></pre><p>运行结果</p>
+<pre><code>stack length:<span class="number">3155</span>
+Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.StackOverflowError</span>
+    at memoryManagement<span class="class">.JavaVMStackSOF</span><span class="class">.stackLeak</span>(JavaVMStackSOF<span class="class">.java</span>:<span class="number">14</span>)
+    at memoryManagement<span class="class">.JavaVMStackSOF</span><span class="class">.stackLeak</span>(JavaVMStackSOF<span class="class">.java</span>:<span class="number">14</span>)
+</code></pre><p>实验结果表明：在单个线程下，无论是由于栈帧太大，还是虚拟机栈容量太小，当内存无法分配的时候，虚拟机抛出的都是StackOverflowError异常。</p>
+<p>如果测试时不限于单线程，通过不断地建立线程的方式倒是可以产生内存溢出异常。但是，这样产生的内存溢出异常与栈空间是否足够大并不存在任何联系，或者准确地说，在这种情况下，给每个线程的栈分配的内存越大，反而越容易产生内存溢出异常。原因其实不难理解，操作系统分配给每个进程的内存是有限制的，譬如32位的Windows限制为2GB。虚拟机提供了参数来控制Java堆和方法区的这两部分内存的最大值。剩余的内存为2GB（操作系统限制）减去Xmx（最大堆容量），再减去MaxPermSize（最大方法区容量），程序计数器消耗内存很小，可以忽略掉。如果虚拟机进程本身耗费的内存不计算在内，剩下的内存就由虚拟机栈和本地方法栈“瓜分”了。每个线程分配到的栈容量越大，可以建立的线程数量自然就越少，建立线程时就越容易把剩下的内存耗尽。</p>
+<p>在开发多线程应用的时候特别注意，出现StackOverflowError异常时有错误堆栈可以阅读，相对来说，比较容易找到问题的所在。而且，如果使用虚拟机默认参数，栈深度在大多数情况下（因为每个方法压入栈的帧大小并不是一样的，所以只能说大多数情况下）达到1000～2000完全没有问题，对于正常的方法调用（包括递归），这个深度应该完全够用了。但是，如果是建立过多线程导致的内存溢出，在不能减少线程数或者更换64位虚拟机的情况下，就只能通过减少最大堆和减少栈容量来换取更多的线程。如果没有这方面的经验，这种通过“减少内存”的手段来解决内存溢出的方式会比较难以想到。</p>
+<p>创建线程导致内存溢出异常测试代码</p>
+<pre><code><span class="comment">/**
+ * VM Args：-Xss2M （这时候不妨设大些）
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaVMStackOOM</span>
+</span>{
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dontStop</span><span class="params">()</span>
+    </span>{
+        <span class="keyword">while</span>( <span class="keyword">true</span> )
+        {
+        }
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stackLeakByThread</span><span class="params">()</span>
+    </span>{
+        <span class="keyword">while</span>( <span class="keyword">true</span> )
+        {
+            Thread thread = <span class="keyword">new</span> Thread( <span class="keyword">new</span> Runnable()
+            {
+                <span class="annotation">@Override</span>
+                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span>
+                </span>{
+                    dontStop();
+                }
+            } );
+            thread.start();
+        }
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span> <span class="keyword">throws</span> Throwable
+    </span>{
+        JavaVMStackOOM oom = <span class="keyword">new</span> JavaVMStackOOM();
+        oom.stackLeakByThread();
+    }
+}
+</code></pre><p>运行结果</p>
+<pre><code>Exception <span class="keyword">in</span> <span class="keyword">thread</span> <span class="string">"main"</span> java<span class="built_in">.</span>lang<span class="built_in">.</span>OutOfMemoryErr<span class="subst">or</span>: unable <span class="keyword">to</span> create <span class="literal">new</span> native <span class="keyword">thread</span>
+</code></pre><h1 id="4-运行时常量池">4.运行时常量池</h1><p>要在常量池里添加内容，最简单的就是使用String.intern()这个Native方法。由于常量池分配在方法区内，我们只需要通过-XX:PermSize和-XX:MaxPermSize限制方法区大小即可限制常量池容量。</p>
+<p>运行时常量池导致的OOM异常测试代码</p>
+<pre><code><span class="comment">/**
+ * VM Args：-XX:PermSize=10M -XX:MaxPermSize=10M
+ * 
+ */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> RuntimeConstantPoolOOM
+{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span>
+    </span>{
+        <span class="comment">// 使用List保持着常量池引用，压制Full GC回收常量池行为               </span>
+        List&lt;String&gt; <span class="built_in">list</span> = <span class="keyword">new</span> ArrayList&lt;String&gt;();
+        <span class="comment">// 10M的PermSize在integer范围内足够产生OOM了      </span>
+        <span class="keyword">int</span> i = <span class="number">0</span>;
+        <span class="keyword">while</span>( <span class="literal">true</span> )
+        {
+            <span class="built_in">list</span>.add( String.valueOf( i++ ).intern() );
+        }
+    }
+}
+</code></pre><p>运行结果</p>
+<pre><code>Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.OutOfMemoryError</span>: PermGen space
+    at java<span class="class">.lang</span><span class="class">.ClassLoader</span><span class="class">.defineClass1</span>(Native Method)
+    at java<span class="class">.lang</span><span class="class">.ClassLoader</span><span class="class">.defineClassCond</span>(Unknown Source)
+</code></pre><p>从运行结果中可以看到，运行时常量池溢出，在OutOfMemoryError后面跟随的提示信息是“PermGen space”，说明运行时常量池属于方法区（HotSpot虚拟机中的永久代）的一部分。</p>
+<h1 id="5-方法区">5.方法区</h1><p>方法区用于存放Class相关信息，所以这个区域的测试我们借助CGLib直接操作字节码动态生成大量的Class，值得注意的是，这里我们这个例子中模拟的场景其实经常会在实际应用中出现：当前很多主流框架，如Spring、Hibernate对类进行增强时，都会使用到CGLib这类字节码技术，当增强的类越多，就需要越大的方法区用于保证动态生成的Class可以加载入内存。</p>
+<p>借助CGLib使得方法区出现OOM异常测试代码</p>
+<pre><code><span class="comment">/**
+ * VM Args： -XX:PermSize=10M -XX:MaxPermSize=10M
+ *
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaMethodAreamOOM</span>
+</span>{
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main( String[] args )
+    {
+        <span class="keyword">while</span>( <span class="literal">true</span> )
+        {
+            Enhancer enhancer = <span class="keyword">new</span> Enhancer();
+            enhancer.setSuperclass( OOMObject.class );
+            enhancer.setUseCache( <span class="literal">false</span> );
+            enhancer.setCallback( <span class="keyword">new</span> MethodInterceptor()
+            {
+                <span class="keyword">public</span> <span class="built_in">Object</span> intercept( <span class="built_in">Object</span> obj, Method method, <span class="built_in">Object</span>[] args, MethodProxy proxy ) throws Throwable
+                {
+                    <span class="keyword">return</span> proxy.invokeSuper( obj, args );
+                }
+            } );
+            enhancer.create();
+        }
+    }
+
+    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMObject</span>
+    </span>{
+    }
+}
+</code></pre><p>运行结果：</p>
+<pre><code>Caused by: java<span class="class">.lang</span><span class="class">.OutOfMemoryError</span>: PermGen space        
+       at java<span class="class">.lang</span><span class="class">.ClassLoader</span><span class="class">.defineClass1</span>(Native Method)        
+       at java<span class="class">.lang</span><span class="class">.ClassLoader</span><span class="class">.defineClassCond</span>(ClassLoader<span class="class">.java</span>:<span class="number">632</span>)        
+       at java<span class="class">.lang</span><span class="class">.ClassLoader</span><span class="class">.defineClass</span>(ClassLoader<span class="class">.java</span>:<span class="number">616</span>)        
+       ... <span class="number">8</span> more
+</code></pre><p>方法区溢出也是一种常见的内存溢出异常，一个类如果要被垃圾收集器回收掉，判定条件是非常苛刻的。在经常动态生成大量Class的应用中，需要特别注意类的回收状况。这类场景除了上面提到的程序使用了GCLib字节码增强外，常见的还有：大量JSP或动态产生JSP文件的应用（JSP第一次运行时需要编译为Java类）、基于OSGi的应用（即使是同一个类文件，被不同的加载器加载也会视为不同的类）等。</p>
+<h1 id="6-_本机直接内存">6. 本机直接内存</h1><p>DirectMemory容量可通过-XX:MaxDirectMemorySize指定，不指定的话默认与Java堆（-Xmx指定）一样，下文代码越过了DirectByteBuffer，直接通过反射获取Unsafe实例进行内存分配（Unsafe类的getUnsafe()方法限制了只有引导类加载器才会返回实例，也就是基本上只有rt.jar里面的类的才能使用），因为DirectByteBuffer也会抛OOM异常，但抛出异常时实际上并没有真正向操作系统申请分配内存，而是通过计算得知无法分配既会抛出，真正申请分配的方法是unsafe.allocateMemory().</p>
+<pre><code><span class="comment">/**
+ * VM Args：-Xmx20M -XX:MaxDirectMemorySize=10M
+ *
+ */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DirectMemoryOOM</span>
+{
+        <span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">int</span> _1MB = <span class="number">1024</span> * <span class="number">1024</span>;
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"> String[] args </span>) throws Exception
+        </span>{
+            Field unsafeField = Unsafe.class.getDeclaredFields()[<span class="number">0</span>];
+            unsafeField.setAccessible( <span class="keyword">true</span> );
+            Unsafe <span class="keyword">unsafe</span> = ( Unsafe ) unsafeField.<span class="keyword">get</span>( <span class="keyword">null</span> );
+            <span class="keyword">while</span>( <span class="keyword">true</span> )
+            {
+                <span class="keyword">unsafe</span>.allocateMemory( _1MB );
+            }
+        }
+}
+</code></pre><p>运行结果</p>
+<pre><code>Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.OutOfMemoryError</span>       
+ at sun<span class="class">.misc</span><span class="class">.Unsafe</span><span class="class">.allocateMemory</span>(Native Method)       
+ at org<span class="class">.fenixsoft</span><span class="class">.oom</span><span class="class">.DirectMemoryOOM</span><span class="class">.main</span>(DirectMemoryOOM<span class="class">.java</span>:<span class="number">20</span>)
+</code></pre><p>摘自</p>
+<p>《深入理解Java虚拟机–JVM高级特性与最佳实践》</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/12/26/2013-12-26-outofmemoryerror-e5ae9ee8b7b5e4b88ee58886e69e90/" data-id="cigd6gc5h001w5jorcvpfndv6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java 基本数据类型及其包装类
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/12/24/2013-12-24-javae8bf90e8a18ce697b6e695b0e68daee58cbae59f9fe7bbad/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java 运行时数据区域(续)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

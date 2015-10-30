@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java 基本数据类型及其包装类 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.基本数据类型Java基本数据类型(Primitive Types)可以分为数值类型(Numeric Types)、 布尔类型 (Boolean Type)和 returnAddress 类型三类。其中数值类型又分为整型类型和浮点类型.
+1.1整数类型整数类型包括以下几种类型:
+
+byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取值范围是从-128 至 127(-2的7次方至 2的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 基本数据类型及其包装类">
+<meta property="og:url" content="http://yoursite.com/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.基本数据类型Java基本数据类型(Primitive Types)可以分为数值类型(Numeric Types)、 布尔类型 (Boolean Type)和 returnAddress 类型三类。其中数值类型又分为整型类型和浮点类型.
+1.1整数类型整数类型包括以下几种类型:
+
+byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取值范围是从-128 至 127(-2的7次方至 2的">
+<meta property="og:image" content="https://otwrpg.dm1.livefilestore.com/y2pIJgKRC1qAKqT0N_zoEWJ3pX2qj_Ox9T3RSwKDaXwGiJR76KspP2ZPEB9rgdmVAAKf4emtniR6DkmTithetjju-gBUVN7nQlUAAXYIS2obXo/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png?psid=1">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 基本数据类型及其包装类">
+<meta name="twitter:description" content="1.基本数据类型Java基本数据类型(Primitive Types)可以分为数值类型(Numeric Types)、 布尔类型 (Boolean Type)和 returnAddress 类型三类。其中数值类型又分为整型类型和浮点类型.
+1.1整数类型整数类型包括以下几种类型:
+
+byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取值范围是从-128 至 127(-2的7次方至 2的">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/" class="article-date">
+  <time datetime="2013-12-29T06:56:10.000Z" itemprop="datePublished">2013-12-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java 基本数据类型及其包装类
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-基本数据类型">1.基本数据类型</h1><p>Java基本数据类型(Primitive Types)可以分为数值类型(Numeric Types)、 布尔类型 (Boolean Type)和 returnAddress 类型三类。其中数值类型又分为整型类型和浮点类型.</p>
+<h2 id="1-1整数类型">1.1整数类型</h2><p>整数类型包括以下几种类型:</p>
+<ul>
+<li>byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取值范围是从-128 至 127(-2的7次方至 2的7次方7-1)，包括-128 和 127。</li>
+</ul>
+<ul>
+<li>short 类型：值为 16 位有符号二进制补码整数，默认值为零。取值范围是从−32768 至 32767(-2的7次方15至 2的7次方15-1) ，包括−32768 和32767。</li>
+</ul>
+<ul>
+<li>int 类型：值为 32 位有符号二进制补码整数，默认值为零。取值范围是从−2147483648 至 2147483647(-2的7次方31至 2的7次方31-1)，包括−2147483648 和 2147483647。</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>long 类型：值为 64 位有符号二进制补码整数，默认值为零。取值范围是从−9223372036854775808 至 9223372036854775807(-2的7次方63至 2的7次方63-1) ，包括−9223372036854775808 和 9223372036854775807。</li>
+</ul>
+<ul>
+<li>char 类型：值为使用 16 位无符号整数表示的、指向基本多文本平面（Basic Multilingual Plane， BMP）的 Unicode 值，以 UTF-16 编码，默认值为 Unicode的 null 值(‘\u0000’)。取值范围是从 0 至 65535，包括 0 和 65535。</li>
+</ul>
+<p>有以下几点需要注意:</p>
+<ul>
+<li>如果将超过变量类型取值范围的数值赋给变量,会产生编译错误,即编译器会检查变量的取值范围</li>
+</ul>
+<pre><code>byte bb = <span class="number">200</span>;<span class="comment">//compile error</span>
+<span class="keyword">short</span> ss = <span class="number">60000</span>;<span class="comment">//compile error</span>
+<span class="keyword">int</span> ii = <span class="number">4000000000</span>;<span class="comment">//compile error</span>
+<span class="keyword">long</span> ll = <span class="number">10000000000000000000L</span>;<span class="comment">//compile error</span>
+<span class="keyword">char</span> cc = <span class="number">70000</span>;<span class="comment">//compile error</span>
+</code></pre><ul>
+<li>如果一个整数超过了int的取值范围,则这个整数常量必须加上L或l才能赋值给long类型变量</li>
+</ul>
+<pre><code><span class="keyword">long</span> l1 = <span class="number">2000000000</span>;<span class="comment">//compile OK</span>
+<span class="keyword">long</span> l2 = <span class="number">900000000000000000</span>;<span class="comment">//compile error</span>
+<span class="keyword">long</span> l3 = <span class="number">900000000000000000L</span>;<span class="comment">//compile OK</span>
+</code></pre><ul>
+<li>Java中整数常量有三种表示方式:10进制,8进制(以0开头),16进制(以0x或0X开头)</li>
+</ul>
+<pre><code><span class="keyword">int</span> octalValue = <span class="number">013</span>;<span class="comment">//十进制1*8+3 = 11</span>
+<span class="keyword">int</span> hexValue1 = <span class="number">0x13</span>;<span class="comment">//十进制1*16+3 = 19</span>
+<span class="keyword">int</span> hexValue2 = <span class="number">0Xab</span>;<span class="comment">//十进制10*16+11 = 171</span>
+System.out.println(octalValue);
+System.out.println(hexValue1);
+System.out.println(hexValue2);
+</code></pre><h2 id="1-2浮点类型">1.2浮点类型</h2><ul>
+<li>float 类型：值为单精度浮点数集合中的元素，或者(如果虚拟机支持的话)是单精度扩展指数（Float-Extended-Exponent）集合中的元素。默认值为正数零。</li>
+</ul>
+<ul>
+<li>double 类型：取值范围是双精度浮点数集合中的元素，或者(如果虚拟机支持的话)是双精度扩展指数(Double-Extended-Exponent）集合中的元素。默认值为正数零。</li>
+</ul>
+<p>Java的默认浮点类型是double,如果想要把一个浮点常量当做float,则需要在常量后面加上F或f</p>
+<pre><code><span class="keyword">float</span> f1 = <span class="number">1.0</span>;<span class="comment">//compile error</span>
+<span class="keyword">float</span> f2 = <span class="number">1.0F</span>;
+<span class="keyword">double</span> d = <span class="number">1.0</span>;
+</code></pre><p>Java提供了三个特殊的浮点数值:正无穷大(POSITIVE_INFINITY)、负无穷大(NEGATIVE_INFINITY)和非数(NaN). 正数除以0会得到正无穷大，负数除以0会得到负无穷大，0.0除以0.0或对负数开方会得到非数。 注意Java里面只有浮点数除以0才会得到正无穷大或负无穷大，整数除以0则会得到一个异常</p>
+<pre><code><span class="keyword">double</span> dpi = <span class="number">1.0</span>/<span class="number">0</span>;
+System.out.println(dpi);
+<span class="keyword">double</span> dni = -<span class="number">1.0</span>/<span class="number">0</span>;
+System.out.println(dni);
+<span class="keyword">int</span> ipi = <span class="number">1</span>/<span class="number">0</span>;
+System.out.println(ipi);
+</code></pre><p>输出为</p>
+<pre><code>Infinity
+-Infinity
+Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.ArithmeticException</span>: / by zero
+    at Test.<span class="function"><span class="title">main</span><span class="params">(Test.java:<span class="number">83</span>)</span></span>
+</code></pre><p>正无穷大用Double或Float的POSITIVE_INFINITY表示，负无穷大用Double或Float的NEGATIVE_INFINITY表示，非数用Double或Float的NaN表示。 所有正无穷大相等，所有负无穷大相等，非数都不相等</p>
+<pre><code>System.out.<span class="keyword">println</span>(<span class="keyword">Float</span>.NEGATIVE_INFINITY == <span class="keyword">Double</span>.NEGATIVE_INFINITY);<span class="comment">//true</span>
+System.out.<span class="keyword">println</span>(<span class="keyword">Float</span>.POSITIVE_INFINITY == <span class="keyword">Double</span>.POSITIVE_INFINITY);<span class="comment">//true</span>
+System.out.<span class="keyword">println</span>(<span class="keyword">Float</span>.NaN == <span class="keyword">Float</span>.NaN);<span class="comment">//false</span>
+</code></pre><h2 id="1-3布尔类型">1.3布尔类型</h2><ul>
+<li>boolean 类型：取值范围为布尔值 true 和 false，默认值为 false</li>
+</ul>
+<p>boolean类型的取值只能是true或 false，不能用0或非0来表示，其他类型不能转换为boolean类型。如果boolean类型和字符串连接，则boolean自动转换为字符串</p>
+<pre><code>System.<span class="keyword">out</span>.println(<span class="keyword">true</span>+<span class="string">""</span>);<span class="comment">//true</span>
+</code></pre><p>1.4基本成员的默认值</p>
+<p>当类的成员变量是基本数据类型的时候,即使不对成员变量进行初始化,Java也会将其自动初始化为一个默认值</p>
+<p>boolean—-&gt;false       char—-&gt;’\u0000’       byte—-&gt;(byte)0      short—-&gt;(short)0</p>
+<p>int—-&gt;0                     long—-&gt;0L                float—-&gt;0.0f               double—-&gt;(double)0.0d</p>
+<p>但是对于局部变量,则不会有默认初始化.</p>
+<h1 id="2-基本数据类型的类型转换">2.基本数据类型的类型转换</h1><p>Java基本数据类型之间的类型转换可以分为：自动类型转换和强制类型转换</p>
+<h2 id="2-1自动类型转换">2.1自动类型转换</h2><p>如果系统支持把某个基本数据类型的值直接赋值给另一个基本数据类型，则这种方式就成为自动类型转换。当把一个表数范围较小的数值或变量赋给另一个表数范围较大的变量的时候，系统可以进行自动类型转换。Java支持自动类型转换的类型如图<br><img src="https://otwrpg.dm1.livefilestore.com/y2pIJgKRC1qAKqT0N_zoEWJ3pX2qj_Ox9T3RSwKDaXwGiJR76KspP2ZPEB9rgdmVAAKf4emtniR6DkmTithetjju-gBUVN7nQlUAAXYIS2obXo/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png?psid=1" alt=""></p>
+<pre><code><span class="keyword">byte</span> b = <span class="number">50</span>;
+<span class="keyword">short</span> s = b;
+<span class="keyword">int</span> i = s;
+<span class="keyword">long</span> l = i;
+<span class="keyword">float</span> f = l;
+<span class="keyword">double</span> d = f;
+System.<span class="keyword">out</span>.println(b);<span class="comment">//50</span>
+System.<span class="keyword">out</span>.println(s);<span class="comment">//50</span>
+System.<span class="keyword">out</span>.println(i);<span class="comment">//50</span>
+System.<span class="keyword">out</span>.println(l);<span class="comment">//50</span>
+System.<span class="keyword">out</span>.println(f);<span class="comment">//50.0</span>
+System.<span class="keyword">out</span>.println(d);<span class="comment">//50.0</span>
+
+<span class="keyword">char</span> c = b;<span class="comment">//compile error</span>
+<span class="keyword">int</span> ii = <span class="number">1.0</span>;<span class="comment">//compile error</span>
+<span class="keyword">double</span> ff = <span class="number">1.0</span>;
+<span class="keyword">long</span> ll = ff;<span class="comment">//compile error</span>
+</code></pre><p>把任何基本类型的值和字符串进行连接运算时，基本类型的值将自动转换为字符串类型。如下代码所示：</p>
+<pre><code>//<span class="keyword">String </span><span class="literal">s1</span> = <span class="number">5</span><span class="comment">;//compile error</span>
+<span class="keyword">String </span><span class="literal">s1</span> = <span class="number">5</span> + <span class="string">""</span><span class="comment">;</span>
+<span class="keyword">String </span><span class="literal">s2</span> = <span class="number">5</span>.<span class="number">0</span> + <span class="string">""</span><span class="comment">;</span>
+<span class="keyword">String </span><span class="literal">s3</span> = true + <span class="string">""</span><span class="comment">;</span>
+<span class="label">System.out.println</span>(<span class="literal">s1</span>)<span class="comment">;//5</span>
+<span class="label">System.out.println</span>(<span class="literal">s2</span>)<span class="comment">;//5.0</span>
+<span class="label">System.out.println</span>(<span class="literal">s3</span>)<span class="comment">;//true</span>
+</code></pre><h2 id="2-2强制类型转换">2.2强制类型转换</h2><p>如果把上图箭头右边的类型转换为左边的类型，则必须进行强制类型转换。注意，强制类型转换可能产生数据溢出。</p>
+<pre><code><span class="keyword">int</span> i1 = <span class="number">300</span>;
+<span class="keyword">byte</span> b = (<span class="keyword">byte</span>)i1;
+<span class="keyword">float</span> f = <span class="number">5.9</span>f;
+<span class="keyword">int</span> i2 = (<span class="keyword">int</span>)f;
+System.<span class="keyword">out</span>.println(b);<span class="comment">//44 数据溢出</span>
+System.<span class="keyword">out</span>.println(i2);<span class="comment">//5 浮点型强制转换为整型，截断小数点</span>
+</code></pre><p>当把一个浮点数强制转换为整数时，Java会直接截断浮点数的小数部分。如果想得到四舍五入的结果，则需要调用java.lang.Math中的round()方法。当把一个超过某个类型表数范围的数值或变量赋给这个类型变量的时候，则可能产生数据溢出。</p>
+<h2 id="2-3表达式类型的自动提升">2.3表达式类型的自动提升</h2><p>当一个算术表达式包含多种数据类型的时候，整个算术表达式的数据类型将发生自动提升。规则如下：</p>
+<ul>
+<li>byte，short，char类型将被提升到int类型</li>
+</ul>
+<ul>
+<li>整个算术表达式的数据类型自动提升到与表达式中最高等级操作数同样的类型</li>
+</ul>
+<p>下面是一个典型的错误</p>
+<pre><code><span class="keyword">short</span> s = <span class="number">5</span>;
+s = s - <span class="number">2</span>;<span class="comment">//compile error</span>
+</code></pre><p>s-2表达式提升到int类型，不能直接将int复制给short。</p>
+<p>表达式类型将严格保持与表达式中等级最高的操作数类型相同。两个整数相除，得到的结果的小数部分会被截断。</p>
+<pre><code><span class="keyword">int</span> a = <span class="number">15</span>;
+<span class="keyword">int</span> b = <span class="number">8</span>;
+System.out.println(a/b);<span class="comment">// 15/8 = 1.875,截断为1</span>
+</code></pre><h1 id="3-基本数据类型的包装类">3.基本数据类型的包装类</h1><p>Java里面8种基本数据类型都有其对应的包装类：</p>
+<table cellpadding="4" width="317" cellspacing="0"><br><tbody><br><tr valign="TOP"><br><br><td width="86">基本数据类型<br></td><br><br><td width="48">包装类<br></td><br><br><td width="88">基本数据类型<br></td><br><br><td width="61">包装类<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">byte<br></td><br><br><td width="48">Byte<br></td><br><br><td width="88">char<br></td><br><br><td width="61">Character<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">short<br></td><br><br><td width="48">Short<br></td><br><br><td width="88">float<br></td><br><br><td width="61">Float<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">int<br></td><br><br><td width="48">Integer<br></td><br><br><td width="88">double<br></td><br><br><td width="61">Double<br></td><br></tr><br><tr valign="TOP"><br><br><td width="86">long<br></td><br><br><td width="48">Long<br></td><br><br><td width="88">boolean<br></td><br><br><td width="61">Boolean<br></td><br></tr><br></tbody><br></table>
+
+
+<h2 id="3-1包装类对象的构造">3.1包装类对象的构造</h2><p>可以通过调用包装类的构造器将基本数据类型包装成包装类实例。而且除了Character外，其他包装类都可以传入一个字符串来构造包装类对象。当用字符串创建Boolean对象时，字符串大小写不敏感。当传入包装类的字符串无法转换为相应基本类型变量时，则抛出java.lang.NumberFormatException异常。</p>
+<pre><code><span class="keyword">boolean</span> b = <span class="keyword">false</span>;
+<span class="keyword">Boolean</span> B1 = <span class="keyword">new</span> <span class="keyword">Boolean</span>(b);    
+<span class="keyword">Boolean</span> B2 = <span class="keyword">new</span> <span class="keyword">Boolean</span>(<span class="string">"TRuE"</span>);<span class="comment">//OK</span>
+<span class="keyword">Boolean</span> B3 = <span class="keyword">new</span> <span class="keyword">Boolean</span>(<span class="string">"fAlse"</span>);<span class="comment">//OK</span>
+Integer I = <span class="keyword">new</span> Integer(<span class="number">5</span>);
+<span class="keyword">Float</span> F1 = <span class="keyword">new</span> <span class="keyword">Float</span>(<span class="number">5.5</span>);<span class="comment">//Float(double value) 可以传入double值</span>
+<span class="keyword">Float</span> F2 = <span class="keyword">new</span> <span class="keyword">Float</span>(<span class="number">5.5</span>f);
+ouble D = <span class="keyword">new</span> <span class="keyword">Double</span>(<span class="string">"5.6"</span>);
+<span class="comment">//Character C = new Character("?")//compile error</span>
+<span class="keyword">Long</span> L = <span class="keyword">new</span> <span class="keyword">Long</span>(<span class="string">"sdsds"</span>);<span class="comment">//Exception in thread "main" java.lang.NumberFormatException</span>
+</code></pre><p>3.2自动装箱与自动拆箱</p>
+<p>JDK1.5后提供自动装箱与自动拆箱功能。自动装箱就是把一个基本类型变量直接赋值给包装类变量(或Object)，自动拆箱是把一个包装类变量直接赋给一个基本类型变量。</p>
+<pre><code>Integer I = <span class="number">5</span>;<span class="comment">//AutoBoxing</span>
+Object O = <span class="keyword">true</span>;<span class="comment">//AutoBoxing</span>
+<span class="keyword">if</span>(O <span class="keyword">instanceof</span> <span class="keyword">Boolean</span>) {
+    <span class="keyword">Boolean</span> B = (<span class="keyword">Boolean</span>)O;<span class="comment">//AutoBoxing</span>
+    <span class="keyword">boolean</span> b = (<span class="keyword">Boolean</span>)O;<span class="comment">//AutoUnBoxing</span>
+}
+<span class="keyword">int</span> i = I;<span class="comment">//AutoUnBoxing</span>
+</code></pre><h2 id="3-3基本类型变量与字符串">3.3基本类型变量与字符串</h2><p>包装类还可以实现基本类型变量与字符串之间的转换，有两种方式：</p>
+<ul>
+<li>包装类的parseXXX(String s)静态方法(除了Character类外)</li>
+</ul>
+<ul>
+<li>包装类的构造器方法</li>
+</ul>
+<p>String类还提供多个重载方法valueOf()，用于将基本类型变量转换为字符串，下面是实例程序</p>
+<pre><code><span class="built_in">Integer</span> I = <span class="built_in">Integer</span>.parseInt(<span class="string">"50"</span>);
+<span class="built_in">Double</span> D = <span class="keyword">new</span> <span class="built_in">Double</span>(<span class="string">"5.0"</span>);
+<span class="built_in">String</span> fstr = <span class="built_in">String</span>.valueOf(<span class="number">5.3</span>f);
+</code></pre><h2 id="3-4Integer类的特殊情况">3.4Integer类的特殊情况</h2><p>先看下面的程序</p>
+<pre><code><span class="built_in">Integer</span> ia = <span class="literal">new</span> <span class="built_in">Integer</span>(<span class="number">20</span>);
+<span class="built_in">Integer</span> ib = <span class="literal">new</span> <span class="built_in">Integer</span>(<span class="number">200</span>);
+<span class="built_in">Integer</span> i1 = <span class="number">20</span>;
+<span class="built_in">Integer</span> i2 = <span class="number">20</span>;
+<span class="built_in">Integer</span> I1 = <span class="number">200</span>;
+<span class="built_in">Integer</span> I2 = <span class="number">200</span>;
+System<span class="built_in">.</span>out<span class="built_in">.</span>println(i1 == ia);<span class="comment">//false</span>
+System<span class="built_in">.</span>out<span class="built_in">.</span>println(i1 == i2);<span class="comment">//true</span>
+System<span class="built_in">.</span>out<span class="built_in">.</span>println(I1 == ib);<span class="comment">//false</span>
+System<span class="built_in">.</span>out<span class="built_in">.</span>println(I1 == I2);<span class="comment">//false</span>
+</code></pre><p>查看Integer源代码可以发现，系统把-127～127之间的整数自动装箱成Integer实例，并放入了一个名为cache的数组中缓存起来。以后如果再有一个-127～127之间的整数自动装箱成Integer实例，则直接指向cache数组中的元素。因此对上面的程序，调用new构造器产生的实例在堆上，每次都会产生新的对象，-127～127之间的整数自动装箱成Integer实例，无论调用多少次，都指向同一个对象。继续看下面的实例</p>
+<pre><code>Integer <span class="keyword">m</span> = new Integer(5);  
+Integer <span class="keyword">n</span> = new Integer(5);  
+System.<span class="keyword">out</span>.println(<span class="keyword">m</span>==<span class="keyword">n</span>);<span class="comment">//false</span>
+<span class="keyword">m</span> = <span class="keyword">m</span>-1;  
+<span class="keyword">n</span> = <span class="keyword">n</span>-1;  
+System.<span class="keyword">out</span>.println(<span class="keyword">m</span>==<span class="keyword">n</span>);<span class="comment">//true</span>
+</code></pre><p>m,n因为都是new出来的对象，内存地址不一样，所以第一次m==n比较的reference不一样。但是，m=m-1首先进行了自动拆箱 m.intValue，相减后再进行装箱动作：m=Integer.valueOf(m.intValue-1)，而m和n都在 -128–127的范围，所以自动装箱后，根据上文所述，都是同一个object的引用。因此第二次输出true。</p>
+<p>摘自：<br>《疯狂Java讲义》<br><a href="http://macemers.iteye.com/blog/860631" target="_blank" rel="external">http://macemers.iteye.com/blog/860631</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/" data-id="cigd6gc5g001t5jorcn1y2pdo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/01/01/2014-01-01-java-e58f98e9878fe58f82e695b0e79a84e4bca0e98092/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java 变量参数的传递
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/12/26/2013-12-26-outofmemoryerror-e5ae9ee8b7b5e4b88ee58886e69e90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">OutOfMemoryError 实践与分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

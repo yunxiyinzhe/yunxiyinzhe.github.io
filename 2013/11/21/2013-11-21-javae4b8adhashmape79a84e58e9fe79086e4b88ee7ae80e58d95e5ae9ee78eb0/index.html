@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java中 HashMap 的原理与简单实现 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
+##    1.HashMap原理的简单分析  
+HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
+
+
+
+
+
+
+HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
+
+
+
+
+
+
+![](https:/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中 HashMap 的原理与简单实现">
+<meta property="og:url" content="http://yoursite.com/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
+##    1.HashMap原理的简单分析  
+HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
+
+
+
+
+
+
+HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
+
+
+
+
+
+
+![](https:/">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java中 HashMap 的原理与简单实现">
+<meta name="twitter:description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
+##    1.HashMap原理的简单分析  
+HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
+
+
+
+
+
+
+HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
+
+
+
+
+
+
+![](https:/">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/" class="article-date">
+  <time datetime="2013-11-21T01:03:22.000Z" itemprop="datePublished">2013-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java中 HashMap 的原理与简单实现
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>基本来源于《Thinking <span class="keyword">in</span> Java》，记下来也算是简单复习一遍。
+</code></pre><p>##<br>    1.HashMap原理的简单分析  </p>
+<pre><code>HashMap之所以有较快的查询速度，是因为HashMap利用了<span class="built_in">key</span>的hashcode存储<span class="built_in">key</span>-<span class="built_in">value</span>。
+
+
+
+
+
+
+HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
+
+
+
+
+
+
+![](https:<span class="comment">//otwrpg.dm2301.livefilestore.com/y2pqA-0VuzeLothAGW9tNloBgnuJhucbU4YrYsABSWmzy1C0hLWeYOk_BRYJYFUBC0NkswFyc_f9kpcC6lJEVec7mdb6M3qL3TXKleIEtUDXmM/100542_Kf3E_134062.jpg?psid=1)&lt;!-- more --&gt;</span>
+
+
+
+
+
+
+通过计算<span class="built_in">key</span>的hashcode，进而生成一个数组下标。由于数组容量是固定的，所以不能避免不同的<span class="built_in">key</span>-<span class="built_in">value</span>计算出相同的数组下标。
+
+
+
+
+
+
+但由于数组本身保存的并不是<span class="built_in">key</span>-<span class="built_in">value</span>本身，而是一个list，所以下标相同的<span class="built_in">key</span>-<span class="built_in">value</span>会被依次放入同一个list中。
+
+
+
+
+
+
+查询的时候，需要对list进行线性查询，但如果散列函数较好，每个list就会有很少的<span class="built_in">key</span>-<span class="built_in">value</span>，所以即使是线性查询也不会花太多时间。
+</code></pre><p>##<br>    2.HashMap的简单实现  </p>
+<pre><code>下面基本是书上的东西，自己合上书敲了一遍，加深记忆。
+
+
+
+
+
+
+<span class="keyword">import</span> java.util.AbstractMap;
+<span class="keyword">import</span> java.util.HashSet;
+<span class="keyword">import</span> java.util.Iterator;
+<span class="keyword">import</span> java.util.LinkedList;
+<span class="keyword">import</span> java.util.Set;
+<span class="keyword">import</span> java.util.Map;
+
+<span class="keyword">public</span> class SlowHashMap&lt;k, v&gt; extends AbstractMap&lt;k, v&gt; {
+    <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> SIZE = <span class="number">100</span>;
+    @SuppressWarnings(<span class="string">"unchecked"</span>)
+    LinkedList&lt;mapentry&lt;k, v&gt;&gt;[] buckets = <span class="keyword">new</span> LinkedList[SIZE];
+
+    <span class="keyword">public</span> V put(K <span class="variable">key</span>, V value) {
+        V oldValue = <span class="keyword">null</span>;
+        <span class="keyword">if</span>(<span class="variable">key</span> == <span class="keyword">null</span>) {
+            MapEntry&lt;k, v=&gt; nullElement = <span class="keyword">new</span> MapEntry&lt;k, v&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>);
+            buckets[<span class="number">0</span>].<span class="built_in">add</span>(<span class="number">0</span>, nullElement);
+            <span class="keyword">return</span> oldValue;
+        }
+        <span class="built_in">int</span> index = Math.<span class="built_in">abs</span>(<span class="variable">key</span>.hashCode()) % SIZE;
+        <span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>) {
+            buckets[index] = <span class="keyword">new</span> LinkedList&lt;mapentry&lt;k, v&gt;&gt;();
+        }
+
+        MapEntry&lt;k, v&gt; element = <span class="keyword">new</span> MapEntry&lt;k, v&gt;(<span class="variable">key</span>, value);
+        Iterator&lt;mapentry&lt;k, v&gt;&gt;  it = buckets[index].listIterator();
+        <span class="built_in">boolean</span> found = <span class="keyword">false</span>;
+
+        <span class="keyword">while</span> (it.hasNext()) {
+            MapEntry&lt;k, v&gt; temp = it.next();
+            <span class="keyword">if</span>(temp.getKey().equals(<span class="variable">key</span>)) {
+                oldValue = temp.getValue();
+                temp.setValue(value);
+                found = <span class="keyword">true</span>;
+                <span class="keyword">break</span>;
+            }
+        }
+
+        <span class="keyword">if</span>(!found) {
+            buckets[index].<span class="built_in">add</span>(element);
+        }
+
+        <span class="keyword">return</span> oldValue;
+    }
+
+    <span class="keyword">public</span> V <span class="built_in">get</span>(<span class="keyword">Object</span> <span class="variable">key</span>) {
+        <span class="built_in">int</span> index = Math.<span class="built_in">abs</span>(<span class="variable">key</span>.hashCode()) % SIZE;
+        <span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>) {
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+        <span class="keyword">for</span>(MapEntry&lt;k, v&gt; e : buckets[index]) {
+            <span class="keyword">if</span>(e.getKey().equals(<span class="variable">key</span>)) {
+                <span class="keyword">return</span> e.getValue();
+            }
+        }
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+
+    }
+    @Override
+    <span class="keyword">public</span> Set&lt;java.util.<span class="built_in">map</span>.entry&lt;k, v&gt;&gt; entrySet() {
+        Set&lt;java.util.<span class="built_in">map</span>.entry&lt;k, v&gt;&gt; <span class="built_in">set</span> = <span class="keyword">new</span> HashSet&lt;<span class="built_in">map</span>.entry&lt;k,v&gt;&gt;;();
+        <span class="keyword">for</span>(LinkedList&lt;mapentry&lt;k, v&gt;&gt; bucket : buckets) {
+            <span class="keyword">if</span>(bucket == <span class="keyword">null</span>) {
+                <span class="keyword">continue</span>;
+            }
+            <span class="keyword">for</span>(MapEntry&lt;k, v&gt; pair : bucket) {
+                <span class="built_in">set</span>.<span class="built_in">add</span>(pair);
+            }
+        }
+
+        <span class="keyword">return</span> <span class="built_in">set</span>;
+    }
+
+
+    @SuppressWarnings(<span class="string">"hiding"</span>)
+    class MapEntry&lt;k, v&gt; implements Map.Entry&lt;k, v&gt;{
+        <span class="keyword">private</span> K <span class="variable">key</span>;
+        <span class="keyword">private</span> V value;
+
+
+        <span class="keyword">public</span> MapEntry(K <span class="variable">key</span>, V value) {
+            <span class="keyword">this</span>.<span class="variable">key</span> = <span class="variable">key</span>;
+            <span class="keyword">this</span>.value = value;
+        }
+        @Override
+        <span class="keyword">public</span> K getKey() {
+            <span class="keyword">return</span> <span class="variable">key</span>;
+        }
+
+        @Override
+        <span class="keyword">public</span> V getValue() {
+            <span class="keyword">return</span> value;
+        }
+
+        @Override
+        <span class="keyword">public</span> V setValue(V value) {
+            V result = <span class="keyword">this</span>.value;
+            <span class="keyword">this</span>.value = value;
+            <span class="keyword">return</span> result;
+        }
+
+    }
+
+}
+
+
+
+
+
+
+上面都是些极其浅显的东西，还有很多东西没有涉及。等我学艺深了，再来讨论
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/" data-id="cigd6gc5w002j5jorl4k0nfr2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java volatile 变量的可见性与原子性浅析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/10/16/2013-10-16-e3808amiku-miku-hockeye3808befbc8cpsv-are58da1e6b8b8e6888fefbc8ce58fa6e7b1bbe79a84e6b8b8e6888fe4bd93e9aa8c/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">《Miku Miku Hockey》，PSV AR卡游戏，另类的游戏体验</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

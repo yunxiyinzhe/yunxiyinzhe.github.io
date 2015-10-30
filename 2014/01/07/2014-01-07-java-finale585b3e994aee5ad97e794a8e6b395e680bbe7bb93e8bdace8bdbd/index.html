@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java final 关键字用法总结与不可变类(转载) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="转载:http://www.cnblogs.com/EvanLiu/archive/2013/06/13/3134776.html
+本篇笔记主要是final修饰符修饰类、成员变量、方法的用法，不可变类，实例缓存的不可变类.
+final关键字可以用来修饰类、变量、方法。final变量不能重新赋值，子类不能覆盖父类的final方法,final类不能有子类。
+1.final修饰的成员变量
+* final">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java final 关键字用法总结与不可变类(转载)">
+<meta property="og:url" content="http://yoursite.com/2014/01/07/2014-01-07-java-finale585b3e994aee5ad97e794a8e6b395e680bbe7bb93e8bdace8bdbd/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="转载:http://www.cnblogs.com/EvanLiu/archive/2013/06/13/3134776.html
+本篇笔记主要是final修饰符修饰类、成员变量、方法的用法，不可变类，实例缓存的不可变类.
+final关键字可以用来修饰类、变量、方法。final变量不能重新赋值，子类不能覆盖父类的final方法,final类不能有子类。
+1.final修饰的成员变量
+* final">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java final 关键字用法总结与不可变类(转载)">
+<meta name="twitter:description" content="转载:http://www.cnblogs.com/EvanLiu/archive/2013/06/13/3134776.html
+本篇笔记主要是final修饰符修饰类、成员变量、方法的用法，不可变类，实例缓存的不可变类.
+final关键字可以用来修饰类、变量、方法。final变量不能重新赋值，子类不能覆盖父类的final方法,final类不能有子类。
+1.final修饰的成员变量
+* final">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-01-07-java-finale585b3e994aee5ad97e794a8e6b395e680bbe7bb93e8bdace8bdbd" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/01/07/2014-01-07-java-finale585b3e994aee5ad97e794a8e6b395e680bbe7bb93e8bdace8bdbd/" class="article-date">
+  <time datetime="2014-01-07T06:30:05.000Z" itemprop="datePublished">2014-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java final 关键字用法总结与不可变类(转载)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>转载:<a href="http://www.cnblogs.com/EvanLiu/archive/2013/06/13/3134776.html" target="_blank" rel="external">http://www.cnblogs.com/EvanLiu/archive/2013/06/13/3134776.html</a></p>
+<p>本篇笔记主要是final修饰符修饰类、成员变量、方法的用法，不可变类，实例缓存的不可变类.</p>
+<p>final关键字可以用来修饰类、变量、方法。final变量不能重新赋值，子类不能覆盖父类的final方法,final类不能有子类。</p>
+<p>1.final修饰的成员变量</p>
+<pre><code>* <span class="keyword">final</span>修饰的成员变量一旦赋值后，不能被重新赋值。
+
+
+* <span class="keyword">final</span>修饰的实例<span class="keyword">Field</span>，要么在定义该<span class="keyword">Field</span>的时候指定初始值，要么在普通初始化块或构造器中指定初始值。如果在普通初始化块中为某个实例<span class="keyword">Field</span>指定了初始值，则不能再在构造器中指定初始值。
+
+
+* <span class="keyword">final</span>修饰的类<span class="keyword">Field</span>，要么在定义该<span class="keyword">Field</span>的时候指定初始值，要么在静态代码块中定义初始值。
+
+
+* 如果在构造器或初始化块中对<span class="keyword">final</span>成员变量进行初始化，则不要在初始化之前就访问该成员的值。
+</code></pre><a id="more"></a>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalTest</span> </span>{
+    <span class="keyword">final</span> <span class="keyword">int</span> a = <span class="number">5</span>;<span class="comment">//直接赋值</span>
+
+    <span class="keyword">final</span> String <span class="keyword">str</span>;<span class="comment">//普通代码块中赋值</span>
+    {
+        <span class="keyword">str</span> = <span class="string">"zhangsan"</span>;
+    }
+
+    <span class="keyword">final</span> <span class="keyword">int</span> b;<span class="comment">//构造器中赋值</span>
+    <span class="keyword">public</span> FinalTest(){
+        b = <span class="number">7</span>;
+    }
+
+    <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> c = <span class="number">8</span>;<span class="comment">//直接赋值</span>
+
+    <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> d;<span class="comment">//静态代码块中赋值</span>
+    <span class="keyword">static</span>{
+        d = <span class="number">9</span>;
+    }
+
+    <span class="comment">//如果在构造器或初始化块中对final成员变量进行初始化,</span>
+    <span class="comment">//则不要在初始化之前就访问该成员的值。</span>
+    <span class="keyword">final</span> <span class="keyword">int</span> age;
+    {
+        <span class="comment">//System.out.println(age);</span>
+        age = <span class="number">22</span>;
+        System.out.println(<span class="number">22</span>);
+    }
+}
+</code></pre><p>2.final修饰的局部变量</p>
+<ul>
+<li>系统不会对局部变量进行初始化，布局变量必须要显示的初始化。所以使用final修饰的局部变量，既可以在定义的时候指定默认值，也可以不指定默认值。</li>
+</ul>
+<ul>
+<li>final修饰形参的时候，不能为该形参赋值。</li>
+</ul>
+<p>3.final修饰基本数据类型变量和修饰引用类型变量的区别<br>使用final修饰基本类型的变量，一旦对该变量赋值之后，就不能重新赋值了。但是对于引用类型变量，他保存的只是引用，final只能保证引用类型变量所引用的地址不改变，但不保证这个对象不改变，这个对象完全可以发生改变。</p>
+<pre><code><span class="keyword">final</span> Person p = <span class="keyword">new</span> Person();
+p.setAge(<span class="number">23</span>);        <span class="comment">//改变了Person对象的age Field</span>
+<span class="comment">//p=null            //编译出错</span>
+</code></pre><p>final修饰的引用类型变量不能被重新赋值，但是可以改变引用变量所引用对象的内容。</p>
+<p>4.final的“宏变量”</p>
+<ul>
+<li>final修饰符的一个重要用途就是“宏变量”。当定义final变量时就该为该变量指定了初始值，而且该初始值可以在编译时就确定下来，那么这个final变量本质上就是一个“宏变量”，编译器会把程序中所有用到该变量的地方直接替换成该变量的值。</li>
+</ul>
+<pre><code><span class="keyword">public</span> class FinalTest {
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args){
+        <span class="keyword">final</span> <span class="keyword">String</span> name = <span class="string">"小明"</span> + <span class="number">22.0</span>;
+        <span class="keyword">final</span> <span class="keyword">String</span> name1 = <span class="string">"小明"</span> + <span class="keyword">String</span>.valueOf(<span class="number">22.0</span>);
+        System.out.<span class="built_in">println</span>(name == <span class="string">"小明22.0"</span>);
+        System.out.<span class="built_in">println</span>(name1 == <span class="string">"小明22.0"</span>);
+    }
+}
+</code></pre><p>final String name1 = “小明” + String.valueOf(22.0);中调用了String类的方法，因此编译器无法再编译的时候确定name1的值，所以name1不会被当成“宏变量”。</p>
+<pre><code><span class="label">public</span> class FinalTest {
+    public static void main(<span class="keyword">String[] </span>args){
+        <span class="keyword">String </span><span class="literal">s1</span> = <span class="string">"小明"</span><span class="comment">;</span>
+        <span class="keyword">String </span><span class="literal">s2</span> = <span class="string">"小"</span> + <span class="string">"明"</span><span class="comment">;</span>
+        System.out.println(<span class="literal">s1</span> == <span class="literal">s2</span>)<span class="comment">;    //true</span>
+
+        <span class="keyword">String </span><span class="keyword">str1 </span>= <span class="string">"小"</span><span class="comment">;</span>
+        <span class="keyword">String </span><span class="keyword">str2 </span>= <span class="string">"明"</span><span class="comment">;</span>
+        <span class="keyword">String </span><span class="literal">s3</span> = <span class="keyword">str1 </span>+ <span class="keyword">str2;
+</span>        System.out.println(<span class="literal">s1</span> == <span class="literal">s3</span>)<span class="comment">;        //false</span>
+
+        //宏替换
+        final <span class="keyword">String </span><span class="keyword">str3 </span>= <span class="string">"小"</span><span class="comment">;</span>
+        final <span class="keyword">String </span><span class="keyword">str4 </span>= <span class="string">"明"</span><span class="comment">;</span>
+        <span class="keyword">String </span><span class="literal">s4</span> = <span class="keyword">str3 </span>+ <span class="keyword">str4;
+</span>        System.out.println(<span class="literal">s1</span> == <span class="literal">s4</span>)<span class="comment">;        //true</span>
+    }
+}
+</code></pre><p>分析：</p>
+<ul>
+<li>java会使用常量池量管理曾经使用过的字符串直接量。String a = “hello”;  那么字符串池中会缓存一个字符串”hello”，当执行String b = “hello”;会让b直接指向字符串池中的”hello”字符串。所以a==b返回true。</li>
+</ul>
+<ul>
+<li>String s3 = str1 + str2;编译时无法确定s3的值</li>
+</ul>
+<ul>
+<li>String s4 = str3 + str4;因为执行了宏替换，所以在编译的时候就已经确定了s4的值</li>
+</ul>
+<p>5.用final修饰的方法不能被重写。用final修饰的类不能有子类。</p>
+<p>6.不可变类<br>不可变类是指创建该类的实例后，该实例的Field是不可改变的。<br>如果创建自定义的不可变类，应该遵循如下规则<br>（1）使用private和final修饰符来修饰该类的Field。<br>（2）提供带参数的构造器，用于传入参数来初始化类里的Field。<br>（3）仅为该类的Field提供getter方法，不要为该类的Field提供setter方法。<br>（4）如果有必要，重写Object类的hashCode和equals方法。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">final</span> String detail;
+    <span class="keyword">private</span> <span class="keyword">final</span> String postCode;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">Address</span><span class="params">()</span> </span>{
+        <span class="keyword">this</span>.detail = <span class="string">""</span>;
+        <span class="keyword">this</span>.postCode = <span class="string">""</span>;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="title">Address</span><span class="params">(String detail, String postCode)</span> </span>{
+        <span class="keyword">this</span>.detail = detail;
+        <span class="keyword">this</span>.postCode = postCode;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getDetail</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> detail;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getPostCode</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> postCode;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>{
+        <span class="keyword">if</span>(<span class="keyword">this</span> == obj){
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+        <span class="keyword">if</span>(obj !=<span class="keyword">null</span> &amp;&amp; obj.getClass() == Address.class){
+            Address ad = (Address)obj;
+            <span class="keyword">if</span>(<span class="keyword">this</span>.getDetail().equals(ad.getDetail()) &amp;&amp; <span class="keyword">this</span>.getPostCode().equals(ad.getPostCode())){
+                <span class="keyword">return</span> <span class="keyword">true</span>;
+            }
+        }
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>{
+        <span class="keyword">return</span> detail.hashCode() + postCode.hashCode() * <span class="number">31</span>;
+    }
+
+}
+</code></pre><p>因为final修饰引用类型变量时，表示这个引用变量不可重新被赋值，但引用类型变量所指向的对象依然可被改变。所以在创建不可变类的时候，如果包含的Field类型是可变的，那么这个不可变类就创建失败了。如下：</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Name</span></span>{
+    <span class="keyword">private</span> String firstName;
+    <span class="keyword">private</span> String lastName;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">Name</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>();
+        <span class="comment">// TODO Auto-generated constructor stub</span>
+    }
+    <span class="function"><span class="keyword">public</span> <span class="title">Name</span><span class="params">(String firstName, String lastName)</span> </span>{
+        <span class="keyword">super</span>();
+        <span class="keyword">this</span>.firstName = firstName;
+        <span class="keyword">this</span>.lastName = lastName;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> firstName;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstName</span><span class="params">(String firstName)</span> </span>{
+        <span class="keyword">this</span>.firstName = firstName;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> lastName;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span> </span>{
+        <span class="keyword">this</span>.lastName = lastName;
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">final</span> Name name;
+    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(Name name)</span></span>{
+        <span class="keyword">this</span>.name = name;
+    }
+    <span class="function"><span class="keyword">public</span> Name <span class="title">getName</span><span class="params">()</span></span>{
+        <span class="keyword">return</span> name;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        Name n = <span class="keyword">new</span> Name(<span class="string">"明"</span>,<span class="string">"小"</span>);
+        Person p = <span class="keyword">new</span> Person(n);
+        System.out.println(p.getName().getFirstName());
+        n.setFirstName(<span class="string">"君"</span>);
+        System.out.println(p.getName().getFirstName());
+    }
+}
+</code></pre><p>通过n.setFirstName(“君”);改变了firstName。为了保证对象的不可变性,可以修改为如下代码</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Name</span></span>{
+    <span class="keyword">private</span> String firstName;
+    <span class="keyword">private</span> String lastName;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">Name</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>();
+        <span class="comment">// TODO Auto-generated constructor stub</span>
+    }
+    <span class="function"><span class="keyword">public</span> <span class="title">Name</span><span class="params">(String firstName, String lastName)</span> </span>{
+        <span class="keyword">super</span>();
+        <span class="keyword">this</span>.firstName = firstName;
+        <span class="keyword">this</span>.lastName = lastName;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> firstName;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstName</span><span class="params">(String firstName)</span> </span>{
+        <span class="keyword">this</span>.firstName = firstName;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> lastName;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span> </span>{
+        <span class="keyword">this</span>.lastName = lastName;
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">final</span> Name name;
+    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(Name name)</span></span>{
+        <span class="comment">//this.name = name;</span>
+        <span class="keyword">this</span>.name = <span class="keyword">new</span> Name(name.getFirstName(), name.getLastName());
+    }
+    <span class="function"><span class="keyword">public</span> Name <span class="title">getName</span><span class="params">()</span></span>{
+        <span class="comment">//return name;</span>
+        <span class="keyword">return</span> <span class="keyword">new</span> Name(name.getFirstName(), name.getLastName());
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        Name n = <span class="keyword">new</span> Name(<span class="string">"明"</span>,<span class="string">"小"</span>);
+        Person p = <span class="keyword">new</span> Person(n);
+        System.out.println(p.getName().getFirstName());
+        n.setFirstName(<span class="string">"君"</span>);
+        System.out.println(p.getName().getFirstName());
+    }
+}
+</code></pre><p>7.实例缓存的不可变类<br>如果程序需要经常使用想用的不可变类实例，则应该考虑缓存这种不可变类的实例，因为重复创建相同的对象没有太大的意义，而且加大系统的开销。可以使用一个数组来作为缓存池，实现不可变类。</p>
+<pre><code><span class="keyword">class</span> CacheImmutale {
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_SIZE = <span class="number">10</span>;
+    <span class="comment">//使用数组来缓存实例</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> CacheImmutale[] cache = <span class="keyword">new</span> CacheImmutale[MAX_SIZE];
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> pos = <span class="number">0</span>;
+    <span class="keyword">private</span> final String name;
+    <span class="function"><span class="keyword">private</span> <span class="title">CacheImmutale</span><span class="params">(String name)</span></span>{
+        <span class="keyword">this</span>.name = name;
+    }
+    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>{
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CacheImmutale <span class="title">valueOf</span><span class="params">(String name)</span></span>{
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; MAX_SIZE; i++){
+            <span class="keyword">if</span>(cache[i] != null &amp;&amp; cache[i].getName().equals(name)){
+                <span class="keyword">return</span> cache[i];
+            }
+        }
+        <span class="keyword">if</span>(pos == MAX_SIZE){
+            cache[<span class="number">0</span>] = <span class="keyword">new</span> CacheImmutale(name);
+            pos = <span class="number">1</span>;
+        }<span class="keyword">else</span>{
+            cache[pos++] = <span class="keyword">new</span> CacheImmutale(name);
+        }
+        <span class="keyword">return</span> cache[pos-<span class="number">1</span>];
+    }
+
+    <span class="function"><span class="keyword">public</span> boolean <span class="title">equals</span><span class="params">(Object obj)</span></span>{
+        <span class="keyword">if</span>(<span class="keyword">this</span> == obj){
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">if</span>(obj != null &amp;&amp; obj.getClass() == CacheImmutale.<span class="keyword">class</span>){
+            CacheImmutale ci = (CacheImmutale)obj;
+            <span class="keyword">return</span> name.equals(ci.getName());
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>{
+        <span class="keyword">return</span> name.hashCode();
+    }
+}
+
+<span class="keyword">public</span> <span class="keyword">class</span> CacheImmutaleTest{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        CacheImmutale c1 = CacheImmutale.valueOf(<span class="string">"hello"</span>);
+        CacheImmutale c2 = CacheImmutale.valueOf(<span class="string">"hello"</span>);
+        System.out.println(c1 == c2);
+    }
+}
+</code></pre><p>分析：以上程序缓存池采用“先进先出”规则来决定哪个对象被移除缓存池。<br>程序中还使用了private修饰来隐藏该类的构造器，通过提供该类的valueOf方法来获取实例。</p>
+<p>Java提供的java.lang.Integer类也是采用类似的策略来处理的，但是只能Integer缓存-128~127之间的Integer对象。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> IntegerTest {
+    <span class="keyword">public</span> static void main(String[] args) {
+        <span class="type">Integer</span> a = new <span class="type">Integer</span>(<span class="number">23</span>);
+        <span class="type">Integer</span> b = <span class="type">Integer</span>.valueOf(<span class="number">23</span>);
+        <span class="type">Integer</span> c = <span class="type">Integer</span>.valueOf(<span class="number">23</span>);
+        System.<span class="type">out</span>.println(a == b);
+        System.<span class="type">out</span>.println(b == c);
+
+        //<span class="type">Integer</span>只能缓存-<span class="number">128</span>~<span class="number">127</span>之间的<span class="type">Integer</span>对象
+        <span class="type">Integer</span> d = <span class="type">Integer</span>.valueOf(<span class="number">230</span>);
+        <span class="type">Integer</span> e = <span class="type">Integer</span>.valueOf(<span class="number">230</span>);
+        System.<span class="type">out</span>.println(d == e);
+    }
+}
+</code></pre><p>另一篇关于不可变类的讲解:</p>
+<p>Effective Java 第39条中提到：必要时进行保护性拷贝</p>
+<p>书中给到的一个例子，总结一句就是：成员变量不要被外部引用直接赋值，而是拷贝之后的赋值。具体看下面例子。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Period {
+    <span class="keyword">private</span> final <span class="built_in">Date</span> start;
+    <span class="keyword">private</span> final <span class="built_in">Date</span> end;
+
+    <span class="keyword">public</span> Period(<span class="built_in">Date</span> start, <span class="built_in">Date</span> end){
+        <span class="keyword">if</span>(start.compareTo(end) &gt; <span class="number">0</span>){
+            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(start + <span class="string">" after "</span> + end);
+        }
+        <span class="keyword">this</span>.start = start;
+        <span class="keyword">this</span>.end = end;
+    }
+
+    <span class="keyword">public</span> <span class="built_in">Date</span> getStart() {
+        <span class="keyword">return</span> start;
+    }
+
+    <span class="keyword">public</span> <span class="built_in">Date</span> getEnd() {
+        <span class="keyword">return</span> end;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">void</span> main(<span class="built_in">String</span>[] args) {
+        <span class="built_in">Date</span> start = <span class="keyword">new</span> <span class="built_in">Date</span>();
+        <span class="built_in">Date</span> end = <span class="keyword">new</span> <span class="built_in">Date</span>();
+        Period p = <span class="keyword">new</span> Period(start, end);
+        end.setYear(<span class="number">78</span>);<span class="comment">//这里改变了外部引用指向的值</span>
+        System.out.println(p.getStart());
+        System.out.println(p.getEnd());
+    }   
+
+}
+</code></pre><p>从代码中我们可以看到，成员变量是被final修饰的，值是不可变的，且只有一个构造函数初始化它们的值，而构造函数里面又有对<em>start</em>,<em>end</em>这两个进行判断，即不让<em>end</em>&lt;<em>start</em>。<br>但是，构造函数中，对成员变量被外部引用直接赋值。因为传入的是引用，所以这个被final修饰的成员变量的值，不变的是引用，但是这个外部引用所指向的值还是可变的。</p>
+<p>从代码25行可以看出，外部引用指向的值被修改了，而成员变量end与外部引用end都是指向同一个内存的，所以成员变量end指向的值也变了。我们就可以很简单的把<em>end</em>&lt;<em>start</em>。这样代码就出现了bug. <strong>解决这个BUG的方法</strong>就是：把外部引用拷贝之后赋值,代码修改如下</p>
+<pre><code>public Period(Date start, Date end){
+         this.start = new Date(start.getTime());//把外部引用拷贝后再赋值
+         this.end = new Date(start.getTime());
+         if(start.compareTo(end) &gt; 0){
+             throw new IllegalArgumentException(start + <span class="string">" after "</span> + end);
+         }
+ /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>修改前代码如下<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/
+ //        if(start.compareTo(end) &gt; 0){
+ //            throw new IllegalArgumentException(start + <span class="string">" after "</span> + end);
+ //        }
+ //        this.start = start;//不要被外部引用直接赋值
+ //        this.end = end;
+     }
+</code></pre><p>改到这里，还有一个问题。我们还把成员变量的引用通过getter直接暴露出来了。这还是会出现问题,因为我们还可以通过getter获取成员变量的引用，再去改变它内部的值,代码如下</p>
+<pre><code>Date <span class="operator"><span class="keyword">start</span> = <span class="keyword">new</span> <span class="built_in">Date</span>();</span>
+Date <span class="operator"><span class="keyword">end</span> = <span class="keyword">new</span> <span class="built_in">Date</span>();</span>
+Period p = new Period(<span class="operator"><span class="keyword">start</span>, <span class="keyword">end</span>);</span>
+System.out.println(p.getStart());
+System.out.println(p.getEnd());
+//通过上面的改造，我们已经不能通过改变<span class="operator"><span class="keyword">end</span>.setYear();</span>去影响成员变量的值了，但是下面这句还是可以改变成员变量的值，
+p.getStart().setYear(88);//这里getter返回的是一个引用，我们可以通过引用去改变成员变量的值
+</code></pre><p>解决这个BUG的方法就是：getter返回可变内部域的保护性拷贝,把getter做如下修改即可</p>
+<pre><code><span class="keyword">public</span> <span class="built_in">Date</span> getStart() {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="keyword">this</span>.start.getTime());<span class="comment">//正确做法:返回可变内部域的保护性拷贝</span>
+        <span class="comment">//return this.start;//错误做法：直接返回引用</span>
+    }
+
+    <span class="keyword">public</span> <span class="built_in">Date</span> getEnd() {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="keyword">this</span>.end.getTime());<span class="comment">//正确做法:返回可变内部域的保护性拷贝</span>
+        <span class="comment">//return this.end;//错误做法：直接返回引用</span>
+    }
+</code></pre><p>总结：</p>
+<ul>
+<li>对于赋值，我们不要把外部引用直接赋值给成员变量</li>
+</ul>
+<ul>
+<li>对于getter，我们不要把成员变量的引用直接返回</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/01/07/2014-01-07-java-finale585b3e994aee5ad97e794a8e6b395e680bbe7bb93e8bdace8bdbd/" data-id="cigd6gc57001h5jor0przvoc6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/01/11/2014-01-11-java-e99d99e68081e7bb91e5ae9ae4b88ee58aa8e68081e7bb91e5ae9a/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java 静态绑定 与 动态绑定
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/01/06/2014-01-06-java-e58fafe58f98e58f82e695b0e58897e8a1a8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java 可变参数列表</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

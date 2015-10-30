@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android Debuggerd 简要介绍和源码分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文以android4.1为基础，分析debuggerd这个工具的使用方法和源码。
+1.Debuggerd 简介debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中。
+1.1 debuggerd的运行原理
+创建一个名为 “Android:debuggerd”的socket，作为server端等待其他client端进程的连接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Debuggerd 简要介绍和源码分析">
+<meta property="og:url" content="http://yoursite.com/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文以android4.1为基础，分析debuggerd这个工具的使用方法和源码。
+1.Debuggerd 简介debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中。
+1.1 debuggerd的运行原理
+创建一个名为 “Android:debuggerd”的socket，作为server端等待其他client端进程的连接">
+<meta property="og:image" content="https://otwrpg.dm2303.livefilestore.com/y2pMF0tkKXR-tDfdOvGfMtn7syQzL1oXn4EFzSC0VbjoazSbt-rxkCBKfXymoWdaO-PmsBOFZKGWWkN3AEXuMBo039JxWZMn60Vu2jMq9fzppw/%E5%9B%BE%E7%89%871.jpg?psid=1">
+<meta property="og:image" content="https://otwrpg.dm2304.livefilestore.com/y2pa3E4ytp20u-TbsuEuQhMWYr9ukjeLD7lBCQ3uIFb4XCHJrpQsEY19WsiQegm7yhH7_fr3IdG4VAE-mmgJinzYZDbMaemnv9Ldxi6uMWzt6k/%E5%9B%BE%E7%89%872.jpg?psid=1">
+<meta property="og:image" content="https://otwrpg.dm2303.livefilestore.com/y2pgL4fp8n5NR_b2Rnx0RsD0fhrvug2c4mqtTFahRStOo-Z7_P7bHKSiEb8eOQWNo552MzB6RJOkIeOt-qLVgI5gGkHNluKMSZz8m5QTlHBw1U/%E5%9B%BE%E7%89%873.jpg?psid=1">
+<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Debuggerd 简要介绍和源码分析">
+<meta name="twitter:description" content="本文以android4.1为基础，分析debuggerd这个工具的使用方法和源码。
+1.Debuggerd 简介debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中。
+1.1 debuggerd的运行原理
+创建一个名为 “Android:debuggerd”的socket，作为server端等待其他client端进程的连接">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/" class="article-date">
+  <time datetime="2014-05-16T01:46:13.000Z" itemprop="datePublished">2014-05-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android Debuggerd 简要介绍和源码分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文以android4.1为基础，分析debuggerd这个工具的使用方法和源码。</p>
+<h2 id="1-Debuggerd_简介">1.Debuggerd 简介</h2><p>debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中。</p>
+<h3 id="1-1_debuggerd的运行原理">1.1 debuggerd的运行原理</h3><ul>
+<li>创建一个名为 “Android:debuggerd”的socket，作为server端等待其他client端进程的连接</li>
+</ul>
+<ul>
+<li>接收client端进程发送来的tid和action信息</li>
+</ul>
+<ul>
+<li>将由tid指定的那个进程的运行信息，按照由action指定的动作dump到文件或者控制台中</li>
+</ul>
+<p>可以作为debuggerd的client端的进程主要有几种：</p>
+<ul>
+<li>异常的C/C++程序</li>
+</ul>
+<p>这种程序由bionic的linker安装异常信号的处理函数，当程序产生异常信号时，进入信号处理函数，与debuggerd建立。</p>
+<ul>
+<li>debuggerd程序</li>
+</ul>
+<p>debuggerd可以在控制台中以命令debuggerd -b [<tid>]启动 ，然后与debuggerd daemon建立连接。这样debuggerd可以在不中断进程执行的情况下dump由tid指定的进程的信息。</tid></p>
+<ul>
+<li>callstack/dumpstate</li>
+</ul>
+<p>控制台中运行命令callstack/dumpstate，并指定必要的参数，命令中会调用dump_backtrace_to_file与debuggerd交互<br><a id="more"></a></p>
+<h3 id="1-2_debuggerd的使用方法">1.2 debuggerd的使用方法</h3><ul>
+<li>产生异常信号的C/C++程序与debuggerd建立连接后，debuggerd将进程信息dump到tombstone_XX文件中保存到/data/tombstone/文件夹下。可通过查看tombstone_XX分析异常进程的堆栈信息</li>
+</ul>
+<ul>
+<li>在控制台中以命令debuggerd -b [<tid>]启动。如果加上-b参数，则由tid指定的进程的信息将dump到控制台上，否则dump到tombstone文件中</tid></li>
+</ul>
+<ul>
+<li>控制台中运行命令callstack/dumpstate，进程信息会写入这两个命令指定的文件中</li>
+</ul>
+<h3 id="1-3_tombstone文件的分析方法">1.3 tombstone文件的分析方法</h3><p>使用prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.6/bin下的工具</p>
+<ol>
+<li>arm-linux-androideabi-addr2line  将类似libxxx.so 0x00012345的调用栈16进制值翻译成文件名和函数名 arm-linux-androideabi-addr2line -e libxxx.so 0x00012345</li>
+</ol>
+<ol>
+<li>arm-linux-androideabi-nm 列出文件的符号信息 arm-linux-androideabi-nm -l -C -n -S libdvm.so &gt; dvm.data</li>
+</ol>
+<ol>
+<li>arm-linux-androideabi-objdump 列出文件的详细信息 arm-eabi-objdump -C -d libc.so &gt; libc.s</li>
+</ol>
+<p>通过以上工具的分析 ，可以得到较完整的调用栈以及调用逻辑的汇编码</p>
+<p>tombstone文件的分析的实用工具和参考文章：</p>
+<ol>
+<li>tombstones.py Python script to retrieve line info from an android tombstone using ndk-stack and addr2line. <a href="https://github.com/feichh/android-tombstones" target="_blank" rel="external">https://github.com/feichh/android-tombstones</a></li>
+</ol>
+<ol>
+<li>android-ndk-stacktrace-analyzer A simple tool for analyzing the stack trace generated from crashing native code in the android system.  <a href="http://code.google.com/p/android-ndk-stacktrace-analyzer/" target="_blank" rel="external">http://code.google.com/p/android-ndk-stacktrace-analyzer/</a></li>
+</ol>
+<ol>
+<li>How to read Android crash log and stack trace  This article briefly explains the structure of the log, how to read it. <a href="http://bootloader.wikidot.com/linux:android:crashlog" target="_blank" rel="external">http://bootloader.wikidot.com/linux:android:crashlog</a></li>
+</ol>
+<h3 id="1-4_Debuggerd_框架图">1.4 Debuggerd 框架图</h3><p><img src="https://otwrpg.dm2303.livefilestore.com/y2pMF0tkKXR-tDfdOvGfMtn7syQzL1oXn4EFzSC0VbjoazSbt-rxkCBKfXymoWdaO-PmsBOFZKGWWkN3AEXuMBo039JxWZMn60Vu2jMq9fzppw/%E5%9B%BE%E7%89%871.jpg?psid=1" alt=""></p>
+<h2 id="2-linker中debugger-c源码分析">2.linker中debugger.c源码分析</h2><p>bionic libc,是一种 C 标准函式库, 用于 Android 嵌入式系统上。bionic库中的链接器会对以下七种信号设置Handler(debugger_signal_handler)：</p>
+<ul>
+<li>SIGILL(非法指令异常)</li>
+</ul>
+<ul>
+<li>SIGABRT(abort退出异常)</li>
+</ul>
+<ul>
+<li>SIGBUS(硬件访问异常)</li>
+</ul>
+<ul>
+<li>SIGFPE(浮点运算异常)</li>
+</ul>
+<ul>
+<li>SIGSEGV(内存访问异常)</li>
+</ul>
+<ul>
+<li>SIGSTKFLT(协处理器栈异常)</li>
+</ul>
+<ul>
+<li>SIGPIPE(管道异常)</li>
+</ul>
+<p>链接到bionic库上的C/C++程序崩溃时，内核会发送相应的signal，进程收到异常信号后，会转入debugger_signal_handler函数中进行处理。</p>
+<p>debugger_init函数(见文件bionic/linker/debugger.c)中设置信号处理函数</p>
+<pre><code><span class="function"><span class="keyword">void</span> <span class="title">debugger_init</span><span class="params">()</span>
+</span>{
+    <span class="keyword">struct</span> sigaction act;
+    <span class="built_in">memset</span>(&amp;act, <span class="number">0</span>, <span class="keyword">sizeof</span>(act));
+    act.sa_sigaction = debugger_signal_handler;
+    act.sa_flags = SA_RESTART | SA_SIGINFO;
+    sigemptyset(&amp;act.sa_mask);
+    sigaction(SIGILL, &amp;act, <span class="literal">NULL</span>);
+    sigaction(SIGABRT, &amp;act, <span class="literal">NULL</span>);
+    sigaction(SIGBUS, &amp;act, <span class="literal">NULL</span>);
+    sigaction(SIGFPE, &amp;act, <span class="literal">NULL</span>);
+    sigaction(SIGSEGV, &amp;act, <span class="literal">NULL</span>);
+    sigaction(SIGSTKFLT, &amp;act, <span class="literal">NULL</span>);
+    sigaction(SIGPIPE, &amp;act, <span class="literal">NULL</span>);
+}
+</code></pre><p>debugger_init中act.sa_flags = SA_RESTART | SA_SIGINFO的涵义：</p>
+<ul>
+<li>SA_RESTART</li>
+</ul>
+<p>如果指定该参数，表示若信号中断了进程的某个系统调用，则系统自动启动该系统调用。如果不指定该参数，则被中断的系统调用返回失败，错误码为EINTR。这个标志位只要用于处理慢系统调用(可能会被阻塞的系统调用)。比如调用write系统调用写某个设备被阻塞，这时进程捕获某个信号且进入相应信号处理函数返回时，该系统调用可能要返回ENINTR错误。指定这个参数后，系统调用会重启，与RETRY_ON_EINTR宏配合使用则可以保证写操作的完成</p>
+<ul>
+<li>SA_SIGINFO</li>
+</ul>
+<p>如果指定该参数，表示信号附带的参数(siginfo_t结构体)可以被传递到信号处理函数中。</p>
+<p>debugger_signal_handler函数处理流程</p>
+<p><img src="https://otwrpg.dm2304.livefilestore.com/y2pa3E4ytp20u-TbsuEuQhMWYr9ukjeLD7lBCQ3uIFb4XCHJrpQsEY19WsiQegm7yhH7_fr3IdG4VAE-mmgJinzYZDbMaemnv9Ldxi6uMWzt6k/%E5%9B%BE%E7%89%872.jpg?psid=1" alt=""></p>
+<ul>
+<li>debugger_signal_handler函数分析：调用logSignalSummary将signal信息写入文件</li>
+</ul>
+<ul>
+<li>调用socket_abstract_client函数与debuggerd建立socket连接</li>
+</ul>
+<ul>
+<li>如果连接建立成功，则设置结构体debugger_msg_t，并发送给debuggerd</li>
+</ul>
+<pre><code>msg.<span class="built_in">action</span> = DEBUGGER_ACTION_CRASH;<span class="comment">//告诉debuggerd采取何种行</span>
+
+msg.tid = tid;<span class="comment">//线程号</span>
+
+RETRY_ON_EINTR(ret, write(s, &amp;msg, <span class="built_in">sizeof</span>(msg)));
+</code></pre><ul>
+<li>等待debuggerd的回复，阻塞在下面的调用中，收到回复后接着执行下面的流程</li>
+</ul>
+<pre><code>RETRY_ON_EINTR<span class="list">(<span class="keyword">ret</span>, read<span class="list">(<span class="keyword">s</span>, <span class="keyword">&amp;tid</span>, <span class="number">1</span>)</span>)</span><span class="comment">;</span>
+</code></pre><ul>
+<li>重新设置信号处理函数为SIG_DFL，即采取默认的动作</li>
+</ul>
+<pre><code>signal<span class="list">(<span class="keyword">n</span>, SIG_DFL)</span><span class="comment">;</span>
+</code></pre><ul>
+<li>重新发送信号，进程从当前信号处理函数返回后，会处理这个信号，进行默认的信号处理动作，即中断进程。</li>
+</ul>
+<p>logSignalSummary函数分析：</p>
+<ul>
+<li>获取异常信号的名字和thread名字，并格式化字符串</li>
+</ul>
+<ul>
+<li>调用函数__libc_android_log_write函数，用相关信息填充struct iovec vec[3]，此结构体数组的内容最终将写入log文件</li>
+</ul>
+<ul>
+<li>函数__libc_android_log_write中，log_id为LOG_ID_MAIN，因此</li>
+</ul>
+<pre><code><span class="built_in">log</span>_channels[LOG_ID_MAIN] = { __write_to_<span class="built_in">log</span>_init, -<span class="number">1</span>, <span class="string">"/dev/"</span>LOGGER_LOG_MAIN }
+</code></pre><p>log_channels[log_id].logger(log_id, vec)将调用__write_to_log_init</p>
+<ul>
+<li>在函数<strong>write_to_log_init中，log文件将写入”/dev/log/main”中，执行写log操作的函数是</strong>write_to_log_kernel</li>
+</ul>
+<h2 id="3-Debuggerd_源码分析">3.Debuggerd 源码分析</h2><p>debuggerd有两种启动方式：</p>
+<ul>
+<li>在init进程中以deamon的方式启动，在init.rc中</li>
+</ul>
+<pre><code>service debuggerd /system/bin/debuggerd 
+<span class="class"><span class="keyword">class</span> <span class="title">main</span></span>
+</code></pre><p>以这种方式启动的话，进入main函数后，将调用do_server函数，作为server端为其他进程提供dump进程信息的服务</p>
+<ul>
+<li>直接运行system/bin/debuggerd可执行文件，需要指定参数，用法为</li>
+</ul>
+<pre><code>debuggerd -b <span class="annotation">[&lt;tid&gt;]</span> <span class="comment">//参数-b表示在控制台中输出backtrace</span>
+</code></pre><p>以这种方式启动的话，进入main函数后，将调用do_explicit_dump函数，与debuggerd daemon通信，将指定进程的信息dump到文件或控制台</p>
+<p>Debuggerd框架图</p>
+<p><img src="https://otwrpg.dm2303.livefilestore.com/y2pgL4fp8n5NR_b2Rnx0RsD0fhrvug2c4mqtTFahRStOo-Z7_P7bHKSiEb8eOQWNo552MzB6RJOkIeOt-qLVgI5gGkHNluKMSZz8m5QTlHBw1U/%E5%9B%BE%E7%89%873.jpg?psid=1" alt=""></p>
+<h3 id="do_server函数流程分析">do_server函数流程分析</h3><p>(以daemon方式启动的时候将会进入这个函数)</p>
+<p>1.为异常信号安装处理函数SIG_DFL，即忽略自身出现的错误问题     signal(SIGILL, SIG_DFL);     signal(SIGABRT, SIG_DFL);</p>
+<pre><code>signal<span class="list">(<span class="keyword">SIGBUS</span>, SIG_DFL)</span><span class="comment">;</span>
+signal<span class="list">(<span class="keyword">SIGFPE</span>, SIG_DFL)</span><span class="comment">;</span>
+signal<span class="list">(<span class="keyword">SIGSEGV</span>, SIG_DFL)</span><span class="comment">;</span>
+signal<span class="list">(<span class="keyword">SIGPIPE</span>, SIG_DFL)</span><span class="comment">;</span>
+signal<span class="list">(<span class="keyword">SIGSTKFLT</span>, SIG_DFL)</span><span class="comment">;</span>
+</code></pre><ol>
+<li>调用下面的代码，建立socket通信的server端</li>
+</ol>
+<pre><code>s = socket_local_server<span class="list">(<span class="keyword">DEBUGGER_SOCKET_NAME</span>,ANDROID_SOCKET_NAMESPACE_ABSTRACT, SOCK_STREAM)</span><span class="comment">;</span>
+</code></pre><p>3.进入无限循环中，等待连接请求，相关代码如下</p>
+<pre><code>for<span class="list">(<span class="comment">;;) {</span>
+       struct sockaddr addr<span class="comment">;</span>
+       socklen_t alen<span class="comment">;</span>
+       int fd<span class="comment">;</span>
+       alen = sizeof<span class="list">(<span class="keyword">addr</span>)</span><span class="comment">;</span>
+       fd = accept<span class="list">(<span class="keyword">s</span>, <span class="keyword">&amp;addr</span>, <span class="keyword">&amp;alen</span>)</span><span class="comment">;</span>
+       if<span class="list">(<span class="keyword">fd</span> &lt; <span class="number">0</span>)</span> {
+           continue<span class="comment">;</span>
+       }
+       fcntl<span class="list">(<span class="keyword">fd</span>, F_SETFD, FD_CLOEXEC)</span><span class="comment">;</span>
+       handle_request<span class="list">(<span class="keyword">fd</span>)</span><span class="comment">;</span>
+   }</span>
+</code></pre><p>最终调用handle_request处理socket上的请求</p>
+<h3 id="handle_request函数流程分析">handle_request函数流程分析</h3><p>1.调用read_request处理socket上由client端进程发送来的数据，处理流程为</p>
+<p><1.1>首先调用函数getsockopt给结构体变量ucred cr赋值</1.1></p>
+<pre><code>getsockopt<span class="list">(<span class="keyword">fd</span>, SOL_SOCKET, SO_PEERCRED, <span class="keyword">&amp;cr</span>, <span class="keyword">&amp;len</span>)</span><span class="comment">;</span>
+</code></pre><p>ucred存储了socket的client端进程的pid uid gid</p>
+<p><1.2>从socket上读取debugger_msg_t结构体</1.2></p>
+<p><1.3> 给debugger_request_t* out_request 赋值</1.3></p>
+<pre><code><span class="keyword">out</span><span class="number">_</span>request-&gt;action = msg.action;
+<span class="keyword">out</span><span class="number">_</span>request-&gt;tid = msg.tid;
+<span class="keyword">out</span><span class="number">_</span>request-&gt;pid = cr.pid;
+<span class="keyword">out</span><span class="number">_</span>request-&gt;uid = cr.uid;
+<span class="keyword">out</span><span class="number">_</span>request-&gt;gid = cr.gid;
+</code></pre><p><1.4>如果debugger_msg_t中设置的action为DEBUGGER_ACTION_CRASH，说明是crash的C/C++进程发来的请求，则判断传进来的tid是否有效</1.4></p>
+<p><1.5>如果debugger_msg_t中设置的action为</1.5></p>
+<pre><code>DEBUGGER_ACTION_DU<span class="built_in">MP_BACKTRACE</span>或者     
+DEBUGGER_ACTION_DU<span class="built_in">MP_BACKTRACE_TO_LOG</span>
+</code></pre><p>说明是其他方式(debuggerd/callstack)发来的请求，则要求必须为root权限或者system权         限，然后再判断tid是否有效</p>
+<p>2.从read_request返回后，调用ptrace函数attach由tid指定的进程，此时debuggerd将变为被attache进程的父进程，然后ptrace函数会向子进程发送SIGSTOP信号将子进程停下来。此时，父进程有机会检查子进程核心image和寄存器的值</p>
+<p>3.调用下面的语句给client端子进程回复消息，使clinet端的进程能从read调用中返回</p>
+<pre><code>TEMP_FAILURE_RETRY<span class="list">(<span class="keyword">write</span><span class="list">(<span class="keyword">fd</span>, <span class="string">"\0"</span>, <span class="number">1</span>)</span></span>
+</code></pre><p>4.在for循环中等待子进程停止</p>
+<pre><code>int signal = wait_for_signal<span class="list">(<span class="keyword">request</span>.tid, <span class="keyword">&amp;total_sleep_time_usec</span>)</span><span class="comment">;</span>
+</code></pre><p>子进程收到SIGSTOP信号时，根据不同的action进行动作</p>
+<pre><code><span class="keyword">if</span> (<span class="built_in">request</span>.action == DEBUGGER_ACTION_DUMP_TOMBSTONE) {
+         tombstone_path = engrave_tombstone(<span class="built_in">request</span>.pid, <span class="built_in">request</span>.tid,
+                                    signal, <span class="literal">true</span>, <span class="literal">true</span>, &amp;detach_failed,
+                                    &amp;total_sleep_time_usec);
+} <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">request</span>.action == DEBUGGER_ACTION_DUMP_BACKTRACE) {
+         dump_backtrace(fd, <span class="built_in">request</span>.pid, <span class="built_in">request</span>.tid, &amp;detach_failed,
+                                    &amp;total_sleep_time_usec);
+} <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">request</span>.action == DEBUGGER_ACTION_DUMP_BACKTRACE_TO_LOG) {
+         dump_backtrace_for_thread(fd, <span class="built_in">request</span>.pid, <span class="built_in">request</span>.tid, &amp;detach_failed,
+                                    &amp;total_sleep_time_usec);
+</code></pre><p>子进程收到七种异常信号时，调用函数engrave_tombstone进行处理 Notes：收到SIGSTOP说明与debuggerd通信的不是crash的进程，根据action不同将进程信息写入tombstone文件，或者写入socket文件并由相应的客户端进程会读取socket文件进行处理。收到七种异常信号说明是crash的进程，调用engrave_tombstone直接将dump的信息写到tombstone文件中</p>
+<p>5.调用ptrace(PTRACE_DETACH, request.tid, 0, 0)解除对子进程的追踪</p>
+<p>6.调用kill(request.pid, SIGCONT)恢复被停止的子进程，并让其自然终止</p>
+<p>关于attach_gdb的说明</p>
+<p>1.如果运行了类似以下指令：</p>
+<pre><code>adb shell setprop debug<span class="class">.db</span><span class="class">.uid</span> <span class="number">10000</span>
+</code></pre><p>则所有uid&lt;10000的进程crash的时候attach_gdb为true，crash的进程将停止</p>
+<p>2.调用ptrace(PTRACE_DETACH, request.tid, 0, 0) 解除对子进程的追踪后，开始等待gdb的连接</p>
+<pre><code>adb forward tcp:<span class="number">5039</span> tcp:<span class="number">5039</span>
+adb shell gdbserver :<span class="number">5039</span> --attach pid &amp;
+</code></pre><p>3.用户按下HOME或者VOLUME DOWN按键，可以使进程继续进行，自然crash 4.attach_gdb为false时，只会解除对子进程的追踪</p>
+<h3 id="engrave_tombstone函数流程分析">engrave_tombstone函数流程分析</h3><p>对于crash的C/C++进程，主要通过这个函数dump进程信息</p>
+<p>1.创建”/data/tombstones”文件夹并修改权限</p>
+<p>2.调用函数find_and_open_tombstone，tombstone_XX文件最多10个，超过则覆盖最早的</p>
+<p>3.调用dump_crash将所有信息dump到tombstone文件</p>
+<p>4.如果isSystemServerCrash(crash的进程是gaiad)或isSystemFinalizerTimeout为true，则运行logcat命令将log缓冲区(/dev/log下的system,events ,radio,main文件)中的内容输出到tombstone文件中</p>
+<h3 id="dump_crash函数流程分析">dump_crash函数流程分析</h3><p>1.dump_build_info(log)</p>
+<p>dump “Build fingerprint”</p>
+<p>2.dump_fault_addr(log, tid, signal) 调用ptrace(PTRACE_GETSIGINFO, tid, 0, &amp;si)dump siginfo信息</p>
+<p>3.dump_thread(context, log, tid, true, total_sleep_time_usec)</p>
+<p>dump进程的上下文信息</p>
+<p>4.dump_maps(log, pid)</p>
+<p>dump /proc/pid/maps 中的信息</p>
+<p>5.dump_smaps(log, pid)</p>
+<p>dump /proc/pid/smaps 中的信息</p>
+<p>6.dump_status(log, pid)</p>
+<p>dump /proc/pid/status中的信息</p>
+<p>7.dump_sibling_thread_report(context, log, pid, tid, total_sleep_time_usec)</p>
+<h3 id="do_explicit_dump函数流程分析">do_explicit_dump函数流程分析</h3><p>(在命令行中加参数启动的时候将进入这个函数)</p>
+<p>判断dump_backtrace为true，调用dump_backtrace_to_file</p>
+<p>(1) 调用socket_local_client与debuggerd deamon建立连接</p>
+<p>(2) 给debugger_msg_t变量赋值，并发送给debuggerd</p>
+<pre><code>debugger_msg_t msg<span class="comment">;</span>
+msg.tid = tid<span class="comment">;</span>
+msg.action = DEBUGGER_ACTION_DUMP_BACKTRACE<span class="comment">;</span>
+</code></pre><p>(3)等待debuggerd 回复，并读取dump的信息，写入控制台中</p>
+<pre><code><span class="keyword">while</span> ((n = <span class="type">TEMP_FAILURE_RETRY</span>(read(s, buffer, sizeof(buffer)))) &gt; <span class="number">0</span>) {
+               <span class="keyword">if</span> (<span class="type">TEMP_FAILURE_RETRY</span>(write(fd, buffer, n)) != n) {
+                   <span class="literal">result</span> = -<span class="number">1</span>;
+                   <span class="keyword">break</span>;
+               }
+    }
+</code></pre><p>判断dump_backtrace为false，调用dump_tombstone</p>
+<p>(1) 调用socket_local_client与debuggerd deamon建立连接</p>
+<p>(2) 给debugger_msg_t变量赋值，并发送给debuggerd</p>
+<pre><code>debugger_msg_t msg<span class="comment">;</span>
+msg.tid = tid<span class="comment">;</span>
+msg.action = DEBUGGER_ACTION_DUMP_TOMBSTONE<span class="comment">;</span>
+</code></pre><p>(3)等待debuggerd 回复，调用</p>
+<pre><code>TEMP_FAILURE_RETRY<span class="list">(<span class="keyword">read</span><span class="list">(<span class="keyword">s</span>, pathbuf, pathlen - <span class="number">1</span>)</span>)</span>
+</code></pre><p>这里和</p>
+<pre><code>handle_request的<span class="function"><span class="title">write</span><span class="params">(fd, tombstone_path, strlen(tombstone_path)</span></span>)
+</code></pre><p>相互呼应 read读到的是tombstone_path，赋值给pathbuf后由do_explicit_dump调用</p>
+<pre><code><span class="function"><span class="title">fprintf</span><span class="params">(stderr, <span class="string">"Tombstone written to: %s\n"</span>, tombstone_path)</span></span>
+</code></pre><p>输出</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/" data-id="cigd6gc4x00105jorjan10g7c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/08/28/2014-08-28-e8a7a3e586b3adbe8bf9ee68ea5e8aebee5a487e587bae78eb0error-insufficient-permissions-for-devicee79a84e99499e8afaf/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          解决adb连接设备出现error: insufficient permissions for device的错误
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/04/01/2014-04-01-e59fbae4ba8edistcce79a84androide58886e5b883e5bc8fe7bc96e8af91e78eafe5a283e79a84e690ade5bbba/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">基于 Distcc 的android分布式编译环境的搭建</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/">博客</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/博客/技术/">技术</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/娱乐/">娱乐</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java学习/">Java学习</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java转载/">Java转载</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PS4/">PS4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PSVITA/">PSVITA</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/Java学习/" style="font-size: 20px;">Java学习</a> <a href="/tags/Java转载/" style="font-size: 13.33px;">Java转载</a> <a href="/tags/PS4/" style="font-size: 10px;">PS4</a> <a href="/tags/PSVITA/" style="font-size: 10px;">PSVITA</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/30/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
