@@ -638,9 +638,64 @@
 
 在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共享。局部变量、方法定义参数和异常处理器参数不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。Java线程之间的通信由Java内存模型（JMM）控制Java内存模型的抽象示意图如下：
 
-![](<span class="string">https:</span><span class="comment">//otwrpg.dm2302.livefilestore.com/y2pMX1mvZWXwsIxnT1a2s2C3kZGyRt8tKMS9R7LFJnuFIrSQBc5ZHKZEG3heRNDzeubNRgOFO7VwZZzSpwMkXcjUL9tZ_YeYzXx1Fs1NVT8F5s/11.png?psid=1)</span>
+![](https://otwrpg.dm2302.livefilestore.com/y2pMX1mvZWXwsIxnT1a2s2C3kZGyRt8tKMS9R7LFJnuFIrSQBc5ZHKZEG3heRNDzeubNRgOFO7VwZZzSpwMkXcjUL9tZ_YeYzXx1Fs1NVT8F5s/11.png?psid=1)
 
-Java内存模型规定，对于多个线程共享的变量，存储在主内存当中，每个线程都有自己独立的工作内存，线程只能访问自己的工作内存，不可以访问其它线程的工作内存。工作内存中保存了主内存共享变量的副本，线程要操作这些共享变量，只能通过操作工作内存中的副本来实现，操作完毕之后再同步回到主内存当中。
+Java内存模型规定，对于多个线程共享的变量，存储在主内存当中，每个线程都有自己独立的工作内存，线程只能访问自己的工作内存，不可以访问其它线程的工作内存。工作内存中保存了主内存共享变量的副本，线程要操作这些共享变量，只能通过操作工作内存中的副本来实现，操作完毕之后再同步回到主内存当中。<span class="comment">&lt;!-- more --&gt;</span>
+
+基于上面的内存模型，如果不采取任何措施，在多线程环境下就会产生共享变量不可见的问题：假设线程A正在对共享变量进行赋值操作，读取主内存的变量，修改变量的值，写回主内存，如果在线程A对共享变量的修改写回主内存前，有线程B要对此共享变量进行读取，此时不能保证线程A的修改对线程B是可见的，所以此时线程B将读取到过期的数据。
+
+为了解决这个问题，我们可以利用synchronized对两个线程的读写操作进行同步，也可以利用关键字volatile修饰共享变量。
+</code></pre><h2 id="2-volatile变量的可见性">2.volatile变量的可见性</h2><pre><code>如果把一个域声明为<span class="keyword">volatile</span>，那么只要对着个域产生了写操作，那么所有的读操作都可以看到这个修改，<span class="keyword">volatile</span>域会被立即写到主存中，而且读取操作也发生在主存中。为了方便理解<span class="keyword">volatile</span>，可以把对<span class="keyword">volatile</span>变量的单个读/写操作，看成是使用同一个锁对这些单个读/写操作做了同步。<span class="keyword">volatile</span>变量的可见性的可见性在于：对一个<span class="keyword">volatile</span>变量的读，总是能看到（任意线程）对这个<span class="keyword">volatile</span>变量最后的写入。对于下面的代码：
+
+<span class="keyword">class</span> VolatileFeaturesExample {
+    <span class="keyword">volatile</span> <span class="keyword">long</span> vl = <span class="number">0L</span>;  <span class="comment">//使用volatile声明64位的long型变量</span>
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">long</span> l)</span> </span>{
+        vl = l;   <span class="comment">//单个volatile变量的写</span>
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getAndIncrement</span> <span class="params">()</span> </span>{
+        vl++;    <span class="comment">//复合（多个）volatile变量的读/写</span>
+    }
+
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">get</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> vl;   <span class="comment">//单个volatile变量的读</span>
+    }
+}
+
+在语义上等同于：
+
+<span class="keyword">class</span> VolatileFeaturesExample {
+    <span class="keyword">long</span> vl = <span class="number">0L</span>;               <span class="comment">// 64位的long型普通变量</span>
+
+    <span class="function"><span class="keyword">public</span> synchronized <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">long</span> l)</span> </span>{     <span class="comment">//对单个的普通 变量的写用同一个监视器同步</span>
+        vl = l;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getAndIncrement</span> <span class="params">()</span> </span>{ <span class="comment">//普通方法调用</span>
+        <span class="keyword">long</span> temp = get();           <span class="comment">//调用已同步的读方法</span>
+        temp += <span class="number">1L</span>;                  <span class="comment">//普通写操作</span>
+        <span class="built_in">set</span>(temp);                   <span class="comment">//调用已同步的写方法</span>
+    }
+    <span class="function"><span class="keyword">public</span> synchronized <span class="keyword">long</span> <span class="title">get</span><span class="params">()</span> </span>{ 
+    <span class="comment">//对单个的普通变量的读用同一个监视器同步</span>
+        <span class="keyword">return</span> vl;
+    }
+}
+</code></pre><h2 id="3-volatile变量的原子性">3.volatile变量的原子性</h2><pre><code>通过上面代码我们可以看出：对任意单个<span class="keyword">volatile</span>变量的读/写具有原子性，但类似于<span class="keyword">volatile</span>++这种复合操作不具有原子性。因为++操作被分解为多个操作，即使复合操作中每一步都是原子的，但是如果复合操作整体不具有原子性，依然会产生同步问题。
+总结下来，<span class="keyword">volatile</span>变量自身具有下列特性：
+</code></pre><ul>
+<li>可见性。对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写入。</li>
+</ul>
+<ul>
+<li>原子性：对任意单个volatile变量的读/写具有原子性，但类似于volatile++这种复合操作不具有原子性。</li>
+</ul>
+<h2 id="参考文献：">参考文献：</h2><pre><code><span class="bullet">1. </span>Java Concurrency In Practice
+
+<span class="bullet">2. </span>深入理解Java内存模型 [<span class="link_label">http://www.infoq.com/cn/minibooks/java_memory_model</span>](<span class="link_url">http://www.infoq.com/cn/minibooks/java_memory_model</span>)
+
+<span class="bullet">3. </span>JVM并发机制的探讨----内存模型、内存可见性和指令重排序 [<span class="link_label">http://my.oschina.net/chihz/blog/58035</span>](<span class="link_url">http://my.oschina.net/chihz/blog/58035</span>)
 </code></pre>
       
       
@@ -659,10 +714,6 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
 	</div>
 
-      
-        <p class="article-more-link">
-          <a  href="/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/#more">more >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -711,13 +762,121 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-![](https:<span class="comment">//otwrpg.dm2301.livefilestore.com/y2pqA-0VuzeLothAGW9tNloBgnuJhucbU4YrYsABSWmzy1C0hLWeYOk_BRYJYFUBC0NkswFyc_f9kpcC6lJEVec7mdb6M3qL3TXKleIEtUDXmM/100542_Kf3E_134062.jpg?psid=1)&lt;!-- more --&gt;</span>
+![](https:<span class="comment">//otwrpg.dm2301.livefilestore.com/y2pqA-0VuzeLothAGW9tNloBgnuJhucbU4YrYsABSWmzy1C0hLWeYOk_BRYJYFUBC0NkswFyc_f9kpcC6lJEVec7mdb6M3qL3TXKleIEtUDXmM/100542_Kf3E_134062.jpg?psid=1)</span>
 
 通过计算<span class="built_in">key</span>的hashcode，进而生成一个数组下标。由于数组容量是固定的，所以不能避免不同的<span class="built_in">key</span>-<span class="built_in">value</span>计算出相同的数组下标。
 
 但由于数组本身保存的并不是<span class="built_in">key</span>-<span class="built_in">value</span>本身，而是一个list，所以下标相同的<span class="built_in">key</span>-<span class="built_in">value</span>会被依次放入同一个list中。
 
-查询的时候，需要对list进行线性查询，但如果散列函数较好，每个list就会有很少的<span class="built_in">key</span>-<span class="built_in">value</span>，所以即使是线性查询也不会花太多时间。
+查询的时候，需要对list进行线性查询，但如果散列函数较好，每个list就会有很少的<span class="built_in">key</span>-<span class="built_in">value</span>，所以即使是线性查询也不会花太多时间。&lt;!-- more --&gt;
+</code></pre><h2 id="2-HashMap的简单实现">2.HashMap的简单实现</h2><pre><code>下面基本是书上的东西，自己合上书敲了一遍，加深记忆。
+
+<span class="keyword">import</span> java.util.AbstractMap;
+<span class="keyword">import</span> java.util.HashSet;
+<span class="keyword">import</span> java.util.Iterator;
+<span class="keyword">import</span> java.util.LinkedList;
+<span class="keyword">import</span> java.util.Set;
+<span class="keyword">import</span> java.util.Map;
+
+<span class="keyword">public</span> class SlowHashMap&lt;k, v&gt; extends AbstractMap&lt;k, v&gt; {
+    <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> SIZE = <span class="number">100</span>;
+    @SuppressWarnings(<span class="string">"unchecked"</span>)
+    LinkedList&lt;mapentry&lt;k, v&gt;&gt;[] buckets = <span class="keyword">new</span> LinkedList[SIZE];
+
+    <span class="keyword">public</span> V put(K <span class="variable">key</span>, V value) {
+        V oldValue = <span class="keyword">null</span>;
+        <span class="keyword">if</span>(<span class="variable">key</span> == <span class="keyword">null</span>) {
+            MapEntry&lt;k, v=&gt; nullElement = <span class="keyword">new</span> MapEntry&lt;k, v&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>);
+            buckets[<span class="number">0</span>].<span class="built_in">add</span>(<span class="number">0</span>, nullElement);
+            <span class="keyword">return</span> oldValue;
+        }
+        <span class="built_in">int</span> index = Math.<span class="built_in">abs</span>(<span class="variable">key</span>.hashCode()) % SIZE;
+        <span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>) {
+            buckets[index] = <span class="keyword">new</span> LinkedList&lt;mapentry&lt;k, v&gt;&gt;();
+        }
+
+        MapEntry&lt;k, v&gt; element = <span class="keyword">new</span> MapEntry&lt;k, v&gt;(<span class="variable">key</span>, value);
+        Iterator&lt;mapentry&lt;k, v&gt;&gt;  it = buckets[index].listIterator();
+        <span class="built_in">boolean</span> found = <span class="keyword">false</span>;
+
+        <span class="keyword">while</span> (it.hasNext()) {
+            MapEntry&lt;k, v&gt; temp = it.next();
+            <span class="keyword">if</span>(temp.getKey().equals(<span class="variable">key</span>)) {
+                oldValue = temp.getValue();
+                temp.setValue(value);
+                found = <span class="keyword">true</span>;
+                <span class="keyword">break</span>;
+            }
+        }
+
+        <span class="keyword">if</span>(!found) {
+            buckets[index].<span class="built_in">add</span>(element);
+        }
+
+        <span class="keyword">return</span> oldValue;
+    }
+
+    <span class="keyword">public</span> V <span class="built_in">get</span>(<span class="keyword">Object</span> <span class="variable">key</span>) {
+        <span class="built_in">int</span> index = Math.<span class="built_in">abs</span>(<span class="variable">key</span>.hashCode()) % SIZE;
+        <span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>) {
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+        <span class="keyword">for</span>(MapEntry&lt;k, v&gt; e : buckets[index]) {
+            <span class="keyword">if</span>(e.getKey().equals(<span class="variable">key</span>)) {
+                <span class="keyword">return</span> e.getValue();
+            }
+        }
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+
+    }
+    @Override
+    <span class="keyword">public</span> Set&lt;java.util.<span class="built_in">map</span>.entry&lt;k, v&gt;&gt; entrySet() {
+        Set&lt;java.util.<span class="built_in">map</span>.entry&lt;k, v&gt;&gt; <span class="built_in">set</span> = <span class="keyword">new</span> HashSet&lt;<span class="built_in">map</span>.entry&lt;k,v&gt;&gt;;();
+        <span class="keyword">for</span>(LinkedList&lt;mapentry&lt;k, v&gt;&gt; bucket : buckets) {
+            <span class="keyword">if</span>(bucket == <span class="keyword">null</span>) {
+                <span class="keyword">continue</span>;
+            }
+            <span class="keyword">for</span>(MapEntry&lt;k, v&gt; pair : bucket) {
+                <span class="built_in">set</span>.<span class="built_in">add</span>(pair);
+            }
+        }
+
+        <span class="keyword">return</span> <span class="built_in">set</span>;
+    }
+
+
+    @SuppressWarnings(<span class="string">"hiding"</span>)
+    class MapEntry&lt;k, v&gt; implements Map.Entry&lt;k, v&gt;{
+        <span class="keyword">private</span> K <span class="variable">key</span>;
+        <span class="keyword">private</span> V value;
+
+
+        <span class="keyword">public</span> MapEntry(K <span class="variable">key</span>, V value) {
+            <span class="keyword">this</span>.<span class="variable">key</span> = <span class="variable">key</span>;
+            <span class="keyword">this</span>.value = value;
+        }
+        @Override
+        <span class="keyword">public</span> K getKey() {
+            <span class="keyword">return</span> <span class="variable">key</span>;
+        }
+
+        @Override
+        <span class="keyword">public</span> V getValue() {
+            <span class="keyword">return</span> value;
+        }
+
+        @Override
+        <span class="keyword">public</span> V setValue(V value) {
+            V result = <span class="keyword">this</span>.value;
+            <span class="keyword">this</span>.value = value;
+            <span class="keyword">return</span> result;
+        }
+
+    }
+
+}
+
+上面都是些极其浅显的东西，还有很多东西没有涉及。等我学艺深了，再来讨论
 </code></pre>
       
       
@@ -736,10 +895,6 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
 	</div>
 
-      
-        <p class="article-more-link">
-          <a  href="/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/#more">more >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>

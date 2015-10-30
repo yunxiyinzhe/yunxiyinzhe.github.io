@@ -17,7 +17,7 @@
 1.Java内存模型Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
 
 在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共">
-<meta property="og:updated_time" content="2015-10-30T08:02:15.000Z">
+<meta property="og:updated_time" content="2015-10-30T08:10:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java volatile 变量的可见性与原子性浅析">
 <meta name="twitter:description" content="最近在看Java Concurrency In Practice, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
@@ -239,11 +239,11 @@
 
 在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共享。局部变量、方法定义参数和异常处理器参数不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。Java线程之间的通信由Java内存模型（JMM）控制Java内存模型的抽象示意图如下：
 
-![](<span class="string">https:</span><span class="comment">//otwrpg.dm2302.livefilestore.com/y2pMX1mvZWXwsIxnT1a2s2C3kZGyRt8tKMS9R7LFJnuFIrSQBc5ZHKZEG3heRNDzeubNRgOFO7VwZZzSpwMkXcjUL9tZ_YeYzXx1Fs1NVT8F5s/11.png?psid=1)</span>
+![](https://otwrpg.dm2302.livefilestore.com/y2pMX1mvZWXwsIxnT1a2s2C3kZGyRt8tKMS9R7LFJnuFIrSQBc5ZHKZEG3heRNDzeubNRgOFO7VwZZzSpwMkXcjUL9tZ_YeYzXx1Fs1NVT8F5s/11.png?psid=1)
 
-Java内存模型规定，对于多个线程共享的变量，存储在主内存当中，每个线程都有自己独立的工作内存，线程只能访问自己的工作内存，不可以访问其它线程的工作内存。工作内存中保存了主内存共享变量的副本，线程要操作这些共享变量，只能通过操作工作内存中的副本来实现，操作完毕之后再同步回到主内存当中。
-</code></pre><a id="more"></a>
-<pre><code>基于上面的内存模型，如果不采取任何措施，在多线程环境下就会产生共享变量不可见的问题：假设线程<span class="literal">A</span>正在对共享变量进行赋值操作，读取主内存的变量，修改变量的值，写回主内存，如果在线程<span class="literal">A</span>对共享变量的修改写回主内存前，有线程B要对此共享变量进行读取，此时不能保证线程<span class="literal">A</span>的修改对线程B是可见的，所以此时线程B将读取到过期的数据。
+Java内存模型规定，对于多个线程共享的变量，存储在主内存当中，每个线程都有自己独立的工作内存，线程只能访问自己的工作内存，不可以访问其它线程的工作内存。工作内存中保存了主内存共享变量的副本，线程要操作这些共享变量，只能通过操作工作内存中的副本来实现，操作完毕之后再同步回到主内存当中。<span class="comment">&lt;!-- more --&gt;</span>
+
+基于上面的内存模型，如果不采取任何措施，在多线程环境下就会产生共享变量不可见的问题：假设线程A正在对共享变量进行赋值操作，读取主内存的变量，修改变量的值，写回主内存，如果在线程A对共享变量的修改写回主内存前，有线程B要对此共享变量进行读取，此时不能保证线程A的修改对线程B是可见的，所以此时线程B将读取到过期的数据。
 
 为了解决这个问题，我们可以利用synchronized对两个线程的读写操作进行同步，也可以利用关键字volatile修饰共享变量。
 </code></pre><h2 id="2-volatile变量的可见性">2.volatile变量的可见性</h2><pre><code>如果把一个域声明为<span class="keyword">volatile</span>，那么只要对着个域产生了写操作，那么所有的读操作都可以看到这个修改，<span class="keyword">volatile</span>域会被立即写到主存中，而且读取操作也发生在主存中。为了方便理解<span class="keyword">volatile</span>，可以把对<span class="keyword">volatile</span>变量的单个读/写操作，看成是使用同一个锁对这些单个读/写操作做了同步。<span class="keyword">volatile</span>变量的可见性的可见性在于：对一个<span class="keyword">volatile</span>变量的读，总是能看到（任意线程）对这个<span class="keyword">volatile</span>变量最后的写入。对于下面的代码：
