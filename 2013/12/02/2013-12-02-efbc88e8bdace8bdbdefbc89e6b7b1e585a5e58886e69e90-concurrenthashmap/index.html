@@ -49,7 +49,7 @@ hash table
 根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间">
 <meta property="og:image" content="https://otwrpg.dm2304.livefilestore.com/y2ps-FjfTha5JM-CiyK2qUM2sptUzitz-9EPhBbWbZ0M4IVYx4VtGNAUb580xGgxAxiqLyxOgf-K-ot2i7JeznBCjOUPaMcT6n5pOZLrNlAkvI/1.jpg?psid=1">
 <meta property="og:image" content="https://otwrpg.dm1.livefilestore.com/y2piO3FvNcDrxsfb7dOmfh7vBdj0b6j1WqO_vIBH4S8yVtaH6j5gHx0sym0bE4HFeINUXPD7Ncwv6uc1tyNVW9BysWQ6d1lTFZaM6viD10Ty5I/2.jpg?psid=1">
-<meta property="og:updated_time" content="2015-10-30T06:50:05.000Z">
+<meta property="og:updated_time" content="2015-10-30T06:55:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="（转载）深入分析 ConcurrentHashMap">
 <meta name="twitter:description" content="原文：http://www.infoq.com/cn/articles/ConcurrentHashMap
@@ -311,10 +311,6 @@ hash table
 </tr>
 </tbody>
 </table>
-<table cellspacing="0" border="1px"><br><tbody><br><tr bgcolor="#4f81bc"><br><td>术语<br></td><br><br><td>英文<br></td><br><br><td>解释<br></td><br><br></tr><br><tr><br><br><td>哈希算法<br></td><br><br><td>hash algorithm<br></td><br><br><td>是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。<br></td><br></tr><br><tr><br><br><td>哈希表<br></td><br><br><td>hash table<br></td><br><br><td>根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，这种表称为哈希表或散列，所得存储位置称为哈希地址或散列地址。<br></td><br></tr><br></tbody><br></table>
-
-
-
 <h2 id="线程不安全的HashMap">线程不安全的HashMap</h2><p>因为多线程环境下，使用HashMap进行put操作会引起死循环，导致CPU利用率接近100%，所以在并发情况下不能使用HashMap，如以下代码<a id="more"></a></p>
 <pre><code>final HashMap&lt;<span class="built_in">string</span>, <span class="built_in">string</span>=<span class="string">""</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> HashMap&lt;<span class="built_in">string</span>, <span class="built_in">string</span>=<span class="string">""</span>&gt;(<span class="number">2</span>);
 Thread t = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() {
