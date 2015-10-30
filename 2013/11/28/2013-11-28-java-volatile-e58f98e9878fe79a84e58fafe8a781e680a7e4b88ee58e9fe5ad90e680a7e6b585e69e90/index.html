@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Java volatile 变量的可见性与原子性浅析 | Hexo</title>
+  <title>Java volatile 变量的可见性与原子性浅析 | Dylan Gao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="最近在看&amp;lt;Java Concurrency In Practice&amp;gt;, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
 ##    1.Java内存模型
@@ -19,7 +19,7 @@ Java是运行于JVM之上的语言，有着自己的内存模型，这就可以�
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java volatile 变量的可见性与原子性浅析">
 <meta property="og:url" content="http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="最近在看&amp;lt;Java Concurrency In Practice&amp;gt;, 对Java volatile变量有了新的认知下面综合各种资料浅显地总结一下我对volatile的理解。
 ##    1.Java内存模型
 Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
@@ -46,7 +46,7 @@ Java是运行于JVM之上的语言，有着自己的内存模型，这就可以�
 
 在Java中，所有实例域、静态域和">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Dylan Gao" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -68,7 +68,7 @@ Java是运行于JVM之上的语言，有着自己的内存模型，这就可以�
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">John Doe</a></h1>
+		  <h1 class="header-author"><a href="/">Dylan Gao</a></h1>
 		</hgroup>
 
 		
@@ -184,7 +184,7 @@ Java是运行于JVM之上的语言，有着自己的内存模型，这就可以�
       <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">John Doe</a></h1>
+  		<h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Dylan Gao</a></h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -192,7 +192,7 @@ Java是运行于JVM之上的语言，有着自己的内存模型，这就可以�
 				<img lazy-src="/img/avatar.png" class="js-avatar">
 			</a>
 			<hgroup>
-			  <h1 class="header-author"><a href="/" title="回到主页">John Doe</a></h1>
+			  <h1 class="header-author"><a href="/" title="回到主页">Dylan Gao</a></h1>
 			</hgroup>
 			
 			<nav class="header-menu">
@@ -404,12 +404,12 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
     
 <div class="copyright">
   <p><span>本文标题:</span><a href="/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/">Java volatile 变量的可见性与原子性浅析</a></p>
-  <p><span>文章作者:</span><a href="/" title="访问 John Doe 的个人博客">John Doe</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2013年11月28日 - 12时11分</p>
   <p><span>最后更新:</span>2015年10月30日 - 11时10分</p>
   <p>
     <span>原始链接:</span><a href="/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/" title="Java volatile 变量的可见性与原子性浅析">http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/</a>
-    <span class="btn" data-clipboard-text="原文: http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/　　作者: John Doe" title="点击复制文章链接">
+    <span class="btn" data-clipboard-text="原文: http://yoursite.com/2013/11/28/2013-11-28-java-volatile-e58f98e9878fe79a84e58fafe8a781e680a7e4b88ee58e9fe5ad90e680a7e6b585e69e90/　　作者: Dylan Gao" title="点击复制文章链接">
         <i class="fa fa-clipboard"></i>
     </span>
   </p>
@@ -540,7 +540,7 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
   <div class="outer">
     <div id="footer-info">
       <div class="footer-left">
-        &copy; 2015 John Doe
+        &copy; 2015 Dylan Gao
       </div>
         <div class="footer-right">
           <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的静态博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减双栏 Hexo 博客主题">Yelee</a> by MOxFIVE
