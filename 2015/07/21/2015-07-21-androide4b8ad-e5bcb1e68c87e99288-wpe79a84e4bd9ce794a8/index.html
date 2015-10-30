@@ -15,7 +15,7 @@
 <meta property="og:description" content="前一篇文章已经分析了强指针弱指针的实现原理。我们可以知道，android中的智能指针是通过引用计数的方式方式来实现内存自动回收的。在很多情况下我们使用强指针sp就好了，那么弱指针wp的存在意义有是什么呢？wp 弱指针 在什么样的情况下才会使用呢？为了直观地了解wp存在的意义，我们先分析下面的代码。
 #include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;utils/RefBas">
-<meta property="og:updated_time" content="2015-10-30T04:56:15.000Z">
+<meta property="og:updated_time" content="2015-10-30T06:21:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android中 弱指针 (wp)的作用">
 <meta name="twitter:description" content="前一篇文章已经分析了强指针弱指针的实现原理。我们可以知道，android中的智能指针是通过引用计数的方式方式来实现内存自动回收的。在很多情况下我们使用强指针sp就好了，那么弱指针wp的存在意义有是什么呢？wp 弱指针 在什么样的情况下才会使用呢？为了直观地了解wp存在的意义，我们先分析下面的代码。
@@ -69,11 +69,6 @@
 						</div>
 						
 						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
 					</div>
 					
 				</div>
@@ -85,8 +80,6 @@
 						
 						<li>友情链接</li>
 						
-						
-						<li>关于我</li>
 						
 					</ul>
 				</div>
@@ -112,19 +105,19 @@
 					<nav class="header-nav">
 						<ul class="social">
 							
-								<li id="Email"><a class="Email" target="_blank" href="mailto:123@123.com" title="Email"></a></li>
+								<li id="Email"><a class="Email" target="_blank" href="mailto:yunxiyinzhe@gmail.com" title="Email"></a></li>
 					        
-								<li id="新浪微博"><a class="新浪微博" target="_blank" href="/sina weibo" title="新浪微博"></a></li>
+								<li id="新浪微博"><a class="新浪微博" target="_blank" href="http://weibo.com/375356447" title="新浪微博"></a></li>
 					        
-								<li id="GitHub"><a class="GitHub" target="_blank" href="/#" title="GitHub"></a></li>
+								<li id="GitHub"><a class="GitHub" target="_blank" href="https://github.com/yunxiyinzhe/" title="GitHub"></a></li>
 					        
 								<li id="RSS"><a class="RSS" target="_blank" href="/atom.xml" title="RSS"></a></li>
 					        
-								<li id="知乎"><a class="知乎" target="_blank" href="/zhihu" title="知乎"></a></li>
+								<li id="知乎"><a class="知乎" target="_blank" href="http://www.zhihu.com/people/dylangao" title="知乎"></a></li>
 					        
-								<li id="QQ"><a class="QQ" target="_blank" href="/#" title="QQ"></a></li>
+								<li id="QQ"><a class="QQ" target="_blank" href="/375356447" title="QQ"></a></li>
 					        
-								<li id="微信"><a class="微信" target="_blank" href="/Wechat" title="微信"></a></li>
+								<li id="微信"><a class="微信" target="_blank" href="/zimingjushi" title="微信"></a></li>
 					        
 						</ul>
 					</nav>
@@ -144,20 +137,10 @@
 					
 			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
 			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
-			        
 			        </div>
 				</section>
 				
 
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">专注于前端</div>
-				</section>
 				
 			</div>
 		</div>
@@ -196,19 +179,19 @@
 			<nav class="header-nav">
 						<ul class="social">
 							
-								<li id="Email"><a class="Email" target="_blank" href="mailto:123@123.com" title="Email"></a></li>
+								<li id="Email"><a class="Email" target="_blank" href="mailto:yunxiyinzhe@gmail.com" title="Email"></a></li>
 					        
-								<li id="新浪微博"><a class="新浪微博" target="_blank" href="/sina weibo" title="新浪微博"></a></li>
+								<li id="新浪微博"><a class="新浪微博" target="_blank" href="http://weibo.com/375356447" title="新浪微博"></a></li>
 					        
-								<li id="GitHub"><a class="GitHub" target="_blank" href="/#" title="GitHub"></a></li>
+								<li id="GitHub"><a class="GitHub" target="_blank" href="https://github.com/yunxiyinzhe/" title="GitHub"></a></li>
 					        
 								<li id="RSS"><a class="RSS" target="_blank" href="/atom.xml" title="RSS"></a></li>
 					        
-								<li id="知乎"><a class="知乎" target="_blank" href="/zhihu" title="知乎"></a></li>
+								<li id="知乎"><a class="知乎" target="_blank" href="http://www.zhihu.com/people/dylangao" title="知乎"></a></li>
 					        
-								<li id="QQ"><a class="QQ" target="_blank" href="/#" title="QQ"></a></li>
+								<li id="QQ"><a class="QQ" target="_blank" href="/375356447" title="QQ"></a></li>
 					        
-								<li id="微信"><a class="微信" target="_blank" href="/Wechat" title="微信"></a></li>
+								<li id="微信"><a class="微信" target="_blank" href="/zimingjushi" title="微信"></a></li>
 					        
 						</ul>
 			</nav>
@@ -313,7 +296,8 @@
 
     <span class="keyword">return</span> <span class="number">0</span>;
 }
-</code></pre><p>代码不复杂，代码中定义了两个类LightClassOne和LightClassTwo，他们都继承于RefBase，于是他们都具备了引用计数的能力。两个类除了构造析构函数外，还分别定义了对方类型的智能指针变量和相关的setXXX()函数。注意LightClassTwo中mOne对象现在是sp类型的。下面分析一下main函数的输出。</p>
+</code></pre><a id="more"></a>
+<p>代码不复杂，代码中定义了两个类LightClassOne和LightClassTwo，他们都继承于RefBase，于是他们都具备了引用计数的能力。两个类除了构造析构函数外，还分别定义了对方类型的智能指针变量和相关的setXXX()函数。注意LightClassTwo中mOne对象现在是sp类型的。下面分析一下main函数的输出。</p>
 <p>1.分别new出LightClassOne和LightClassTwo两个对象，此时构造函数调用，目前还没有任何智能指针指向这两个对象，因此强引用计数器的数值是初始值。</p>
 <p>2.大括号里，分别构造两个sp指针指向这两个对象，强引用计数器加一，又是第一次有sp指向这两个对象，因此此时他们的强弱引用计数器是1。</p>
 <p>3.分别互相调用setXXX()函数，在函数里面又有sp指向对象，强弱引用计数器继续增加，此时他们的强弱引用计数器是2。</p>
@@ -361,7 +345,7 @@
   <p><span>本文标题:</span><a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/">android中 弱指针 (wp)的作用</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2015年7月21日 - 11时07分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 12时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 14时10分</p>
   <p>
     <span>原始链接:</span><a href="/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/" title="android中 弱指针 (wp)的作用">http://yoursite.com/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2015/07/21/2015-07-21-androide4b8ad-e5bcb1e68c87e99288-wpe79a84e4bd9ce794a8/　　作者: Dylan Gao" title="点击复制文章链接">

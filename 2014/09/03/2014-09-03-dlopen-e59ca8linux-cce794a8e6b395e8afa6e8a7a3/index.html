@@ -19,7 +19,7 @@ void *dlsym(void *handle, const c">
 #include &amp;lt;dlfcn.h&amp;gt;
 void *dlopen(const char *filename, int flag);
 void *dlsym(void *handle, const c">
-<meta property="og:updated_time" content="2015-10-30T03:40:49.000Z">
+<meta property="og:updated_time" content="2015-10-30T06:22:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dlopen 在Linux C/C++用法详解">
 <meta name="twitter:description" content="本文汇总了几篇讲解 dlopen 用法的文章，详细解析dlopen系列函数在Linux C/C++中的使用。
@@ -75,11 +75,6 @@ void *dlsym(void *handle, const c">
 						</div>
 						
 						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
 					</div>
 					
 				</div>
@@ -91,8 +86,6 @@ void *dlsym(void *handle, const c">
 						
 						<li>友情链接</li>
 						
-						
-						<li>关于我</li>
 						
 					</ul>
 				</div>
@@ -118,19 +111,19 @@ void *dlsym(void *handle, const c">
 					<nav class="header-nav">
 						<ul class="social">
 							
-								<li id="Email"><a class="Email" target="_blank" href="mailto:123@123.com" title="Email"></a></li>
+								<li id="Email"><a class="Email" target="_blank" href="mailto:yunxiyinzhe@gmail.com" title="Email"></a></li>
 					        
-								<li id="新浪微博"><a class="新浪微博" target="_blank" href="/sina weibo" title="新浪微博"></a></li>
+								<li id="新浪微博"><a class="新浪微博" target="_blank" href="http://weibo.com/375356447" title="新浪微博"></a></li>
 					        
-								<li id="GitHub"><a class="GitHub" target="_blank" href="/#" title="GitHub"></a></li>
+								<li id="GitHub"><a class="GitHub" target="_blank" href="https://github.com/yunxiyinzhe/" title="GitHub"></a></li>
 					        
 								<li id="RSS"><a class="RSS" target="_blank" href="/atom.xml" title="RSS"></a></li>
 					        
-								<li id="知乎"><a class="知乎" target="_blank" href="/zhihu" title="知乎"></a></li>
+								<li id="知乎"><a class="知乎" target="_blank" href="http://www.zhihu.com/people/dylangao" title="知乎"></a></li>
 					        
-								<li id="QQ"><a class="QQ" target="_blank" href="/#" title="QQ"></a></li>
+								<li id="QQ"><a class="QQ" target="_blank" href="/375356447" title="QQ"></a></li>
 					        
-								<li id="微信"><a class="微信" target="_blank" href="/Wechat" title="微信"></a></li>
+								<li id="微信"><a class="微信" target="_blank" href="/zimingjushi" title="微信"></a></li>
 					        
 						</ul>
 					</nav>
@@ -150,20 +143,10 @@ void *dlsym(void *handle, const c">
 					
 			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
 			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
-			        
 			        </div>
 				</section>
 				
 
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">专注于前端</div>
-				</section>
 				
 			</div>
 		</div>
@@ -202,19 +185,19 @@ void *dlsym(void *handle, const c">
 			<nav class="header-nav">
 						<ul class="social">
 							
-								<li id="Email"><a class="Email" target="_blank" href="mailto:123@123.com" title="Email"></a></li>
+								<li id="Email"><a class="Email" target="_blank" href="mailto:yunxiyinzhe@gmail.com" title="Email"></a></li>
 					        
-								<li id="新浪微博"><a class="新浪微博" target="_blank" href="/sina weibo" title="新浪微博"></a></li>
+								<li id="新浪微博"><a class="新浪微博" target="_blank" href="http://weibo.com/375356447" title="新浪微博"></a></li>
 					        
-								<li id="GitHub"><a class="GitHub" target="_blank" href="/#" title="GitHub"></a></li>
+								<li id="GitHub"><a class="GitHub" target="_blank" href="https://github.com/yunxiyinzhe/" title="GitHub"></a></li>
 					        
 								<li id="RSS"><a class="RSS" target="_blank" href="/atom.xml" title="RSS"></a></li>
 					        
-								<li id="知乎"><a class="知乎" target="_blank" href="/zhihu" title="知乎"></a></li>
+								<li id="知乎"><a class="知乎" target="_blank" href="http://www.zhihu.com/people/dylangao" title="知乎"></a></li>
 					        
-								<li id="QQ"><a class="QQ" target="_blank" href="/#" title="QQ"></a></li>
+								<li id="QQ"><a class="QQ" target="_blank" href="/375356447" title="QQ"></a></li>
 					        
-								<li id="微信"><a class="微信" target="_blank" href="/Wechat" title="微信"></a></li>
+								<li id="微信"><a class="微信" target="_blank" href="/zimingjushi" title="微信"></a></li>
 					        
 						</ul>
 			</nav>
@@ -269,7 +252,7 @@ void *dlsym(void *handle, const c">
 <span class="function"><span class="keyword">void</span> *<span class="title">dlsym</span><span class="params">(<span class="keyword">void</span> *handle, <span class="keyword">const</span> <span class="keyword">char</span> *symbol)</span></span>;
 <span class="function"><span class="keyword">int</span> <span class="title">dlclose</span><span class="params">(<span class="keyword">void</span> *handle)</span></span>;
 <span class="function"><span class="keyword">char</span> *<span class="title">dlerror</span><span class="params">(<span class="keyword">void</span>)</span></span>;
-</code></pre><p>下面分别解释这几个函数。</p>
+</code></pre><p>下面分别解释这几个函数。<br><a id="more"></a></p>
 <h3 id="dlopen">dlopen</h3><p>dlopen()函数以指定模式打开指定的动态链接库文件，并返回动态链接库的句柄。参数flag有以下两种常用的值，并且必须指定其一。<br>RTLD_LAZY:在dlopen返回前，对于动态库中存在的未定义的变量(如外部变量extern，也可以是函数)不执行解析，就是不解析这个变量的地址。<br>RTLD_NOW：与上面不同，他需要在dlopen返回前，解析出每个未定义变量的地址，如果解析不出来，在dlopen会返回NULL.</p>
 <h3 id="dlsym">dlsym</h3><p>dlsym()函数根据动态链接库操作句柄(handle)与符号(symbol)，返回符号对应的地址。使用这个函数不但可以获取函数地址，也可以获取变量地址。参数的含义如下:<br>handle：由dlopen打开动态链接库后返回的指针；<br>symbol：要求获取的函数或全局变量的名称。</p>
 <h3 id="dlclose">dlclose</h3><p>dlclose()函数用于关闭指定句柄的动态链接库，只有当此动态链接库的使用计数为0时,才会真正被系统卸载。</p>
@@ -531,7 +514,7 @@ g++ -o main2 main1<span class="class">.cpp</span> polygon<span class="class">.h<
   <p><span>本文标题:</span><a href="/2014/09/03/2014-09-03-dlopen-e59ca8linux-cce794a8e6b395e8afa6e8a7a3/">dlopen 在Linux C/C++用法详解</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2014年9月3日 - 08时09分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 11时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 14时10分</p>
   <p>
     <span>原始链接:</span><a href="/2014/09/03/2014-09-03-dlopen-e59ca8linux-cce794a8e6b395e8afa6e8a7a3/" title="dlopen 在Linux C/C++用法详解">http://yoursite.com/2014/09/03/2014-09-03-dlopen-e59ca8linux-cce794a8e6b395e8afa6e8a7a3/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2014/09/03/2014-09-03-dlopen-e59ca8linux-cce794a8e6b395e8afa6e8a7a3/　　作者: Dylan Gao" title="点击复制文章链接">

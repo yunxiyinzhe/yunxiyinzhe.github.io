@@ -13,7 +13,7 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 <meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="一. 前言
 Android的native代码使用C++编写的。C++最让程序员头疼的事情就是对象的管理，即动态内存的分配与释放。一方面C++的这种灵活性可以为编程带来更大的自由，另一方面这种自由也带来了一些风险，稍有不慎，就可能造成内存泄漏甚至是程序崩溃。Java语言有GC（垃圾回收）机制，可以让程序员不用考虑对象生命周期的管理，虽然这对程序性能会造成一定的损失。那么如何既能发挥C++的性能优势，">
-<meta property="og:updated_time" content="2015-10-30T03:40:49.000Z">
+<meta property="og:updated_time" content="2015-10-30T06:22:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android智能指针(sp wp)原理分析">
 <meta name="twitter:description" content="一. 前言
@@ -66,11 +66,6 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 						</div>
 						
 						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
 					</div>
 					
 				</div>
@@ -82,8 +77,6 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 						
 						<li>友情链接</li>
 						
-						
-						<li>关于我</li>
 						
 					</ul>
 				</div>
@@ -109,19 +102,19 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 					<nav class="header-nav">
 						<ul class="social">
 							
-								<li id="Email"><a class="Email" target="_blank" href="mailto:123@123.com" title="Email"></a></li>
+								<li id="Email"><a class="Email" target="_blank" href="mailto:yunxiyinzhe@gmail.com" title="Email"></a></li>
 					        
-								<li id="新浪微博"><a class="新浪微博" target="_blank" href="/sina weibo" title="新浪微博"></a></li>
+								<li id="新浪微博"><a class="新浪微博" target="_blank" href="http://weibo.com/375356447" title="新浪微博"></a></li>
 					        
-								<li id="GitHub"><a class="GitHub" target="_blank" href="/#" title="GitHub"></a></li>
+								<li id="GitHub"><a class="GitHub" target="_blank" href="https://github.com/yunxiyinzhe/" title="GitHub"></a></li>
 					        
 								<li id="RSS"><a class="RSS" target="_blank" href="/atom.xml" title="RSS"></a></li>
 					        
-								<li id="知乎"><a class="知乎" target="_blank" href="/zhihu" title="知乎"></a></li>
+								<li id="知乎"><a class="知乎" target="_blank" href="http://www.zhihu.com/people/dylangao" title="知乎"></a></li>
 					        
-								<li id="QQ"><a class="QQ" target="_blank" href="/#" title="QQ"></a></li>
+								<li id="QQ"><a class="QQ" target="_blank" href="/375356447" title="QQ"></a></li>
 					        
-								<li id="微信"><a class="微信" target="_blank" href="/Wechat" title="微信"></a></li>
+								<li id="微信"><a class="微信" target="_blank" href="/zimingjushi" title="微信"></a></li>
 					        
 						</ul>
 					</nav>
@@ -141,20 +134,10 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 					
 			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
 			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
-			        
 			        </div>
 				</section>
 				
 
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">专注于前端</div>
-				</section>
 				
 			</div>
 		</div>
@@ -193,19 +176,19 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 			<nav class="header-nav">
 						<ul class="social">
 							
-								<li id="Email"><a class="Email" target="_blank" href="mailto:123@123.com" title="Email"></a></li>
+								<li id="Email"><a class="Email" target="_blank" href="mailto:yunxiyinzhe@gmail.com" title="Email"></a></li>
 					        
-								<li id="新浪微博"><a class="新浪微博" target="_blank" href="/sina weibo" title="新浪微博"></a></li>
+								<li id="新浪微博"><a class="新浪微博" target="_blank" href="http://weibo.com/375356447" title="新浪微博"></a></li>
 					        
-								<li id="GitHub"><a class="GitHub" target="_blank" href="/#" title="GitHub"></a></li>
+								<li id="GitHub"><a class="GitHub" target="_blank" href="https://github.com/yunxiyinzhe/" title="GitHub"></a></li>
 					        
 								<li id="RSS"><a class="RSS" target="_blank" href="/atom.xml" title="RSS"></a></li>
 					        
-								<li id="知乎"><a class="知乎" target="_blank" href="/zhihu" title="知乎"></a></li>
+								<li id="知乎"><a class="知乎" target="_blank" href="http://www.zhihu.com/people/dylangao" title="知乎"></a></li>
 					        
-								<li id="QQ"><a class="QQ" target="_blank" href="/#" title="QQ"></a></li>
+								<li id="QQ"><a class="QQ" target="_blank" href="/375356447" title="QQ"></a></li>
 					        
-								<li id="微信"><a class="微信" target="_blank" href="/Wechat" title="微信"></a></li>
+								<li id="微信"><a class="微信" target="_blank" href="/zimingjushi" title="微信"></a></li>
 					        
 						</ul>
 			</nav>
@@ -256,8 +239,7 @@ Android的native代码使用C++编写的。C++最让程序员头疼的事情就�
 system<span class="regexp">/core/</span>libutils/RefBase.cpp
 system<span class="regexp">/core/</span>include<span class="regexp">/utils/</span>StrongPointer.h
 </code></pre><p>三个文件都不大，却包含了Android系统强大的智能指针的实现，其中的几个模板类：LightRefBase、RefBase、sp、wp组成了Android智能指针的框架，前两个是引用计数基类，后两个是智能指针类。要说明的是：任何想要使用Android智能指针的类都必须继承或者间接继承于LightRefBase/RefBase这两个基类。下面将着重分析这几个模板类。</p>
-<p>PS：下面帖的代码基本上都是精简过的，去除了一些用于Debug的代码，便于分析本质。</p>
-<p><strong>二. LightRefBase</strong></p>
+<p>PS：下面帖的代码基本上都是精简过的，去除了一些用于Debug的代码，便于分析本质。<br><a id="more"></a><br><strong>二. LightRefBase</strong></p>
 <p>首先来分析一下Android智能指针的轻量级实现LightRefBase，他的代码在RefBase.h中：</p>
 <pre><code>template &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;
 <span class="title">class</span> <span class="title">LightRefBase</span>
@@ -861,7 +843,7 @@ sp&lt;T&gt; wp&lt;T&gt;::promote() <span class="keyword">const</span>
   <p><span>本文标题:</span><a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/">android智能指针(sp wp)原理分析</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2015年7月17日 - 05时07分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 11时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 14时10分</p>
   <p>
     <span>原始链接:</span><a href="/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/" title="android智能指针(sp wp)原理分析">http://yoursite.com/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2015/07/17/2015-07-17-androide699bae883bde68c87e99288sp-wpe58e9fe79086e58886e69e90/　　作者: Dylan Gao" title="点击复制文章链接">
