@@ -61,76 +61,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/" class="article-date">
-  <time datetime="2014-05-16T01:46:13.000Z" itemprop="datePublished">2014-05-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/">Android Debuggerd 简要介绍和源码分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文以android4.1为基础，分析debuggerd这个工具的使用方法和源码。</p>
-<h2 id="1-Debuggerd_简介">1.Debuggerd 简介</h2><p>debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中。</p>
-<h3 id="1-1_debuggerd的运行原理">1.1 debuggerd的运行原理</h3><ul>
-<li>创建一个名为 “Android:debuggerd”的socket，作为server端等待其他client端进程的连接</li>
-</ul>
-<ul>
-<li>接收client端进程发送来的tid和action信息</li>
-</ul>
-<ul>
-<li>将由tid指定的那个进程的运行信息，按照由action指定的动作dump到文件或者控制台中</li>
-</ul>
-<p>可以作为debuggerd的client端的进程主要有几种：</p>
-<ul>
-<li>异常的C/C++程序</li>
-</ul>
-<p>这种程序由bionic的linker安装异常信号的处理函数，当程序产生异常信号时，进入信号处理函数，与debuggerd建立。</p>
-<ul>
-<li>debuggerd程序</li>
-</ul>
-<p>debuggerd可以在控制台中以命令debuggerd -b [<tid>]启动 ，然后与debuggerd daemon建立连接。这样debuggerd可以在不中断进程执行的情况下dump由tid指定的进程的信息。</p>
-<ul>
-<li>callstack/dumpstate</li>
-</ul>
-<p>控制台中运行命令callstack/dumpstate，并指定必要的参数，命令中会调用dump_backtrace_to_file与debuggerd交互<br>
-        
-          <p class="article-more-link">
-            <a href="/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/05/16/2014-05-16-android-debuggerd-e7ae80e8a681e4bb8be7bb8de5928ce6ba90e7a081e58886e69e90/" data-id="cigd6gc4x00105jorjan10g7c" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-2014-04-01-e59fbae4ba8edistcce79a84androide58886e5b883e5bc8fe7bc96e8af91e78eafe5a283e79a84e690ade5bbba" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/04/01/2014-04-01-e59fbae4ba8edistcce79a84androide58886e5b883e5bc8fe7bc96e8af91e78eafe5a283e79a84e690ade5bbba/" class="article-date">
@@ -168,7 +98,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/01/2014-04-01-e59fbae4ba8edistcce79a84androide58886e5b883e5bc8fe7bc96e8af91e78eafe5a283e79a84e690ade5bbba/" data-id="cigd6gc4z00135jordcmuf45k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/04/01/2014-04-01-e59fbae4ba8edistcce79a84androide58886e5b883e5bc8fe7bc96e8af91e78eafe5a283e79a84e690ade5bbba/" data-id="cigd6k4u8001299or0en5jby2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -222,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/03/23/2014-03-23-e68891e69c89e4b880e5a4b4e5b08fe6af9be9a9b4efbc8ce68891e4b88ae78fade5a4a9e5a4a9e9aa91/" data-id="cigd6gc5100165jora9vvl44y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/03/23/2014-03-23-e68891e69c89e4b880e5a4b4e5b08fe6af9be9a9b4efbc8ce68891e4b88ae78fade5a4a9e5a4a9e9aa91/" data-id="cigd6k4u9001599orhz41bizy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -268,7 +198,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/02/14/2014-02-14-javae5a49ae7babfe7a88be4b88be79a84e58d95e4be8be6a8a1e5bc8f/" data-id="cigd6gc5200185jor95u1t338" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/02/14/2014-02-14-javae5a49ae7babfe7a88be4b88be79a84e58d95e4be8be6a8a1e5bc8f/" data-id="cigd6k4ub001799or4covp522" class="article-share-link">Share</a>
       
       
     </footer>
@@ -336,7 +266,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/01/28/2014-01-28-java-e58685e983a8e7b1bb/" data-id="cigd6gc54001a5jorqfset70d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/01/28/2014-01-28-java-e58685e983a8e7b1bb/" data-id="cigd6k4uc001999orgsfs585h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
@@ -409,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/01/11/2014-01-11-java-e99d99e68081e7bb91e5ae9ae4b88ee58aa8e68081e7bb91e5ae9a/" data-id="cigd6gc56001e5jor66wmj7ro" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/01/11/2014-01-11-java-e99d99e68081e7bb91e5ae9ae4b88ee58aa8e68081e7bb91e5ae9a/" data-id="cigd6k4uf001d99orir1mqwl8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
@@ -470,7 +400,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/01/07/2014-01-07-java-finale585b3e994aee5ad97e794a8e6b395e680bbe7bb93e8bdace8bdbd/" data-id="cigd6gc57001h5jor0przvoc6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/01/07/2014-01-07-java-finale585b3e994aee5ad97e794a8e6b395e680bbe7bb93e8bdace8bdbd/" data-id="cigd6k4uh001g99ortf1qpys6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
@@ -526,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/01/06/2014-01-06-java-e58fafe58f98e58f82e695b0e58897e8a1a8/" data-id="cigd6gc59001k5jorr4dbfami" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/01/06/2014-01-06-java-e58fafe58f98e58f82e695b0e58897e8a1a8/" data-id="cigd6k4ui001j99ortc53b3w6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
@@ -581,7 +511,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/01/05/2014-01-05-java-e7b1bbe5889de5a78be58c96e9a1bae5ba8f/" data-id="cigd6gc5c001n5joragna7yye" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/01/05/2014-01-05-java-e7b1bbe5889de5a78be58c96e9a1bae5ba8f/" data-id="cigd6k4um001m99ormgo2f5v9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
@@ -652,7 +582,64 @@ after change
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/01/01/2014-01-01-java-e58f98e9878fe58f82e695b0e79a84e4bca0e98092/" data-id="cigd6gc5e001q5jorncg7giat" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/01/01/2014-01-01-java-e58f98e9878fe58f82e695b0e79a84e4bca0e98092/" data-id="cigd6k4un001p99or84kvf443" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/" class="article-date">
+  <time datetime="2013-12-29T06:56:10.000Z" itemprop="datePublished">2013-12-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/">Java 基本数据类型及其包装类</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-基本数据类型">1.基本数据类型</h1><p>Java基本数据类型(Primitive Types)可以分为数值类型(Numeric Types)、 布尔类型 (Boolean Type)和 returnAddress 类型三类。其中数值类型又分为整型类型和浮点类型.</p>
+<h2 id="1-1整数类型">1.1整数类型</h2><p>整数类型包括以下几种类型:</p>
+<ul>
+<li>byte 类型：值为 8 位有符号二进制补码整数，默认值为零。取值范围是从-128 至 127(-2的7次方至 2的7次方7-1)，包括-128 和 127。</li>
+</ul>
+<ul>
+<li>short 类型：值为 16 位有符号二进制补码整数，默认值为零。取值范围是从−32768 至 32767(-2的7次方15至 2的7次方15-1) ，包括−32768 和32767。</li>
+</ul>
+<ul>
+<li>int 类型：值为 32 位有符号二进制补码整数，默认值为零。取值范围是从−2147483648 至 2147483647(-2的7次方31至 2的7次方31-1)，包括−2147483648 和 2147483647。</li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/12/29/2013-12-29-java-e59fbae69cace695b0e68daee7b1bbe59e8be58f8ae585b6e58c85e8a385e7b1bb/" data-id="cigd6k4up001s99orlipbz8bi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
@@ -704,7 +691,7 @@ after change
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -714,10 +701,6 @@ after change
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2015/10/30/hello-world/">Hello World</a>
-          </li>
         
           <li>
             <a href="/2015/09/18/2015-09-18-e5889de5ada6-python-e99984e4b88ae587a0e4b8aae7bb83e4b9a0e5b08fe7a88be5ba8f/">初学 Python 附上几个练习小程序</a>
@@ -733,6 +716,10 @@ after change
         
           <li>
             <a href="/2015/05/09/2015-05-09-e8a7a3e586b3-android-studio-e697a0e6b395e69bb4e696b0e79a84e997aee9a298/">解决 Android Studio Android SDK 无法更新的问题</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/11/2015-02-11-ps4e585a5e6898be4b880e591a8e6849fe683b3/">PS4入手一周感想</a>
           </li>
         
       </ul>
