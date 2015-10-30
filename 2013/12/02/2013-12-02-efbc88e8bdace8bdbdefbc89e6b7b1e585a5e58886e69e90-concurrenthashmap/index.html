@@ -6,71 +6,23 @@
   <title>（转载）深入分析 ConcurrentHashMap | Dylan Gao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="原文：http://www.infoq.com/cn/articles/ConcurrentHashMap
-术语定义
-
-
-术语
-英文
-解释
-
-
-
-
-哈希算法
-hash algorithm
-是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。
-
-
-哈希表
-hash table
-根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间">
+术语定义哈希算法(hash algorithm):是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。
+哈希表(hash table):根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="（转载）深入分析 ConcurrentHashMap">
 <meta property="og:url" content="http://yoursite.com/2013/12/02/2013-12-02-efbc88e8bdace8bdbdefbc89e6b7b1e585a5e58886e69e90-concurrenthashmap/index.html">
 <meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="原文：http://www.infoq.com/cn/articles/ConcurrentHashMap
-术语定义
-
-
-术语
-英文
-解释
-
-
-
-
-哈希算法
-hash algorithm
-是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。
-
-
-哈希表
-hash table
-根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间">
+术语定义哈希算法(hash algorithm):是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。
+哈希表(hash table):根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，">
 <meta property="og:image" content="https://otwrpg.dm2304.livefilestore.com/y2ps-FjfTha5JM-CiyK2qUM2sptUzitz-9EPhBbWbZ0M4IVYx4VtGNAUb580xGgxAxiqLyxOgf-K-ot2i7JeznBCjOUPaMcT6n5pOZLrNlAkvI/1.jpg?psid=1">
 <meta property="og:image" content="https://otwrpg.dm1.livefilestore.com/y2piO3FvNcDrxsfb7dOmfh7vBdj0b6j1WqO_vIBH4S8yVtaH6j5gHx0sym0bE4HFeINUXPD7Ncwv6uc1tyNVW9BysWQ6d1lTFZaM6viD10Ty5I/2.jpg?psid=1">
-<meta property="og:updated_time" content="2015-10-30T06:55:13.000Z">
+<meta property="og:updated_time" content="2015-10-30T07:06:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="（转载）深入分析 ConcurrentHashMap">
 <meta name="twitter:description" content="原文：http://www.infoq.com/cn/articles/ConcurrentHashMap
-术语定义
-
-
-术语
-英文
-解释
-
-
-
-
-哈希算法
-hash algorithm
-是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。
-
-
-哈希表
-hash table
-根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间">
+术语定义哈希算法(hash algorithm):是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。
+哈希表(hash table):根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，">
   
     <link rel="alternative" href="/atom.xml" title="Dylan Gao" type="application/atom+xml">
   
@@ -290,27 +242,8 @@ hash table
     <div class="article-entry" itemprop="articleBody">
       
         <p>原文：<a href="http://www.infoq.com/cn/articles/ConcurrentHashMap" target="_blank" rel="external">http://www.infoq.com/cn/articles/ConcurrentHashMap</a></p>
-<h2 id="术语定义">术语定义</h2><table>
-<thead>
-<tr>
-<th>术语</th>
-<th style="text-align:center">英文</th>
-<th style="text-align:right">解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>哈希算法</td>
-<td style="text-align:center">hash algorithm</td>
-<td style="text-align:right">是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。</td>
-</tr>
-<tr>
-<td>哈希表</td>
-<td style="text-align:center">hash table</td>
-<td style="text-align:right">根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，这种表称为哈希表或散列，所得存储位置称为哈希地址或散列地址。</td>
-</tr>
-</tbody>
-</table>
+<h2 id="术语定义">术语定义</h2><p>哈希算法(hash algorithm):<br>是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。</p>
+<p>哈希表(hash table):<br>根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，这种表称为哈希表或散列，所得存储位置称为哈希地址或散列地址。</p>
 <h2 id="线程不安全的HashMap">线程不安全的HashMap</h2><p>因为多线程环境下，使用HashMap进行put操作会引起死循环，导致CPU利用率接近100%，所以在并发情况下不能使用HashMap，如以下代码<a id="more"></a></p>
 <pre><code>final HashMap&lt;<span class="built_in">string</span>, <span class="built_in">string</span>=<span class="string">""</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> HashMap&lt;<span class="built_in">string</span>, <span class="built_in">string</span>=<span class="string">""</span>&gt;(<span class="number">2</span>);
 Thread t = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() {
@@ -423,7 +356,7 @@ System.out.println(Integer.parseInt(<span class="string">"1111111"</span>, <span
   <p><span>本文标题:</span><a href="/2013/12/02/2013-12-02-efbc88e8bdace8bdbdefbc89e6b7b1e585a5e58886e69e90-concurrenthashmap/">（转载）深入分析 ConcurrentHashMap</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2013年12月2日 - 13时12分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 14时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 15时10分</p>
   <p>
     <span>原始链接:</span><a href="/2013/12/02/2013-12-02-efbc88e8bdace8bdbdefbc89e6b7b1e585a5e58886e69e90-concurrenthashmap/" title="（转载）深入分析 ConcurrentHashMap">http://yoursite.com/2013/12/02/2013-12-02-efbc88e8bdace8bdbdefbc89e6b7b1e585a5e58886e69e90-concurrenthashmap/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2013/12/02/2013-12-02-efbc88e8bdace8bdbdefbc89e6b7b1e585a5e58886e69e90-concurrenthashmap/　　作者: Dylan Gao" title="点击复制文章链接">

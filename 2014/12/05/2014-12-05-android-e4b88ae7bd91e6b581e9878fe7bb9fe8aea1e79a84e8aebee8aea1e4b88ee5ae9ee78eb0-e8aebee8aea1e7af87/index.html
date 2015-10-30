@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/12/05/2014-12-05-android-e4b88ae7bd91e6b581e9878fe7bb9fe8aea1e79a84e8aebee8aea1e4b88ee5ae9ee78eb0-e8aebee8aea1e7af87/index.html">
 <meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="1. 前言需要做一个 流量统计 的功能，主要实现WIFI和移动数据的日流量统计、月流量统计，可能的话还有流量超限报警等功能。然后着手搜集资料，发现android的SDK提供了类TrafficStats可以获取流量统计值。但是这个类只能获取开机以来的各种流量数据。TrafficStats获取流量数值的实现，是通过JNI，读取并解析linux的proc下相应的文件得到的，关机之后，这些数据都清零了。因">
-<meta property="og:updated_time" content="2015-10-30T07:00:46.000Z">
+<meta property="og:updated_time" content="2015-10-30T07:05:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 上网流量统计的设计与实现-设计篇">
 <meta name="twitter:description" content="1. 前言需要做一个 流量统计 的功能，主要实现WIFI和移动数据的日流量统计、月流量统计，可能的话还有流量超限报警等功能。然后着手搜集资料，发现android的SDK提供了类TrafficStats可以获取流量统计值。但是这个类只能获取开机以来的各种流量数据。TrafficStats获取流量数值的实现，是通过JNI，读取并解析linux的proc下相应的文件得到的，关机之后，这些数据都清零了。因">
@@ -302,8 +302,8 @@ static long <span class="function"><span class="title">getUidTxBytes</span><span
 <li>monthly_plan_limit_percent：包月套餐流量预警值</li>
 </ul>
 <p>具体参数的使用会在实现部分解释。</p>
-<p>日流量统计<br>| id        | type           | mobile  |total|mobile_before|total_before|mobile_init|total_init|<br>| ————- |:————-:| —–:| —–:| —–:| —–:| —–:| —–:|<br>| upload      | |  |  |  |  |  |  |<br>| download    |  |   |  |  |  |  |  |</p>
-<p>月流量统计<br>| id        | type           | mobile  |total|mobile_before|total_before|mobile_init|total_init|<br>| ————- |:————-:| —–:| —–:| —–:| —–:| —–:| —–:|<br>| upload      | |  |  |  |  |  |  |<br>| download    | |   |  |  |  |  |  |</p>
+<p>日流量统计<br>| id       | type | mobile | total | mobile_before | total_before | mobile_init | total_init |<br>| upload   |<br>| download | </p>
+<p>月流量统计<br>| id       | type | mobile | total | mobile_before | total_before | mobile_init | total_init |<br>| upload   |<br>| download | </p>
 <p>日流量统计和月流量统计表格的组织形式一样。其中：</p>
 <ul>
 <li>Type用来标示出事上传流量还是下载流量。</li>

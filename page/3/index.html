@@ -674,27 +674,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>原文：<a href="http://www.infoq.com/cn/articles/ConcurrentHashMap">http://www.infoq.com/cn/articles/ConcurrentHashMap</a></p>
-<h2 id="术语定义">术语定义</h2><table>
-<thead>
-<tr>
-<th>术语</th>
-<th style="text-align:center">英文</th>
-<th style="text-align:right">解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>哈希算法</td>
-<td style="text-align:center">hash algorithm</td>
-<td style="text-align:right">是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。</td>
-</tr>
-<tr>
-<td>哈希表</td>
-<td style="text-align:center">hash table</td>
-<td style="text-align:right">根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，这种表称为哈希表或散列，所得存储位置称为哈希地址或散列地址。</td>
-</tr>
-</tbody>
-</table>
+<h2 id="术语定义">术语定义</h2><p>哈希算法(hash algorithm):<br>是一种将任意内容的输入转换成相同长度输出的加密方式，其输出被称为哈希值。</p>
+<p>哈希表(hash table):<br>根据设定的哈希函数H(key)和处理冲突方法将一组关键字映象到一个有限的地址区间上，并以关键字在地址区间中的象作为记录在表中的存储位置，这种表称为哈希表或散列，所得存储位置称为哈希地址或散列地址。</p>
 <h2 id="线程不安全的HashMap">线程不安全的HashMap</h2><p>因为多线程环境下，使用HashMap进行put操作会引起死循环，导致CPU利用率接近100%，所以在并发情况下不能使用HashMap，如以下代码
       
       
