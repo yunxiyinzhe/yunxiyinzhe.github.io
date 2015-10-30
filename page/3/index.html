@@ -483,58 +483,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code>之前在百度云空间上搞了个wordpress个人博客,一直感觉运行的不错,免费的空间对于一个小型个人博客来说也很充足. 突然前些日子发现BAE从2.0升级到3.0, 需要自己手动迁移. 折腾了很久终于把博客和数据库迁移到3.0平台上了,怎奈之前的域名没法绑定了,只能用新的域名.
+        <pre><code>之前在百度云空间上搞了个wordpress个人博客,一直感觉运行的不错,免费的空间对于一个小型个人博客来说也很充足. 突然前些日子发现BAE从<span class="number">2.0</span>升级到<span class="number">3.0</span>, 需要自己手动迁移. 折腾了很久终于把博客和数据库迁移到<span class="number">3.0</span>平台上了,怎奈之前的域名没法绑定了,只能用新的域名.
 
+索性不再用二级域名了,自己买个域名得了. 于是就去买了这个域名,万网上买的,首年<span class="number">45</span>续费<span class="number">50</span>,价格还算便宜. 没有去godaddy上买是因为近期没有什么优惠. 
 
-
-
-
-
-索性不再用二级域名了,自己买个域名得了. 于是就去买了这个域名,万网上买的,首年45续费50,价格还算便宜. 没有去godaddy上买是因为近期没有什么优惠. 
-
-
-
-
-
-
-域名买好之后解析到在BAE上的地址, 然后BAE上绑定自己的域名,然后又出问题了.之前我记得BAE绑定自己的域名是不需要备案的,貌似现在有要求了,而且备案流程看着我就头疼,还要花很久时间.所以既然我域名都买了我就只能放弃BAE了. checkout最新代码,<span class="operator"><span class="keyword">backup</span>数据库,我去找别的空间去.&lt;!<span class="comment">-- more --&gt;</span>
-
-
-
-
-
-
-在衡天主机上买的空间,首先纠结于是香港主机还是美国主机,前者访问速度好,后者便宜. 但想想我这个人博客也没什么太好的网站相应需求, 就搞了个美国主机,后来证明速度也还不错的.
-
-
-
-
-
-
-主机买好先是登陆不了DirectAdmin面板,联系客服换了服务器IP搞定, 然后域名解析到新的服务器IP, 上传wordpress代码,建立数据库,导入备份数据库,配置wordpress数据库,<span class="keyword">SQL</span>执行
-
-
-
-
-
-
-<span class="keyword">UPDATE</span> wp_options <span class="keyword">SET</span> option_value = <span class="keyword">replace</span>( option_value,<span class="string">'http://dylangao.duapp.com'</span>, <span class="string">'http://dylangao.com'</span>;</span>) WHERE option_name ='home' OR option_name 'siteurl' ;
-<span class="operator"><span class="keyword">UPDATE</span> wp_posts <span class="keyword">SET</span> post_content = <span class="keyword">replace</span>(post_content,<span class="string">'http://dylangao.duapp.com'</span>, <span class="string">'http://dylangao.com'</span>);</span> 
-<span class="operator"><span class="keyword">UPDATE</span> wp_posts <span class="keyword">SET</span> guid = <span class="keyword">replace</span>( guid,  <span class="string">'http://dylangao.duapp.com'</span>, <span class="string">'http://dylangao.com'</span> ) ;</span>
-
-
-
-
-
-
-修改连接,其中经历了各种坎坷,不过好在google和客服的帮助下,顺利完成了迁移. 
-
-
-
-
-
-
-自己租借的主机,自己的域名,感觉清爽了很多,也geek了很多.
+域名买好之后解析到在BAE上的地址, 然后BAE上绑定自己的域名,然后又出问题了.之前我记得BAE绑定自己的域名是不需要备案的,貌似现在有要求了,而且备案流程看着我就头疼,还要花很久时间.所以既然我域名都买了我就只能放弃BAE了. checkout最新代码,backup数据库,我去找别的空间去.
 </code></pre>
       
       
@@ -549,6 +502,10 @@
 
 
       
+      
+        <p class="article-more-link">
+          <a  href="/2013/12/21/2013-12-21-wordpress-e4b8aae4babae58d9ae5aea2e8bf81e7a7bbe8aeb0-e4bb8ebaebaidu-app-enginee8bf81e587ba/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -734,30 +691,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <pre><code>最近在看&lt;Java Concurrency <span class="keyword">In</span> Practice&gt;, 对Java <span class="keyword">volatile</span>变量有了新的认知下面综合各种资料浅显地总结一下我对<span class="keyword">volatile</span>的理解。
-</code></pre><p>##<br>    <strong>1.Java内存模型</strong></p>
-<pre><code>Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
-
-
-
-
-
-
+</code></pre><h2 id="1-Java内存模型"><strong>1.Java内存模型</strong></h2><pre><code>Java是运行于JVM之上的语言，有着自己的内存模型，这就可以将不同操作系统和不同硬件平台实现细节屏蔽掉，进而达成跨平台的目的。
 
 在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共享。局部变量、方法定义参数和异常处理器参数不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。Java线程之间的通信由Java内存模型（JMM）控制Java内存模型的抽象示意图如下：
 
-
-
-
-
-
-
 ![](<span class="string">https:</span><span class="comment">//otwrpg.dm2302.livefilestore.com/y2pMX1mvZWXwsIxnT1a2s2C3kZGyRt8tKMS9R7LFJnuFIrSQBc5ZHKZEG3heRNDzeubNRgOFO7VwZZzSpwMkXcjUL9tZ_YeYzXx1Fs1NVT8F5s/11.png?psid=1)</span>
-
-
-
-
-
-
 
 Java内存模型规定，对于多个线程共享的变量，存储在主内存当中，每个线程都有自己独立的工作内存，线程只能访问自己的工作内存，不可以访问其它线程的工作内存。工作内存中保存了主内存共享变量的副本，线程要操作这些共享变量，只能通过操作工作内存中的副本来实现，操作完毕之后再同步回到主内存当中。
 </code></pre>
@@ -826,162 +764,18 @@ Java内存模型规定，对于多个线程共享的变量，存储在主内存�
     <div class="article-entry" itemprop="articleBody">
       
         <pre><code>基本来源于《Thinking <span class="keyword">in</span> Java》，记下来也算是简单复习一遍。
-</code></pre><p>##<br>    1.HashMap原理的简单分析  </p>
+</code></pre><p>##1.HashMap原理的简单分析 </p>
 <pre><code>HashMap之所以有较快的查询速度，是因为HashMap利用了<span class="built_in">key</span>的hashcode存储<span class="built_in">key</span>-<span class="built_in">value</span>。
-
-
-
-
-
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-
-
-
-
-
 ![](https:<span class="comment">//otwrpg.dm2301.livefilestore.com/y2pqA-0VuzeLothAGW9tNloBgnuJhucbU4YrYsABSWmzy1C0hLWeYOk_BRYJYFUBC0NkswFyc_f9kpcC6lJEVec7mdb6M3qL3TXKleIEtUDXmM/100542_Kf3E_134062.jpg?psid=1)&lt;!-- more --&gt;</span>
-
-
-
-
-
 
 通过计算<span class="built_in">key</span>的hashcode，进而生成一个数组下标。由于数组容量是固定的，所以不能避免不同的<span class="built_in">key</span>-<span class="built_in">value</span>计算出相同的数组下标。
 
-
-
-
-
-
 但由于数组本身保存的并不是<span class="built_in">key</span>-<span class="built_in">value</span>本身，而是一个list，所以下标相同的<span class="built_in">key</span>-<span class="built_in">value</span>会被依次放入同一个list中。
 
-
-
-
-
-
 查询的时候，需要对list进行线性查询，但如果散列函数较好，每个list就会有很少的<span class="built_in">key</span>-<span class="built_in">value</span>，所以即使是线性查询也不会花太多时间。
-</code></pre><p>##<br>    2.HashMap的简单实现  </p>
-<pre><code>下面基本是书上的东西，自己合上书敲了一遍，加深记忆。
-
-
-
-
-
-
-<span class="keyword">import</span> java.util.AbstractMap;
-<span class="keyword">import</span> java.util.HashSet;
-<span class="keyword">import</span> java.util.Iterator;
-<span class="keyword">import</span> java.util.LinkedList;
-<span class="keyword">import</span> java.util.Set;
-<span class="keyword">import</span> java.util.Map;
-
-<span class="keyword">public</span> class SlowHashMap&lt;k, v&gt; extends AbstractMap&lt;k, v&gt; {
-    <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> SIZE = <span class="number">100</span>;
-    @SuppressWarnings(<span class="string">"unchecked"</span>)
-    LinkedList&lt;mapentry&lt;k, v&gt;&gt;[] buckets = <span class="keyword">new</span> LinkedList[SIZE];
-
-    <span class="keyword">public</span> V put(K <span class="variable">key</span>, V value) {
-        V oldValue = <span class="keyword">null</span>;
-        <span class="keyword">if</span>(<span class="variable">key</span> == <span class="keyword">null</span>) {
-            MapEntry&lt;k, v=&gt; nullElement = <span class="keyword">new</span> MapEntry&lt;k, v&gt;(<span class="keyword">null</span>, <span class="keyword">null</span>);
-            buckets[<span class="number">0</span>].<span class="built_in">add</span>(<span class="number">0</span>, nullElement);
-            <span class="keyword">return</span> oldValue;
-        }
-        <span class="built_in">int</span> index = Math.<span class="built_in">abs</span>(<span class="variable">key</span>.hashCode()) % SIZE;
-        <span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>) {
-            buckets[index] = <span class="keyword">new</span> LinkedList&lt;mapentry&lt;k, v&gt;&gt;();
-        }
-
-        MapEntry&lt;k, v&gt; element = <span class="keyword">new</span> MapEntry&lt;k, v&gt;(<span class="variable">key</span>, value);
-        Iterator&lt;mapentry&lt;k, v&gt;&gt;  it = buckets[index].listIterator();
-        <span class="built_in">boolean</span> found = <span class="keyword">false</span>;
-
-        <span class="keyword">while</span> (it.hasNext()) {
-            MapEntry&lt;k, v&gt; temp = it.next();
-            <span class="keyword">if</span>(temp.getKey().equals(<span class="variable">key</span>)) {
-                oldValue = temp.getValue();
-                temp.setValue(value);
-                found = <span class="keyword">true</span>;
-                <span class="keyword">break</span>;
-            }
-        }
-
-        <span class="keyword">if</span>(!found) {
-            buckets[index].<span class="built_in">add</span>(element);
-        }
-
-        <span class="keyword">return</span> oldValue;
-    }
-
-    <span class="keyword">public</span> V <span class="built_in">get</span>(<span class="keyword">Object</span> <span class="variable">key</span>) {
-        <span class="built_in">int</span> index = Math.<span class="built_in">abs</span>(<span class="variable">key</span>.hashCode()) % SIZE;
-        <span class="keyword">if</span>(buckets[index] == <span class="keyword">null</span>) {
-            <span class="keyword">return</span> <span class="keyword">null</span>;
-        }
-        <span class="keyword">for</span>(MapEntry&lt;k, v&gt; e : buckets[index]) {
-            <span class="keyword">if</span>(e.getKey().equals(<span class="variable">key</span>)) {
-                <span class="keyword">return</span> e.getValue();
-            }
-        }
-        <span class="keyword">return</span> <span class="keyword">null</span>;
-
-    }
-    @Override
-    <span class="keyword">public</span> Set&lt;java.util.<span class="built_in">map</span>.entry&lt;k, v&gt;&gt; entrySet() {
-        Set&lt;java.util.<span class="built_in">map</span>.entry&lt;k, v&gt;&gt; <span class="built_in">set</span> = <span class="keyword">new</span> HashSet&lt;<span class="built_in">map</span>.entry&lt;k,v&gt;&gt;;();
-        <span class="keyword">for</span>(LinkedList&lt;mapentry&lt;k, v&gt;&gt; bucket : buckets) {
-            <span class="keyword">if</span>(bucket == <span class="keyword">null</span>) {
-                <span class="keyword">continue</span>;
-            }
-            <span class="keyword">for</span>(MapEntry&lt;k, v&gt; pair : bucket) {
-                <span class="built_in">set</span>.<span class="built_in">add</span>(pair);
-            }
-        }
-
-        <span class="keyword">return</span> <span class="built_in">set</span>;
-    }
-
-
-    @SuppressWarnings(<span class="string">"hiding"</span>)
-    class MapEntry&lt;k, v&gt; implements Map.Entry&lt;k, v&gt;{
-        <span class="keyword">private</span> K <span class="variable">key</span>;
-        <span class="keyword">private</span> V value;
-
-
-        <span class="keyword">public</span> MapEntry(K <span class="variable">key</span>, V value) {
-            <span class="keyword">this</span>.<span class="variable">key</span> = <span class="variable">key</span>;
-            <span class="keyword">this</span>.value = value;
-        }
-        @Override
-        <span class="keyword">public</span> K getKey() {
-            <span class="keyword">return</span> <span class="variable">key</span>;
-        }
-
-        @Override
-        <span class="keyword">public</span> V getValue() {
-            <span class="keyword">return</span> value;
-        }
-
-        @Override
-        <span class="keyword">public</span> V setValue(V value) {
-            V result = <span class="keyword">this</span>.value;
-            <span class="keyword">this</span>.value = value;
-            <span class="keyword">return</span> result;
-        }
-
-    }
-
-}
-
-
-
-
-
-
-上面都是些极其浅显的东西，还有很多东西没有涉及。等我学艺深了，再来讨论
 </code></pre>
       
       
@@ -1000,6 +794,10 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java学习/">Java学习</a></li></ul>
 	</div>
 
+      
+        <p class="article-more-link">
+          <a  href="/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

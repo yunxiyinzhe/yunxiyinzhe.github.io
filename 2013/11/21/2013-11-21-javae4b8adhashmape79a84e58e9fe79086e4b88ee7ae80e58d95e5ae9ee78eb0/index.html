@@ -6,63 +6,33 @@
   <title>Java中 HashMap 的原理与简单实现 | Dylan Gao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
-##    1.HashMap原理的简单分析  
+##1.HashMap原理的简单分析 
 HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
-
-
-
-
-
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-
-
-
-
-
-![](https:/">
+![](https://otwrpg.dm2301.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中 HashMap 的原理与简单实现">
 <meta property="og:url" content="http://yoursite.com/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/index.html">
 <meta property="og:site_name" content="Dylan Gao">
 <meta property="og:description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
-##    1.HashMap原理的简单分析  
+##1.HashMap原理的简单分析 
 HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
-
-
-
-
-
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-
-
-
-
-
-![](https:/">
-<meta property="og:updated_time" content="2015-10-30T03:40:48.000Z">
+![](https://otwrpg.dm2301.">
+<meta property="og:updated_time" content="2015-10-30T07:44:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中 HashMap 的原理与简单实现">
 <meta name="twitter:description" content="基本来源于《Thinking in Java》，记下来也算是简单复习一遍。
-##    1.HashMap原理的简单分析  
+##1.HashMap原理的简单分析 
 HashMap之所以有较快的查询速度，是因为HashMap利用了key的hashcode存储key-value。
-
-
-
-
-
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-
-
-
-
-
-![](https:/">
+![](https://otwrpg.dm2301.">
   
     <link rel="alternative" href="/atom.xml" title="Dylan Gao" type="application/atom+xml">
   
@@ -274,50 +244,21 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
     <div class="article-entry" itemprop="articleBody">
       
         <pre><code>基本来源于《Thinking <span class="keyword">in</span> Java》，记下来也算是简单复习一遍。
-</code></pre><p>##<br>    1.HashMap原理的简单分析  </p>
+</code></pre><p>##1.HashMap原理的简单分析 </p>
 <pre><code>HashMap之所以有较快的查询速度，是因为HashMap利用了<span class="built_in">key</span>的hashcode存储<span class="built_in">key</span>-<span class="built_in">value</span>。
-
-
-
-
-
 
 HashMap的内部结构，可以简单描述为一个list数组（在简单版本的 HashMap 实现中，数组大小固定）。
 
-
-
-
-
-
 ![](https:<span class="comment">//otwrpg.dm2301.livefilestore.com/y2pqA-0VuzeLothAGW9tNloBgnuJhucbU4YrYsABSWmzy1C0hLWeYOk_BRYJYFUBC0NkswFyc_f9kpcC6lJEVec7mdb6M3qL3TXKleIEtUDXmM/100542_Kf3E_134062.jpg?psid=1)&lt;!-- more --&gt;</span>
-
-
-
-
-
 
 通过计算<span class="built_in">key</span>的hashcode，进而生成一个数组下标。由于数组容量是固定的，所以不能避免不同的<span class="built_in">key</span>-<span class="built_in">value</span>计算出相同的数组下标。
 
-
-
-
-
-
 但由于数组本身保存的并不是<span class="built_in">key</span>-<span class="built_in">value</span>本身，而是一个list，所以下标相同的<span class="built_in">key</span>-<span class="built_in">value</span>会被依次放入同一个list中。
 
-
-
-
-
-
 查询的时候，需要对list进行线性查询，但如果散列函数较好，每个list就会有很少的<span class="built_in">key</span>-<span class="built_in">value</span>，所以即使是线性查询也不会花太多时间。
-</code></pre><p>##<br>    2.HashMap的简单实现  </p>
+</code></pre><a id="more"></a>
+<p>##2.HashMap的简单实现  </p>
 <pre><code>下面基本是书上的东西，自己合上书敲了一遍，加深记忆。
-
-
-
-
-
 
 <span class="keyword">import</span> java.util.AbstractMap;
 <span class="keyword">import</span> java.util.HashSet;
@@ -424,11 +365,6 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
 
 }
 
-
-
-
-
-
 上面都是些极其浅显的东西，还有很多东西没有涉及。等我学艺深了，再来讨论
 </code></pre>
       
@@ -442,7 +378,7 @@ HashMap的内部结构，可以简单描述为一个list数组（在简单版本
   <p><span>本文标题:</span><a href="/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/">Java中 HashMap 的原理与简单实现</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Dylan Gao 的个人博客">Dylan Gao</a></p>
   <p><span>发布时间:</span>2013年11月21日 - 09时11分</p>
-  <p><span>最后更新:</span>2015年10月30日 - 11时10分</p>
+  <p><span>最后更新:</span>2015年10月30日 - 15时10分</p>
   <p>
     <span>原始链接:</span><a href="/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/" title="Java中 HashMap 的原理与简单实现">http://yoursite.com/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/</a>
     <span class="btn" data-clipboard-text="原文: http://yoursite.com/2013/11/21/2013-11-21-javae4b8adhashmape79a84e58e9fe79086e4b88ee7ae80e58d95e5ae9ee78eb0/　　作者: Dylan Gao" title="点击复制文章链接">
